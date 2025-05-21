@@ -1,0 +1,1723 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nội thất Mộc Nhiên</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    
+    <!-- Sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {   
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9f7f3;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #5a3d2b;
+            padding: 18px 0 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .logo {
+            width: 90px;
+            height: 90px;
+            margin-right: 18px;
+            border-radius: 60%;
+            border: 3px solid #e9c46a;
+            box-shadow: 0 0 15px rgba(233, 196, 106, 0.6);
+            transition: transform 0.3s, box-shadow 0.3s;
+            object-fit: cover;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(233, 196, 106, 0.8);
+        }
+        .store-name {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2.7rem;
+            font-weight: 400;
+            color: #e9c46a;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+            letter-spacing: 1.5px;
+        }
+        .header-nav {
+            width: 100%;
+            background-color: #4a3322;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            justify-content: center;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 0 10px;
+            min-height: 48px;
+        }
+        .nav-btn {
+            font-family: 'Montserrat', sans-serif;
+            text-decoration: none;
+            color: #f9f7f3;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 5px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            position: relative;
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background-color: rgba(233, 196, 106, 0.2);
+            border-color: #e9c46a;
+        }
+        .active {
+            background-color: rgba(233, 196, 106, 0.2);
+            border: 1px solid #e9c46a;
+        }
+        
+        /* Dropdown menu */
+        .dropdown {
+            position: relative;
+        }
+        .mega-menu {
+            display: none;
+            position: absolute;
+            left: 0;
+            top: 100%;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            padding: 24px 32px;
+            display: flex;
+            gap: 40px;
+            z-index: 100;
+            min-width: 800px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+        .dropdown:hover .mega-menu {
+            display: flex;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .mega-column {
+            display: flex;
+            flex-direction: column;
+            min-width: 160px;
+            margin-right: 24px;
+        }
+        .mega-menu a {
+            color: #555;
+            padding: 8px 0;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border-bottom: 1px solid transparent;
+        }
+        .mega-menu a:hover {
+            color: #e9c46a;
+            border-bottom: 1px solid #e9c46a;
+            transform: translateX(5px);
+        }
+        
+        /* Thêm mũi tên cho dropdown */
+        .dropdown > .nav-btn::after {
+            content: '▼';
+            font-size: 0.7em;
+            margin-left: 5px;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        .dropdown:hover > .nav-btn::after {
+            transform: rotate(180deg);
+        }
+        
+        /* Nút giỏ hàng */
+        .cart-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #d9d1cc;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            margin-left: 10px;
+            font-size: 0.75rem;
+        }
+        .cart-icon {
+            font-size: 2rem;
+        }
+        .cart-btn:hover {
+            background: #d4b054;
+            transform: translateY(-2px);
+        }
+        
+        /* Style cho nút đăng nhập */
+        .login-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #5a3d2b;
+            padding: 8px 16px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-weight: 600;
+            margin-left: 10px;
+            font-size: 0.75rem;
+            background-color: #e9c46a;
+            border: 1px solid #e9c46a;
+        }
+        .login-btn:hover {
+            background-color: #5a3d2b;
+            color: #e9c46a;
+            transform: translateY(-2px);
+        }
+
+        /* Products Section */
+        .products-container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 1.2rem;
+            color: #5a3d2b;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: #e9c46a;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #e9c46a;
+            color: #5a3d2b;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #e9c46a;
+            color: #5a3d2b;
+        }
+
+        .btn-primary:hover {
+            background: #5a3d2b;
+            color: #e9c46a;
+        }
+
+        .btn-secondary:hover {
+            background: #e9c46a;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #5a3d2b;
+            color: #e9e2d0;
+            padding: 50px 0 20px;
+        }
+        .footer-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin-bottom: 30px;
+            padding: 0 15px;
+        }
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e9c46a;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: #e9c46a;
+        }
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .footer-contact-icon {
+            min-width: 20px;
+            margin-right: 10px;
+            color: #e9c46a;
+        }
+        .footer-links {
+            list-style: none;
+        }
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        .footer-links a {
+            color: #e9e2d0;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover {
+            color: #e9c46a;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(233, 196, 106, 0.2);
+            font-size: 0.9rem;
+        }
+
+        /* Filters */
+        .filters {
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #e9c46a;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #5a3d2b;
+            background: #fff;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #5a3d2b;
+            box-shadow: 0 0 0 2px rgba(90, 61, 43, 0.1);
+        }
+
+        .filter-select option {
+            padding: 10px;
+        }
+
+        /* Styles cho modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff8ed;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            color: #5a3d2b;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .modal-subtitle {
+            color: #4a3322;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid #e9c46a;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #5a3d2b;
+            background: #fff;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #5a3d2b;
+            box-shadow: 0 0 0 2px rgba(90, 61, 43, 0.1);
+        }
+
+        .form-button {
+            width: 100%;
+            padding: 12px;
+            background: #e9c46a;
+            color: #5a3d2b;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .form-button:hover:not(:disabled) {
+            background: #5a3d2b;
+            color: #fff8ed;
+        }
+
+        .form-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .modal-links {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .modal-link {
+            color: #5a3d2b;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .modal-link:hover {
+            color: #e9c46a;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #5a3d2b;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: none;
+        }
+
+        .form-button:disabled .spinner {
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Thêm style cho modal chi tiết sản phẩm */
+        .product-detail-modal {
+            max-width: 1000px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .product-detail-modal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: #e9c46a;
+        }
+
+        .product-detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            padding: 30px;
+        }
+
+        /* Product Gallery */
+        .product-gallery {
+            position: relative;
+        }
+
+        .main-image {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .main-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .thumbnail-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 5px;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .thumbnail:hover {
+            border-color: #e9c46a;
+        }
+
+        .thumbnail.active {
+            border-color: #5a3d2b;
+        }
+
+        /* Product Info */
+        .product-header {
+            margin-bottom: 20px;
+        }
+
+        .product-header h3 {
+            font-size: 2rem;
+            color: #5a3d2b;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .product-meta {
+            display: flex;
+            gap: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .product-price-section {
+            background: #f9f7f3;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+        }
+
+        .price-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .current-price {
+            font-size: 2rem;
+            color: #e9c46a;
+            font-weight: 600;
+        }
+
+        .original-price {
+            font-size: 1.2rem;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        /* .discount-badge {
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        } */
+
+        .stock-status {
+            color: #28a745;
+            font-weight: 500;
+        }
+
+        .product-description {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        /* .product-specs {
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        } */
+
+        .product-specs h4 {
+            color: #5a3d2b;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .spec-item {
+            display: flex;
+            gap: 10px;
+        }
+
+        .spec-label {
+            color: #666;
+            min-width: 120px;
+        }
+
+        .spec-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Product Actions */
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            background: #f5f5f5;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #e9c46a;
+            color: white;
+        }
+
+        #productQuantity {
+            width: 60px;
+            height: 40px;
+            border: none;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .add-to-cart-btn, .buy-now-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .add-to-cart-btn {
+            background: #fff;
+            border: 2px solid #e9c46a;
+            color: #5a3d2b;
+        }
+
+        .buy-now-btn {
+            background: #e9c46a;
+            color: #5a3d2b;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #e9c46a;
+            color: white;
+        }
+
+        .buy-now-btn:hover {
+            background: #5a3d2b;
+            color: #e9c46a;
+        }
+
+        /* Product Features */
+        .product-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding: 20px;
+            background: #f9f7f3;
+            border-radius: 12px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+            }
+
+            .product-actions {
+                flex-direction: column;
+            }
+
+            .product-features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Thêm style cho badge số lượng */
+        .cart-btn {
+            position: relative;
+        }
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #e9c46a;
+            color: #5a3d2b;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-top">
+        <img src="picture/logo.jpg" alt="Mộc Nhiên Logo" class="logo">
+        <div class="store-name">Nội thất Mộc Nhiên</div>
+    </div>
+    <nav class="header-nav">
+        <div class="nav-links">
+            <a href="index.html" class="nav-btn">Trang chủ</a>
+            <div class="dropdown">
+                <a href="products.html" class="nav-btn active">Sản phẩm</a>
+                <div class="mega-menu">
+                    <div class="mega-column">
+                        <a href="products.html?category=Sofa">Sofa</a>
+                        <a href="products.html?category=Ghế dài & đôn">Ghế dài & đôn</a>
+                        <a href="products.html?category=Bàn nước">Bàn nước</a>
+                        <a href="products.html?category=Tủ tivi">Tủ tivi</a>
+                        <a href="products.html?category=Kệ trưng bày">Kệ trưng bày</a>
+                        <a href="products.html?category=Tủ giày">Tủ giày</a>
+                    </div>
+                    <div class="mega-column">
+                        <a href="products.html?category=Bàn ăn">Bàn ăn</a>
+                        <a href="products.html?category=Ghế ăn">Ghế ăn</a>
+                        <a href="products.html?category=Ghế Bar">Ghế Bar</a>
+                        <a href="products.html?category=Tủ ly">Tủ ly</a>
+                        <a href="products.html?category=Tủ bếp">Tủ bếp</a>
+                    </div>
+                    <div class="mega-column">
+                        <a href="products.html?category=Giường ngủ">Giường ngủ</a>
+                        <a href="products.html?category=Bàn đầu giường">Bàn đầu giường</a>
+                        <a href="products.html?category=Bàn trang điểm">Bàn trang điểm</a>
+                        <a href="products.html?category=Tủ áo">Tủ áo</a>
+                        <a href="products.html?category=Nệm">Nệm</a>
+                    </div>
+                    <div class="mega-column">
+                        <a href="products.html?category=Bàn làm việc">Bàn làm việc</a>
+                        <a href="products.html?category=Ghế làm việc">Ghế làm việc</a>
+                        <a href="products.html?category=Kệ sách">Kệ sách</a>
+                        <a href="products.html?category=Bàn ngoài trời">Bàn ngoài trời</a>
+                        <a href="products.html?category=Ghế ngoài trời">Ghế ngoài trời</a>
+                    </div>
+                    <div class="mega-column">
+                        <a href="products.html?category=Đèn trang trí">Đèn trang trí</a>
+                        <a href="products.html?category=Thảm trang trí">Thảm trang trí</a>
+                        <a href="products.html?category=Bình trang trí">Bình trang trí</a>
+                        <a href="products.html?category=Tranh">Tranh</a>
+                        <a href="products.html?category=Gương">Gương</a>
+                        <a href="products.html?category=Đồng hồ">Đồng hồ</a>
+                        <a href="products.html?category=Tượng trang trí">Tượng trang trí</a>
+                        <a href="products.html?category=Dụng cụ bếp">Dụng cụ bếp</a>
+                    </div>
+                </div>
+            </div>
+            <a href="bo-suu-tap.html" class="nav-btn">Bộ sưu tập</a>
+            <a href="khuyen-mai.html" class="nav-btn">Khuyến mãi</a>
+            <a href="tin-tuc.html" class="nav-btn">Tin tức</a>
+            <a href="member.html" class="nav-btn">Thành viên</a>
+            <a href="chinh-sach.html" class="nav-btn">Chính sách</a>
+            <a href="ve-chung-toi.html" class="nav-btn">Về chúng tôi</a>
+            <a href="card.html" class="cart-btn">
+                <span class="cart-icon">🛒</span>
+                <span>Giỏ hàng</span>
+            </a>
+            <a href="#" class="login-btn" onclick="showModal('loginModal')">
+                <span>👤</span>
+                <span>Đăng nhập</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Products Section -->
+    <section class="products-container">
+        <div class="filters">
+            <div class="filter-group">
+                <select id="categoryFilter" class="filter-select">
+                    <option value="">Tất cả danh mục</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <select id="priceFilter" class="filter-select">
+                    <option value="">Giá</option>
+                    <option value="0-10000000">Dưới 10 triệu</option>
+                    <option value="10000000-20000000">10 - 20 triệu</option>
+                    <option value="20000000-30000000">20 - 30 triệu</option>
+                    <option value="30000000-999999999">Trên 30 triệu</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <!-- Products will be loaded here dynamically -->
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3 class="footer-title">Về Mộc Nhiên</h3>
+                <p>Với nhiểu năm nghiên cứu về các sản phẩm nội thất, Mộc Nhiên tự hào mang đến những sản phẩm nội thất gỗ tự nhiên chất lượng cao, thiết kế độc đáo và tinh tế.</p>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Liên hệ</h3>
+                <div class="footer-contact-item">
+                    <span class="footer-contact-icon">📍</span>
+                    <span>Nguyễn Văn Cừ, An Khánh, Ninh Kiều, Cần Thơ </span>
+                </div>
+                <div class="footer-contact-item">
+                    <span class="footer-contact-icon">📱</span>
+                    <span>0123456789</span>
+                </div>
+                <div class="footer-contact-item">
+                    <span class="footer-contact-icon">✉️</span>
+                    <span>noithatmocnhien@gmail.com</span>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Danh mục</h3>  
+                <ul class="footer-links">
+                    <li><a href="#">Phòng khách</a></li>
+                    <li><a href="#">Phòng ngủ</a></li>
+                    <li><a href="#">Phòng bếp</a></li>
+                    <li><a href="#">Phòng làm việc</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3 class="footer-title">Theo dõi</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Facebook</a></li>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Email</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 Nội thất Mộc Nhiên. Tất cả quyền được bảo lưu.</p>
+        </div>
+    </footer>
+
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+
+    <!-- Modal Đăng nhập -->
+    <div class="modal" id="loginModal">
+        <div class="modal-header">
+            <h2 class="modal-title">Đăng nhập</h2>
+            <p class="modal-subtitle">Đăng nhập để trải nghiệm dịch vụ tốt nhất từ Mộc Nhiên</p>
+        </div>
+        <form class="modal-form" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Mật khẩu" required>
+            </div>
+            <button type="submit" class="form-button">
+                <span>Đăng nhập</span>
+                <div class="spinner"></div>
+            </button>
+        </form>
+        <div class="modal-links">
+            <a class="modal-link" onclick="showModal('registerModal')">Đăng ký tài khoản mới</a>
+            <br>
+            <a class="modal-link" onclick="showModal('forgotModal')">Quên mật khẩu?</a>
+        </div>
+    </div>
+
+    <!-- Modal Đăng ký -->
+    <div class="modal" id="registerModal">
+        <div class="modal-header">
+            <h2 class="modal-title">Đăng ký</h2>
+            <p class="modal-subtitle">Tạo tài khoản để nhận nhiều ưu đãi từ Mộc Nhiên</p>
+        </div>
+        <form class="modal-form" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Họ và tên" required>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Mật khẩu" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-input" placeholder="Xác nhận mật khẩu" required>
+            </div>
+            <button type="submit" class="form-button">
+                <span>Đăng ký</span>
+                <div class="spinner"></div>
+            </button>
+        </form>
+        <div class="modal-links">
+            <a class="modal-link" onclick="showModal('loginModal')">Đã có tài khoản? Đăng nhập</a>
+        </div>
+    </div>
+
+    <!-- Modal Quên mật khẩu -->
+    <div class="modal" id="forgotModal">
+        <div class="modal-header">
+            <h2 class="modal-title">Quên mật khẩu</h2>
+            <p class="modal-subtitle">Nhập email để nhận link đặt lại mật khẩu</p>
+        </div>
+        <form class="modal-form" onsubmit="handleForgotPassword(event)">
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Email" required>
+            </div>
+            <button type="submit" class="form-button">
+                <span>Gửi yêu cầu</span>
+                <div class="spinner"></div>
+            </button>
+        </form>
+        <div class="modal-links">
+            <a class="modal-link" onclick="showModal('loginModal')">Quay lại đăng nhập</a>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết sản phẩm -->
+    <div class="modal product-detail-modal" id="productDetailModal">
+        <div class="modal-header">
+            <h2 class="modal-title">Chi tiết sản phẩm</h2>
+            <button class="close-modal" onclick="closeModal('productDetailModal')">×</button>
+        </div>
+        <div class="modal-content">
+            <div class="product-detail-container">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="" alt="" id="detailProductImage">
+                    </div>
+                    <div class="thumbnail-list" id="thumbnailList">
+                        <!-- Thumbnails will be added here dynamically -->
+                    </div>
+                </div>
+                <div class="product-detail-info">
+                    <div class="product-header">
+                        <h3 id="detailProductName"></h3>
+                        <div class="product-meta">
+                            <span class="product-category" id="detailProductCategory"></span>
+                            <span class="product-code" id="detailProductCode"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="product-price-section">
+                        <div class="price-info">
+                            <span class="current-price" id="detailProductPrice"></span>
+                            <span class="original-price" id="detailOriginalPrice"></span>
+                            <span class="discount-badge" id="detailDiscountBadge"></span>
+                        </div>
+                    </div>
+
+                    <div class="product-description" id="detailProductDescription"></div>
+
+                    <div class="product-specs" id="detailProductSpecs"></div>
+
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus">-</button>
+                            <input type="number" value="1" min="1" id="productQuantity">
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <button class="add-to-cart-btn" id="addToCartBtn">
+                            <span class="cart-icon">🛒</span>
+                            Thêm vào giỏ hàng
+                        </button>
+                        <button class="buy-now-btn">Mua ngay</button>
+                    </div>
+
+                    <div class="product-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">🚚</span>
+                            <span class="feature-text">Miễn phí vận chuyển</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">🛡️</span>
+                            <span class="feature-text">Bảo hành chính hãng</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">↩️</span>
+                            <span class="feature-text">Đổi trả trong 30 ngày</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHTL0ZIZkmRNi7kRF8UJdjR1qhx8cdre4",
+            authDomain: "webnoithat-de11f.firebaseapp.com",
+            databaseURL: "https://webnoithat-de11f-default-rtdb.firebaseio.com",
+            projectId: "webnoithat-de11f",
+            storageBucket: "webnoithat-de11f.firebasestorage.app",
+            messagingSenderId: "919918511984",
+            appId: "1:919918511984:web:d1b260dc52102fd279b1b5",
+            measurementId: "G-H1G2WJETSH"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const auth = firebase.auth();
+
+        // Format price to VND
+        function formatPrice(price) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(price);
+        }
+
+        // Load products from Firebase
+        function loadProducts() {
+            const productsRef = database.ref('products');
+            productsRef.on('value', (snapshot) => {
+                const products = snapshot.val();
+                const productsGrid = document.getElementById('productsGrid');
+                const categoryFilter = document.getElementById('categoryFilter');
+                const categories = new Set();
+                
+                // Clear existing products
+                productsGrid.innerHTML = '';
+
+                // Add products to grid
+                Object.entries(products).forEach(([productId, product]) => {
+                    // Add category to filter options
+                    if (product.danhMucSanPham && product.danhMucSanPham.tenDanhMuc) {
+                        categories.add(product.danhMucSanPham.tenDanhMuc);
+                    }
+
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.hinhAnh}" alt="${product.tenSanPham}" class="product-image">
+                        <div class="product-info">
+                            <h3 class="product-name">${product.tenSanPham}</h3>
+                            <p class="product-category" style="display: none;">${product.danhMucSanPham.tenDanhMuc}</p>
+                            <p class="product-price">${formatPrice(product.giaSauGiam)}</p>
+                            <div class="product-actions">
+                                <button class="btn-primary">Mua ngay</button>
+                                <button class="btn-secondary" onclick="showProductDetail('${productId}')">Chi tiết</button>
+                            </div>
+                        </div>
+                    `;
+                    productsGrid.appendChild(productCard);
+                });
+
+                // Update category filter options
+                categoryFilter.innerHTML = '<option value="">Tất cả danh mục</option>';
+                categories.forEach(category => {
+                    categoryFilter.innerHTML += `<option value="${category}">${category}</option>`;
+                });
+            });
+        }
+
+        // Filter products
+        function filterProducts() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const priceFilter = document.getElementById('priceFilter');
+            const products = document.querySelectorAll('.product-card');
+
+            products.forEach(product => {
+                const category = product.querySelector('.product-category').textContent;
+                const priceText = product.querySelector('.product-price').textContent;
+                const price = parseInt(priceText.replace(/[^0-9]/g, ''));
+                const selectedCategory = categoryFilter.value;
+                const selectedPrice = priceFilter.value;
+
+                let showProduct = true;
+
+                // Filter by category
+                if (selectedCategory && category !== selectedCategory) {
+                    showProduct = false;
+                }
+
+                // Filter by price
+                if (selectedPrice) {
+                    const [min, max] = selectedPrice.split('-').map(Number);
+                    if (price < min || price > max) {
+                        showProduct = false;
+                    }
+                }
+
+                product.style.display = showProduct ? 'block' : 'none';
+            });
+        }
+
+        // Add event listeners for filters
+        document.getElementById('categoryFilter').addEventListener('change', filterProducts);
+        document.getElementById('priceFilter').addEventListener('change', filterProducts);
+
+        // Load products when page loads
+        window.addEventListener('load', () => {
+            loadProducts();
+            
+            // Get category from URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const category = urlParams.get('category');
+            
+            if (category) {
+                // Wait for category filter to be populated
+                setTimeout(() => {
+                    const categoryFilter = document.getElementById('categoryFilter');
+                    categoryFilter.value = category;
+                    filterProducts();
+                }, 1000);
+            }
+        });
+
+        // Hàm hiển thị thông báo lỗi
+        function showError(title, message) {
+            Swal.fire({
+                icon: 'error',
+                title: title,
+                text: message,
+                confirmButtonColor: '#5a3d2b',
+            });
+        }
+
+        // Hàm hiển thị thông báo thành công
+        function showSuccess(title, message) {
+            Swal.fire({
+                icon: 'success',
+                title: title,
+                text: message,
+                confirmButtonColor: '#5a3d2b',
+            });
+        }
+
+        // Hàm hiển thị xác nhận
+        function showConfirm(title, message) {
+            return Swal.fire({
+                icon: 'question',
+                title: title,
+                text: message,
+                showCancelButton: true,
+                confirmButtonColor: '#5a3d2b',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đồng ý',
+                cancelButtonText: 'Hủy'
+            });
+        }
+
+        // Hiển thị modal
+        function showModal(modalId) {
+            // Ẩn tất cả các modal
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            
+            // Hiển thị modal được chọn và overlay
+            document.getElementById(modalId).classList.add('active');
+            document.getElementById('modalOverlay').style.display = 'block';
+        }
+
+        // Đóng modal khi click vào overlay
+        document.getElementById('modalOverlay').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        });
+
+        // Cập nhật hàm saveUserData
+        async function saveUserData(user, additionalData = {}) {
+            if (!user) return false;
+
+            const userData = {
+                email: user.email || '',
+                emailVerified: user.emailVerified || false,
+                displayName: user.displayName || additionalData.fullName || '',
+                lastLogin: new Date().toISOString(),
+                role: 'user',  // Mặc định role là user
+                ...additionalData
+            };
+
+            try {
+                // Kiểm tra và tạo reference đến node user
+                const userRef = database.ref('users/' + user.uid);
+                
+                // Lấy dữ liệu hiện tại của user (nếu có)
+                const snapshot = await userRef.once('value');
+                const currentData = snapshot.val() || {};
+
+                // Gộp dữ liệu mới với dữ liệu hiện tại
+                const updatedData = {
+                    ...currentData,
+                    ...userData,
+                    // Giữ lại createdAt nếu đã tồn tại, nếu không thì tạo mới
+                    createdAt: currentData.createdAt || new Date().toISOString()
+                };
+
+                // Cập nhật dữ liệu
+                await userRef.set(updatedData);
+                return true;
+            } catch (error) {
+                console.error('Error saving user data:', error);
+                if (error.code === 'PERMISSION_DENIED') {
+                    showError('Lỗi phân quyền', 'Không thể cập nhật thông tin. Vui lòng đăng nhập lại.');
+                } else {
+                    showError('Lỗi cập nhật', 'Không thể cập nhật thông tin người dùng. Vui lòng thử lại sau.');
+                }
+                return false;
+            }
+        }
+
+        // Cập nhật hàm updateLoginStatus
+        async function updateLoginStatus(user, status) {
+            if (!user) return false;
+
+            try {
+                const statusData = {
+                    status: status,
+                    timestamp: new Date().toISOString()
+                };
+
+                // Cập nhật trạng thái đăng nhập
+                await database.ref(`users/${user.uid}/loginStatus`).set(statusData);
+                return true;
+            } catch (error) {
+                console.error('Error updating login status:', error);
+                // Chỉ hiển thị lỗi nếu không phải là PERMISSION_DENIED
+                if (error.code !== 'PERMISSION_DENIED') {
+                    showError('Lỗi cập nhật', 'Không thể cập nhật trạng thái đăng nhập.');
+                }
+                return false;
+            }
+        }
+
+        // Cập nhật xử lý đăng nhập
+        async function handleLogin(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button');
+            const email = event.target.querySelector('input[type="email"]').value;
+            const password = event.target.querySelector('input[type="password"]').value;
+            
+            button.disabled = true;
+            
+            try {
+                const userCredential = await auth.signInWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                
+                const [savedData, updatedStatus] = await Promise.all([
+                    saveUserData(user),
+                    updateLoginStatus(user, 'online')
+                ]);
+
+                if (savedData && updatedStatus) {
+                    showSuccess('Đăng nhập thành công', 'Chào mừng bạn đã quay trở lại!');
+                    document.getElementById('modalOverlay').style.display = 'none';
+                    document.querySelectorAll('.modal').forEach(modal => {
+                        modal.classList.remove('active');
+                    });
+                }
+            } catch (error) {
+                console.error('Lỗi đăng nhập:', error);
+                let errorMessage = 'Đã có lỗi xảy ra';
+                switch (error.code) {
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email không hợp lệ';
+                        break;
+                    case 'auth/user-disabled':
+                        errorMessage = 'Tài khoản đã bị vô hiệu hóa';
+                        break;
+                    case 'auth/user-not-found':
+                        errorMessage = 'Không tìm thấy tài khoản với email này';
+                        break;
+                    case 'auth/wrong-password':
+                        errorMessage = 'Mật khẩu không chính xác';
+                        break;
+                }
+                showError('Đăng nhập thất bại', errorMessage);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Cập nhật xử lý đăng ký
+        async function handleRegister(event) {
+            event.preventDefault();
+            const form = event.target;
+            const button = form.querySelector('button');
+            const fullName = form.querySelector('input[type="text"]').value;
+            const email = form.querySelector('input[type="email"]').value;
+            const password = form.querySelectorAll('input[type="password"]')[0].value;
+            const confirmPassword = form.querySelectorAll('input[type="password"]')[1].value;
+
+            if (password !== confirmPassword) {
+                showError('Lỗi xác nhận', 'Mật khẩu xác nhận không khớp!');
+                return;
+            }
+
+            if (password.length < 6) {
+                showError('Lỗi mật khẩu', 'Mật khẩu phải có ít nhất 6 ký tự!');
+                return;
+            }
+
+            button.disabled = true;
+
+            try {
+                // Tạo tài khoản
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+
+                // Lưu thông tin bổ sung
+                const success = await saveUserData(user, {
+                    fullName,
+                    accountType: 'email',
+                    status: 'active'
+                });
+
+                if (success) {
+                    showSuccess('Đăng ký thành công', 'Vui lòng đăng nhập để tiếp tục!');
+                    // Reset form
+                    form.reset();
+                    showModal('loginModal');
+                }
+            } catch (error) {
+                console.error('Lỗi đăng ký:', error);
+                let errorMessage = 'Đã có lỗi xảy ra';
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        errorMessage = 'Email này đã được sử dụng bởi tài khoản khác';
+                        break;
+                    case 'auth/invalid-email':
+                        errorMessage = 'Email không hợp lệ';
+                        break;
+                    case 'auth/operation-not-allowed':
+                        errorMessage = 'Tính năng đăng ký tạm thời không khả dụng';
+                        break;
+                    case 'auth/weak-password':
+                        errorMessage = 'Mật khẩu không đủ mạnh';
+                        break;
+                }
+                showError('Đăng ký thất bại', errorMessage);
+            } finally {
+                button.disabled = false;
+            }
+        }
+
+        // Xử lý quên mật khẩu
+        function handleForgotPassword(event) {
+            event.preventDefault();
+            const button = event.target.querySelector('button');
+            const email = event.target.querySelector('input[type="email"]').value;
+            
+            button.disabled = true;
+            
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    showSuccess('Gửi email thành công', 'Vui lòng kiểm tra hộp thư của bạn để đặt lại mật khẩu.');
+                    showModal('loginModal');
+                })
+                .catch((error) => {
+                    console.error('Lỗi gửi email:', error);
+                    let errorMessage = 'Đã có lỗi xảy ra';
+                    switch (error.code) {
+                        case 'auth/invalid-email':
+                            errorMessage = 'Email không hợp lệ';
+                            break;
+                        case 'auth/user-not-found':
+                            errorMessage = 'Không tìm thấy tài khoản với email này';
+                            break;
+                    }
+                    showError('Gửi email thất bại', errorMessage);
+                })
+                .finally(() => {
+                    button.disabled = false;
+                });
+        }
+
+        // Kiểm tra trạng thái đăng nhập
+        auth.onAuthStateChanged((user) => {
+            const loginBtn = document.querySelector('.login-btn');
+            if (user) {
+                updateLoginStatus(user, 'online');
+                
+                loginBtn.innerHTML = `
+                    <span>👤</span>
+                    <span>${user.email}</span>
+                `;
+                loginBtn.onclick = () => {
+                    showConfirm('Đăng xuất', 'Bạn có chắc chắn muốn đăng xuất?')
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                updateLoginStatus(user, 'offline').then(() => {
+                                    auth.signOut();
+                                });
+                            }
+                        });
+                };
+
+                window.addEventListener('beforeunload', () => {
+                    updateLoginStatus(user, 'offline');
+                });
+            } else {
+                loginBtn.innerHTML = `
+                    <span>👤</span>
+                    <span>Đăng nhập</span>
+                `;
+                loginBtn.onclick = () => showModal('loginModal');
+            }
+        });
+
+        // Thêm hàm hiển thị chi tiết sản phẩm
+        function showProductDetail(productId) {
+            const productsRef = database.ref('products').child(productId);
+            productsRef.once('value')
+                .then((snapshot) => {
+                    const product = snapshot.val();
+                    if (product) {
+                        // Cập nhật hình ảnh chính
+                        document.getElementById('detailProductImage').src = product.hinhAnh;
+                        document.getElementById('detailProductImage').alt = product.tenSanPham;
+
+                        // Cập nhật thông tin sản phẩm
+                        document.getElementById('detailProductName').textContent = product.tenSanPham;
+                        document.getElementById('detailProductCategory').textContent = `Danh mục: ${product.danhMucSanPham.tenDanhMuc}`;
+                        document.getElementById('detailProductCode').textContent = `Mã SP: ${productId}`;
+                        
+                        // Cập nhật giá
+                        const currentPrice = formatPrice(product.giaSauGiam);
+                        const originalPrice = product.giaGoc ? formatPrice(product.giaGoc) : '';
+                        const discount = product.giaGoc ? Math.round((1 - product.giaSauGiam/product.giaGoc) * 100) : 0;
+                        
+                        document.getElementById('detailProductPrice').textContent = currentPrice;
+                        if (originalPrice) {
+                            document.getElementById('detailOriginalPrice').textContent = originalPrice;
+                            document.getElementById('detailDiscountBadge').textContent = `-${discount}%`;
+                        }
+
+                        // Cập nhật mô tả
+                        const descriptionHtml = product.moTa ? `
+                            <h4>Mô tả sản phẩm</h4>
+                            <p>${product.moTa}</p>
+                        ` : '';
+                        document.getElementById('detailProductDescription').innerHTML = descriptionHtml;
+
+                        // Cập nhật thông số kỹ thuật
+                        const specsHtml = product.thongSoKyThuat ? `
+                            <h4>Thông số kỹ thuật</h4>
+                            <div class="specs-grid">
+                                ${Object.entries(product.thongSoKyThuat).map(([key, value]) => `
+                                    <div class="spec-item">
+                                        <span class="spec-label">${key}:</span>
+                                        <span class="spec-value">${value}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        ` : '';
+                        document.getElementById('detailProductSpecs').innerHTML = specsHtml;
+
+                        // Cập nhật thumbnail gallery nếu có nhiều hình
+                        const thumbnailList = document.getElementById('thumbnailList');
+                        thumbnailList.innerHTML = '';
+                        if (product.hinhAnhPhu && product.hinhAnhPhu.length > 0) {
+                            [product.hinhAnh, ...product.hinhAnhPhu].forEach((img, index) => {
+                                const thumbnail = document.createElement('img');
+                                thumbnail.src = img;
+                                thumbnail.alt = `${product.tenSanPham} - Hình ${index + 1}`;
+                                thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
+                                thumbnail.onclick = () => {
+                                    document.getElementById('detailProductImage').src = img;
+                                    document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
+                                    thumbnail.classList.add('active');
+                                };
+                                thumbnailList.appendChild(thumbnail);
+                            });
+                        }
+
+                        // Cập nhật nút thêm vào giỏ hàng
+                        const addToCartBtn = document.getElementById('addToCartBtn');
+                        addToCartBtn.onclick = function() {
+                            addToCartFromModal(productId);
+                        };
+
+                        // Hiển thị modal
+                        showModal('productDetailModal');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error loading product details:', error);
+                    showError('Lỗi', 'Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.');
+                });
+        }
+
+        // Thêm hàm đóng modal
+        function closeModal(modalId) {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Xử lý nút tăng/giảm số lượng
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('productQuantity');
+            const minusBtn = document.querySelector('.quantity-btn.minus');
+            const plusBtn = document.querySelector('.quantity-btn.plus');
+
+            if (minusBtn && plusBtn && quantityInput) {
+                minusBtn.addEventListener('click', () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+
+                plusBtn.addEventListener('click', () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    quantityInput.value = currentValue + 1;
+                });
+
+                quantityInput.addEventListener('change', () => {
+                    if (parseInt(quantityInput.value) < 1) {
+                        quantityInput.value = 1;
+                    }
+                });
+            }
+        });
+
+        // Hàm thêm vào giỏ hàng từ modal chi tiết
+        function addToCartFromModal(productId) {
+            const productsRef = database.ref('products').child(productId);
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            
+            productsRef.once('value')
+                .then((snapshot) => {
+                    const product = snapshot.val();
+                    if (product) {
+                        // Lấy giỏ hàng hiện tại từ localStorage
+                        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+                        
+                        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+                        const existingProductIndex = cart.findIndex(item => item.id === productId);
+                        
+                        if (existingProductIndex > -1) {
+                            // Nếu sản phẩm đã có, tăng số lượng
+                            cart[existingProductIndex].quantity += quantity;
+                        } else {
+                            // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
+                            cart.push({
+                                id: productId,
+                                name: product.tenSanPham,
+                                price: product.giaSauGiam || product.giaBan,
+                                image: product.hinhAnh,
+                                quantity: quantity
+                            });
+                        }
+                        
+                        // Lưu giỏ hàng mới vào localStorage
+                        localStorage.setItem('cart', JSON.stringify(cart));
+                        
+                        // Hiển thị thông báo thành công
+                        showSuccess('Thành công', 'Đã thêm sản phẩm vào giỏ hàng!');
+                        
+                        // Đóng modal chi tiết
+                        closeModal('productDetailModal');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error adding to cart:', error);
+                    showError('Lỗi', 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.');
+                });
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tài khoản - Nội thất Mộc Nhiên</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+        
+        <!-- Firebase SDK -->
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics-compat.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+        
+        <!-- Sweetalert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            body {
+                font-family: 'Montserrat', sans-serif;
+                background-color: #f9f7f3;
+            }
+            .header-top {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #5a3d2b;
+                padding: 18px 0 12px 0;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            }
+            .logo {
+                width: 90px;
+                height: 90px;
+                margin-right: 18px;
+                border-radius: 60%;
+                border: 3px solid #e9c46a;
+                box-shadow: 0 0 15px rgba(233, 196, 106, 0.6);
+                transition: transform 0.3s, box-shadow 0.3s;
+                object-fit: cover;
+            }
+            .store-name {
+                font-family: 'Great Vibes', cursive;
+                font-size: 2.7rem;
+                font-weight: 400;
+                color: #e9c46a;
+                text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+                letter-spacing: 1.5px;
+            }
+            .header-nav {
+                width: 100%;
+                background-color: #4a3322;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+                display: flex;
+                justify-content: center;
+            }
+            .nav-links {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 0 10px;
+                min-height: 48px;
+            }
+            .nav-btn {
+                font-family: 'Montserrat', sans-serif;
+                text-decoration: none;
+                color: #f9f7f3;
+                font-weight: 500;
+                padding: 8px 12px;
+                border-radius: 5px;
+                transition: all 0.3s;
+                border: 1px solid transparent;
+                letter-spacing: 0.5px;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                position: relative;
+                white-space: nowrap;
+            }
+            .nav-btn:hover {
+                background-color: rgba(233, 196, 106, 0.2);
+                border-color: #e9c46a;
+            }
+            .active {
+                background-color: rgba(233, 196, 106, 0.2);
+                border: 1px solid #e9c46a;
+            }
+
+            /* Member Page Styles */
+            .member-container {
+                max-width: 1200px;
+                margin: 40px auto;
+                padding: 0 20px;
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                gap: 30px;
+            }
+
+            .member-sidebar {
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                height: fit-content;
+            }
+
+            .member-avatar {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                margin: 0 auto 20px;
+                display: block;
+                border: 3px solid #e9c46a;
+            }
+
+            .member-name {
+                text-align: center;
+                font-size: 1.2rem;
+                color: #5a3d2b;
+                margin-bottom: 5px;
+            }
+
+            .member-email {
+                text-align: center;
+                color: #666;
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+            }
+
+            .sidebar-menu li {
+                margin-bottom: 10px;
+            }
+
+            .sidebar-menu a {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                color: #5a3d2b;
+                text-decoration: none;
+                border-radius: 6px;
+                transition: all 0.3s;
+            }
+
+            .sidebar-menu a:hover,
+            .sidebar-menu a.active {
+                background: #f9f7f3;
+                color: #e9c46a;
+            }
+
+            .sidebar-menu i {
+                font-size: 1.2rem;
+            }
+
+            .member-content {
+                background: white;
+                border-radius: 12px;
+                padding: 30px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+            .content-header {
+                margin-bottom: 30px;
+            }
+
+            .content-header h2 {
+                font-size: 1.8rem;
+                color: #5a3d2b;
+                margin-bottom: 10px;
+            }
+
+            .content-header p {
+                color: #666;
+            }
+
+            /* Form Styles */
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #5a3d2b;
+                font-weight: 500;
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                font-size: 1rem;
+                transition: all 0.3s;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: #e9c46a;
+                box-shadow: 0 0 0 3px rgba(233, 196, 106, 0.2);
+            }
+
+            .btn {
+                padding: 12px 24px;
+                border: none;
+                border-radius: 6px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+                font-size: 1rem;
+            }
+
+            .btn-primary {
+                background: #e9c46a;
+                color: #5a3d2b;
+            }
+
+            .btn-primary:hover {
+                background: #5a3d2b;
+                color: #e9c46a;
+            }
+
+            /* Order History Styles */
+            .order-list {
+                display: grid;
+                gap: 20px;
+            }
+
+            .order-card {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+            }
+
+            .order-header {
+                background: #f9f7f3;
+                padding: 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .order-number {
+                font-weight: 600;
+                color: #5a3d2b;
+            }
+
+            .order-status {
+                padding: 5px 12px;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 500;
+            }
+
+            .status-pending {
+                background: #fff3e0;
+                color: #e65100;
+            }
+
+            .status-processing {
+                background: #e3f2fd;
+                color: #1565c0;
+            }
+
+            .status-completed {
+                background: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .status-cancelled {
+                background: #ffebee;
+                color: #c62828;
+            }
+
+            .order-items {
+                padding: 15px;
+            }
+
+            .order-item {
+                display: flex;
+                gap: 15px;
+                margin-bottom: 15px;
+                padding-bottom: 15px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .order-item:last-child {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+            }
+
+            .item-image {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+
+            .item-details {
+                flex: 1;
+            }
+
+            .item-name {
+                font-weight: 500;
+                color: #5a3d2b;
+                margin-bottom: 5px;
+            }
+
+            .item-price {
+                color: #666;
+                font-size: 0.9rem;
+            }
+
+            .order-footer {
+                padding: 15px;
+                background: #f9f7f3;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .order-total {
+                font-weight: 600;
+                color: #5a3d2b;
+            }
+
+            .order-actions {
+                display: flex;
+                gap: 10px;
+            }
+
+            .btn-outline {
+                background: transparent;
+                border: 2px solid #e9c46a;
+                color: #5a3d2b;
+            }
+
+            .btn-outline:hover {
+                background: #e9c46a;
+                color: #5a3d2b;
+            }
+
+            @media (max-width: 768px) {
+                .member-container {
+                    grid-template-columns: 1fr;
+                }
+                
+                .member-sidebar {
+                    position: sticky;
+                    top: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header-top">
+            <img src="picture/logo.jpg" alt="Mộc Nhiên Logo" class="logo">
+            <div class="store-name">Nội thất Mộc Nhiên</div>
+        </div>
+        <nav class="header-nav">
+            <div class="nav-links">
+                <a href="index.html" class="nav-btn">Trang chủ</a>
+                <a href="san-pham.html" class="nav-btn">Sản phẩm</a>
+                <a href="bo-suu-tap.html" class="nav-btn">Bộ sưu tập</a>
+                <a href="khuyen-mai.html" class="nav-btn">Khuyến mãi</a>
+                <a href="tin-tuc.html" class="nav-btn">Tin tức</a>
+                <a href="thanh-vien.html" class="nav-btn active">Tài khoản</a>
+                <a href="chinh-sach.html" class="nav-btn">Chính sách</a>
+                <a href="ve-chung-toi.html" class="nav-btn">Về chúng tôi</a>
+            </div>
+        </nav>
+
+        <div class="member-container">
+            <div class="member-sidebar">
+                <img src="picture/logo.jpg" alt="Avatar" class="member-avatar">
+                <h3 class="member-name" id="userName">Loading...</h3>
+                <p class="member-email" id="userEmail">Loading...</p>
+                
+                <ul class="sidebar-menu">
+                    <li><a href="#" class="active" onclick="showSection('profile')">
+                        <i>👤</i> Thông tin cá nhân
+                    </a></li>
+                    <li><a href="#" onclick="showSection('orders')">
+                        <i>📦</i> Lịch sử đặt hàng
+                    </a></li>
+                    <li><a href="#" onclick="showSection('address')">
+                        <i>📍</i> Địa chỉ giao hàng
+                    </a></li>
+                    <li><a href="#" onclick="showSection('password')">
+                        <i>🔒</i> Đổi mật khẩu
+                    </a></li>
+                    <li><a href="#" onclick="logout()">
+                        <i>🚪</i> Đăng xuất
+                    </a></li>
+                </ul>
+            </div>
+
+            <div class="member-content">
+                <!-- Profile Section -->
+                <div id="profileSection" class="content-section">
+                    <div class="content-header">
+                        <h2>Thông tin cá nhân</h2>
+                        <p>Cập nhật thông tin cá nhân của bạn</p>
+                    </div>
+                    <form id="profileForm" onsubmit="updateProfile(event)">
+                        <div class="form-group">
+                            <label for="fullName">Họ và tên</label>
+                            <input type="text" id="fullName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Số điện thoại</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" class="form-control" disabled>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập nhật thông tin</button>
+                    </form>
+                </div>
+
+                <!-- Orders Section -->
+                <div id="ordersSection" class="content-section" style="display: none;">
+                    <div class="content-header">
+                        <h2>Lịch sử đặt hàng</h2>
+                        <p>Xem lại các đơn hàng của bạn</p>
+                    </div>
+                    <div class="order-list" id="orderList">
+                        <!-- Orders will be dynamically added here -->
+                    </div>
+                </div>
+
+                <!-- Address Section -->
+                <div id="addressSection" class="content-section" style="display: none;">
+                    <div class="content-header">
+                        <h2>Địa chỉ giao hàng</h2>
+                        <p>Quản lý địa chỉ giao hàng của bạn</p>
+                    </div>
+                    <form id="addressForm" onsubmit="updateAddress(event)">
+                        <div class="form-group">
+                            <label for="address">Địa chỉ</label>
+                            <input type="text" id="address" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Thành phố</label>
+                            <input type="text" id="city" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="district">Quận/Huyện</label>
+                            <input type="text" id="district" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Cập nhật địa chỉ</button>
+                    </form>
+                </div>
+
+                <!-- Password Section -->
+                <div id="passwordSection" class="content-section" style="display: none;">
+                    <div class="content-header">
+                        <h2>Đổi mật khẩu</h2>
+                        <p>Cập nhật mật khẩu của bạn</p>
+                    </div>
+                    <form id="passwordForm" onsubmit="updatePassword(event)">
+                        <div class="form-group">
+                            <label for="currentPassword">Mật khẩu hiện tại</label>
+                            <input type="password" id="currentPassword" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Mật khẩu mới</label>
+                            <input type="password" id="newPassword" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Xác nhận mật khẩu mới</label>
+                            <input type="password" id="confirmPassword" class="form-control" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Đổi mật khẩu</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Cấu hình Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyBHTL0ZIZkmRNi7kRF8UJdjR1qhx8cdre4",
+                authDomain: "webnoithat-de11f.firebaseapp.com",
+                databaseURL: "https://webnoithat-de11f-default-rtdb.firebaseio.com",
+                projectId: "webnoithat-de11f",
+                storageBucket: "webnoithat-de11f.firebasestorage.app",
+                messagingSenderId: "919918511984",
+                appId: "1:919918511984:web:d1b260dc52102fd279b1b5",
+                measurementId: "G-H1G2WJETSH"
+            };
+
+            // Khởi tạo Firebase
+            firebase.initializeApp(firebaseConfig);
+            const database = firebase.database();
+            const auth = firebase.auth();
+
+            // Biến lưu trữ thông tin user hiện tại
+            let currentUser = null;
+
+            // Kiểm tra đăng nhập và load dữ liệu
+            auth.onAuthStateChanged((user) => {
+                if (!user) {
+                    Swal.fire({
+                        title: 'Vui lòng đăng nhập',
+                        text: 'Bạn cần đăng nhập để truy cập trang này',
+                        icon: 'warning',
+                        confirmButtonText: 'Đăng nhập'
+                    }).then(() => {
+                        window.location.href = 'index.html';
+                    });
+                    return;
+                }
+
+                currentUser = user;
+                loadUserData(user);
+                loadOrders(user.uid);
+            });
+
+            // Load thông tin user
+            function loadUserData(user) {
+                try {
+                    document.getElementById('userName').textContent = user.displayName || 'Chưa cập nhật';
+                    document.getElementById('userEmail').textContent = user.email;
+
+                    // Load thông tin chi tiết từ database
+                    database.ref('users/' + user.uid).once('value')
+                        .then((snapshot) => {
+                            const userData = snapshot.val();
+                            if (userData) {
+                                document.getElementById('fullName').value = userData.displayName || '';
+                                document.getElementById('phone').value = userData.phone || '';
+                                document.getElementById('email').value = user.email;
+                                document.getElementById('address').value = userData.address || '';
+                                document.getElementById('city').value = userData.city || '';
+                                document.getElementById('district').value = userData.district || '';
+                            }
+                        })
+                        .catch((error) => {
+                            console.error('Lỗi khi load thông tin user:', error);
+                            Swal.fire('Lỗi', 'Không thể tải thông tin người dùng', 'error');
+                        });
+                } catch (error) {
+                    console.error('Lỗi khi xử lý thông tin user:', error);
+                    Swal.fire('Lỗi', 'Có lỗi xảy ra khi xử lý thông tin', 'error');
+                }
+            }
+
+            // Load lịch sử đặt hàng
+            function loadOrders(userId) {
+                const orderList = document.getElementById('orderList');
+                
+                try {
+                    database.ref('orders').orderByChild('userId').equalTo(userId).on('value', (snapshot) => {
+                        const orders = snapshot.val();
+                        orderList.innerHTML = '';
+
+                        if (!orders) {
+                            orderList.innerHTML = '<p>Bạn chưa có đơn hàng nào</p>';
+                            return;
+                        }
+
+                        Object.entries(orders).forEach(([orderId, order]) => {
+                            if (!order || !order.items) return;
+
+                            const statusClass = {
+                                'pending': 'status-pending',
+                                'processing': 'status-processing',
+                                'completed': 'status-completed',
+                                'cancelled': 'status-cancelled'
+                            }[order.status] || 'status-pending';
+
+                            const statusText = {
+                                'pending': 'Chờ xác nhận',
+                                'processing': 'Đang xử lý',
+                                'completed': 'Hoàn thành',
+                                'cancelled': 'Đã hủy'
+                            }[order.status] || 'Chờ xác nhận';
+
+                            const orderDate = new Date(order.createdAt).toLocaleString();
+
+                            let orderItems = '';
+                            order.items.forEach(item => {
+                                if (!item) return;
+                                orderItems += `
+                                    <div class="order-item">
+                                        <img src="${item.image || 'picture/logo.jpg'}" alt="${item.name || 'Sản phẩm'}" class="item-image">
+                                        <div class="item-details">
+                                            <h4 class="item-name">${item.name || 'Sản phẩm không xác định'}</h4>
+                                            <p class="item-price">${(item.price || 0).toLocaleString()}đ x ${item.quantity || 1}</p>
+                                        </div>
+                                    </div>
+                                `;
+                            });
+
+                            orderList.innerHTML += `
+                                <div class="order-card">
+                                    <div class="order-header">
+                                        <span class="order-number">Đơn hàng #${orderId}</span>
+                                        <span class="order-status ${statusClass}">${statusText}</span>
+                                    </div>
+                                    <div class="order-items">
+                                        ${orderItems}
+                                    </div>
+                                    <div class="order-footer">
+                                        <span class="order-total">Tổng tiền: ${(order.total || 0).toLocaleString()}đ</span>
+                                        <div class="order-actions">
+                                            <button class="btn btn-outline" onclick="viewOrderDetail('${orderId}')">Chi tiết</button>
+                                            ${order.status === 'pending' ? `
+                                                <button class="btn btn-outline" onclick="cancelOrder('${orderId}')">Hủy đơn</button>
+                                            ` : ''}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                    }, (error) => {
+                        console.error('Lỗi khi load đơn hàng:', error);
+                        Swal.fire('Lỗi', 'Không thể tải lịch sử đơn hàng', 'error');
+                    });
+                } catch (error) {
+                    console.error('Lỗi khi xử lý đơn hàng:', error);
+                    Swal.fire('Lỗi', 'Có lỗi xảy ra khi xử lý đơn hàng', 'error');
+                }
+            }
+
+            // Cập nhật thông tin cá nhân
+            function updateProfile(event) {
+                event.preventDefault();
+                if (!currentUser) return;
+
+                const fullName = document.getElementById('fullName').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+
+                if (!fullName) {
+                    Swal.fire('Lỗi', 'Vui lòng nhập họ tên', 'error');
+                    return;
+                }
+
+                if (!phone) {
+                    Swal.fire('Lỗi', 'Vui lòng nhập số điện thoại', 'error');
+                    return;
+                }
+
+                // Validate phone number
+                const phoneRegex = /^[0-9]{10,11}$/;
+                if (!phoneRegex.test(phone)) {
+                    Swal.fire('Lỗi', 'Số điện thoại không hợp lệ', 'error');
+                    return;
+                }
+
+                const userData = {
+                    displayName: fullName,
+                    phone: phone
+                };
+
+                // Show loading
+                Swal.fire({
+                    title: 'Đang cập nhật...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                database.ref('users/' + currentUser.uid).update(userData)
+                    .then(() => {
+                        // Update display name in auth
+                        return currentUser.updateProfile({
+                            displayName: fullName
+                        });
+                    })
+                    .then(() => {
+                        Swal.fire('Thành công', 'Thông tin đã được cập nhật', 'success');
+                        loadUserData(currentUser);
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi cập nhật thông tin:', error);
+                        Swal.fire('Lỗi', 'Không thể cập nhật thông tin', 'error');
+                    });
+            }
+
+            // Cập nhật địa chỉ
+            function updateAddress(event) {
+                event.preventDefault();
+                if (!currentUser) return;
+
+                const address = document.getElementById('address').value.trim();
+                const city = document.getElementById('city').value.trim();
+                const district = document.getElementById('district').value.trim();
+
+                if (!address || !city || !district) {
+                    Swal.fire('Lỗi', 'Vui lòng điền đầy đủ thông tin địa chỉ', 'error');
+                    return;
+                }
+
+                const addressData = {
+                    address: address,
+                    city: city,
+                    district: district
+                };
+
+                // Show loading
+                Swal.fire({
+                    title: 'Đang cập nhật...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                database.ref('users/' + currentUser.uid).update(addressData)
+                    .then(() => {
+                        Swal.fire('Thành công', 'Địa chỉ đã được cập nhật', 'success');
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi cập nhật địa chỉ:', error);
+                        Swal.fire('Lỗi', 'Không thể cập nhật địa chỉ', 'error');
+                    });
+            }
+
+            // Đổi mật khẩu
+            function updatePassword(event) {
+                event.preventDefault();
+                if (!currentUser) return;
+
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    Swal.fire('Lỗi', 'Vui lòng điền đầy đủ thông tin', 'error');
+                    return;
+                }
+
+                if (newPassword !== confirmPassword) {
+                    Swal.fire('Lỗi', 'Mật khẩu xác nhận không khớp', 'error');
+                    return;
+                }
+
+                if (newPassword.length < 6) {
+                    Swal.fire('Lỗi', 'Mật khẩu mới phải có ít nhất 6 ký tự', 'error');
+                    return;
+                }
+
+                // Show loading
+                Swal.fire({
+                    title: 'Đang xử lý...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                // Reauthenticate user
+                const credential = firebase.auth.EmailAuthProvider.credential(
+                    currentUser.email,
+                    currentPassword
+                );
+
+                currentUser.reauthenticateWithCredential(credential)
+                    .then(() => {
+                        return currentUser.updatePassword(newPassword);
+                    })
+                    .then(() => {
+                        Swal.fire('Thành công', 'Mật khẩu đã được cập nhật', 'success');
+                        document.getElementById('passwordForm').reset();
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi đổi mật khẩu:', error);
+                        if (error.code === 'auth/wrong-password') {
+                            Swal.fire('Lỗi', 'Mật khẩu hiện tại không đúng', 'error');
+                        } else {
+                            Swal.fire('Lỗi', 'Không thể cập nhật mật khẩu', 'error');
+                        }
+                    });
+            }
+
+            // Xem chi tiết đơn hàng
+            function viewOrderDetail(orderId) {
+                if (!orderId) return;
+
+                // Show loading
+                Swal.fire({
+                    title: 'Đang tải...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                database.ref('orders/' + orderId).once('value')
+                    .then((snapshot) => {
+                        const order = snapshot.val();
+                        if (!order) {
+                            throw new Error('Không tìm thấy đơn hàng');
+                        }
+
+                        const orderDate = new Date(order.createdAt).toLocaleString();
+                        const statusText = {
+                            'pending': 'Chờ xác nhận',
+                            'processing': 'Đang xử lý',
+                            'completed': 'Hoàn thành',
+                            'cancelled': 'Đã hủy'
+                        }[order.status] || 'Chờ xác nhận';
+
+                        let itemsHtml = '';
+                        if (order.items && order.items.length > 0) {
+                            itemsHtml = order.items.map(item => `
+                                <div style="margin-bottom: 10px;">
+                                    <p><strong>${item.name}</strong></p>
+                                    <p>Số lượng: ${item.quantity}</p>
+                                    <p>Giá: ${item.price.toLocaleString()}đ</p>
+                                </div>
+                            `).join('');
+                        }
+
+                        Swal.fire({
+                            title: `Chi tiết đơn hàng #${orderId}`,
+                            html: `
+                                <div style="text-align: left;">
+                                    <p><strong>Ngày đặt:</strong> ${orderDate}</p>
+                                    <p><strong>Trạng thái:</strong> ${statusText}</p>
+                                    <p><strong>Địa chỉ giao hàng:</strong> ${order.shippingAddress || 'Chưa cập nhật'}</p>
+                                    <p><strong>Tổng tiền:</strong> ${(order.total || 0).toLocaleString()}đ</p>
+                                    <hr>
+                                    <h4>Sản phẩm:</h4>
+                                    ${itemsHtml}
+                                </div>
+                            `,
+                            width: '600px'
+                        });
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi xem chi tiết đơn hàng:', error);
+                        Swal.fire('Lỗi', 'Không thể tải thông tin đơn hàng', 'error');
+                    });
+            }
+
+            // Hủy đơn hàng
+            function cancelOrder(orderId) {
+                if (!orderId) return;
+
+                Swal.fire({
+                    title: 'Xác nhận hủy đơn',
+                    text: 'Bạn có chắc chắn muốn hủy đơn hàng này?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Hủy đơn',
+                    cancelButtonText: 'Không'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Đang xử lý...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        database.ref('orders/' + orderId).update({
+                            status: 'cancelled',
+                            cancelledAt: firebase.database.ServerValue.TIMESTAMP
+                        }).then(() => {
+                            Swal.fire('Thành công', 'Đơn hàng đã được hủy', 'success');
+                        }).catch((error) => {
+                            console.error('Lỗi khi hủy đơn hàng:', error);
+                            Swal.fire('Lỗi', 'Không thể hủy đơn hàng', 'error');
+                        });
+                    }
+                });
+            }
+
+            // Hiển thị section
+            function showSection(sectionId) {
+                if (!sectionId) return;
+
+                // Ẩn tất cả các section
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.style.display = 'none';
+                });
+
+                // Hiển thị section được chọn
+                const selectedSection = document.getElementById(sectionId + 'Section');
+                if (selectedSection) {
+                    selectedSection.style.display = 'block';
+                }
+
+                // Cập nhật active state cho menu
+                document.querySelectorAll('.sidebar-menu a').forEach(link => {
+                    link.classList.remove('active');
+                });
+                event.currentTarget.classList.add('active');
+            }
+
+            // Đăng xuất
+            function logout() {
+                Swal.fire({
+                    title: 'Xác nhận đăng xuất',
+                    text: 'Bạn có chắc chắn muốn đăng xuất?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đăng xuất',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Đang đăng xuất...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        auth.signOut().then(() => {
+                            window.location.href = 'index.html';
+                        }).catch((error) => {
+                            console.error('Lỗi khi đăng xuất:', error);
+                            Swal.fire('Lỗi', 'Không thể đăng xuất', 'error');
+                        });
+                    }
+                });
+            }
+
+            // Xử lý lỗi chung
+            window.onerror = function(msg, url, lineNo, columnNo, error) {
+                console.error('Lỗi:', msg, 'URL:', url, 'Line:', lineNo, 'Column:', columnNo, 'Error:', error);
+                return false;
+            };
+        </script>
+    </body>
+</html> 
