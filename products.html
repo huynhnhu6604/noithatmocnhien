@@ -208,11 +208,217 @@
             margin: 0 auto;
         }
 
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        .products-header {
+            margin-bottom: 30px;
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #5a3d2b;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .breadcrumb a:hover {
+            color: #e9c46a;
+        }
+
+        .breadcrumb-separator {
+            color: #999;
+        }
+
+        .products-title {
+            font-size: 2rem;
+            color: #5a3d2b;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .products-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .products-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .products-sort {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .sort-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            color: #5a3d2b;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .sort-select:hover {
+            border-color: #e9c46a;
+        }
+
+        .sort-select:focus {
+            outline: none;
+            border-color: #e9c46a;
+            box-shadow: 0 0 0 2px rgba(233, 196, 106, 0.2);
+        }
+
+        .products-content {
+            display: flex;
             gap: 30px;
-            margin-top: 30px;
+        }
+
+        .filters {
+            width: 300px;
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .filter-group {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .filter-title {
+            font-size: 1.2rem;
+            color: #5a3d2b;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e9c46a;
+        }
+
+        .filter-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .filter-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #666;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid transparent;
+        }
+
+        .filter-item:hover {
+            background-color: rgba(233, 196, 106, 0.1);
+            color: #5a3d2b;
+            border-color: #e9c46a;
+        }
+
+        .filter-item.active {
+            background-color: #e9c46a;
+            color: #5a3d2b;
+            font-weight: 500;
+            border-color: #e9c46a;
+        }
+
+        .filter-item-count {
+            color: #999;
+            font-size: 0.85rem;
+            margin-left: auto;
+            background: rgba(233, 196, 106, 0.1);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Custom scrollbar for filter list */
+        .filter-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .filter-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .filter-list::-webkit-scrollbar-thumb {
+            background: #e9c46a;
+            border-radius: 3px;
+        }
+
+        .filter-list::-webkit-scrollbar-thumb:hover {
+            background: #d4b054;
+        }
+
+        @media (max-width: 1200px) {
+            .filters {
+                width: 100%;
+                position: static;
+                margin-bottom: 30px;
+            }
+
+            .filter-list {
+                max-height: 300px;
+            }
+        }
+
+        .products-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .products-grid {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .product-card {
@@ -220,8 +426,14 @@
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s ease;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            aspect-ratio: 1;
+            max-width: 350px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .product-card:hover {
@@ -231,18 +443,39 @@
 
         .product-image {
             width: 100%;
-            height: 250px;
+            aspect-ratio: 1;
             object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
         }
 
         .product-info {
             padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(to bottom, #fff, #f9f7f3);
+            justify-content: space-between;
         }
 
         .product-name {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: #5a3d2b;
             margin-bottom: 10px;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 2.8em;
+            transition: color 0.3s ease;
+        }
+
+        .product-card:hover .product-name {
+            color: #e9c46a;
         }
 
         .product-price {
@@ -250,20 +483,115 @@
             font-size: 1.3rem;
             font-weight: 600;
             margin-bottom: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-price {
+            transform: scale(1.05);
         }
 
         .product-actions {
             display: flex;
-            gap: 10px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
-        .btn-primary, .btn-secondary {
-            padding: 8px 20px;
-            border-radius: 6px;
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .quantity-btn {
+            width: 45px;
+            height: 45px;
+            border: none;
+            background: #f5f5f5;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quantity-btn:hover {
+            background: #e9c46a;
+            color: white;
+        }
+
+        #productQuantity {
+            width: 70px;
+            height: 45px;
+            border: none;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .add-to-cart-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 45px;
+            font-size: 1rem;
+            background: #e9c46a;
+            color: #5a3d2b;
+        }
+
+        .add-to-cart-btn:hover {
+            background: #5a3d2b;
+            color: #e9c46a;
+        }
+
+        .buy-now-btn {
+            flex: 1;
+            padding: 12px 20px;
             border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            height: 45px;
+            font-size: 1rem;
+            background: #e9c46a;
+            color: #5a3d2b;
+        }
+
+        .buy-now-btn:hover {
+            background: #5a3d2b;
+            color: #e9c46a;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            flex: 1;
+            text-align: center;
+            font-size: 0.9rem;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .btn-primary {
@@ -280,10 +608,32 @@
         .btn-primary:hover {
             background: #5a3d2b;
             color: #e9c46a;
+            transform: translateY(-2px);
         }
 
         .btn-secondary:hover {
             background: #e9c46a;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 1200px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                padding: 0 20px;
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                padding: 0 15px;
+                gap: 20px;
+            }
+            
+            .product-card {
+                max-width: 300px;
+            }
         }
 
         /* Footer */
@@ -355,45 +705,6 @@
             font-size: 0.9rem;
         }
 
-        /* Filters */
-        .filters {
-            margin-bottom: 30px;
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-        }
-
-        .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-
-        .filter-select {
-            width: 100%;
-            padding: 12px;
-            border: 1.5px solid #e9c46a;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            color: #5a3d2b;
-            background: #fff;
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-
-        .filter-select:focus {
-            outline: none;
-            border-color: #5a3d2b;
-            box-shadow: 0 0 0 2px rgba(90, 61, 43, 0.1);
-        }
-
-        .filter-select option {
-            padding: 10px;
-        }
-
         /* Styles cho modal */
         .modal-overlay {
             display: none;
@@ -403,9 +714,13 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
+            z-index: 999;
             -webkit-backdrop-filter: blur(5px);
             backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: block;
         }
 
         .modal {
@@ -534,20 +849,52 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Thêm style cho modal chi tiết sản phẩm */
+        /* Style cho modal chi tiết sản phẩm */
         .product-detail-modal {
-            max-width: 1000px;
+            max-width: 1200px;
             width: 95%;
-            max-height: 90vh;
-            overflow-y: auto;
+            height: 90vh;
+            background: #fff;
+            border-radius: 15px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; /* Thay đổi từ flex thành none */
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 1000;
         }
 
-        .product-detail-modal .modal-header {
+        .product-detail-modal.active {
+            display: flex; /* Hiển thị khi có class active */
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            -webkit-backdrop-filter: blur(5px);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 30px;
             border-bottom: 1px solid #eee;
+            background: #fff;
+            z-index: 2;
         }
 
         .close-modal {
@@ -557,32 +904,46 @@
             color: #666;
             cursor: pointer;
             padding: 5px;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
         }
 
         .close-modal:hover {
             color: #e9c46a;
+            background: rgba(233, 196, 106, 0.1);
+        }
+
+        .product-detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
         }
 
         .product-detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 40px;
-            padding: 30px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
-        /* Product Gallery */
         .product-gallery {
             position: relative;
         }
 
         .main-image {
             width: 100%;
-            height: 400px;
+            aspect-ratio: 1;
             border-radius: 12px;
             overflow: hidden;
             margin-bottom: 15px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
         }
 
         .main-image img {
@@ -601,6 +962,22 @@
             gap: 10px;
             overflow-x: auto;
             padding: 5px;
+            scrollbar-width: thin;
+            scrollbar-color: #e9c46a #f1f1f1;
+        }
+
+        .thumbnail-list::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .thumbnail-list::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .thumbnail-list::-webkit-scrollbar-thumb {
+            background: #e9c46a;
+            border-radius: 3px;
         }
 
         .thumbnail {
@@ -610,6 +987,8 @@
             cursor: pointer;
             border: 2px solid transparent;
             transition: all 0.3s;
+            object-fit: cover;
+            flex-shrink: 0;
         }
 
         .thumbnail:hover {
@@ -620,7 +999,12 @@
             border-color: #5a3d2b;
         }
 
-        /* Product Info */
+        .product-detail-info {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
         .product-header {
             margin-bottom: 20px;
         }
@@ -628,7 +1012,7 @@
         .product-header h3 {
             font-size: 2rem;
             color: #5a3d2b;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             line-height: 1.3;
         }
 
@@ -641,7 +1025,7 @@
 
         .product-price-section {
             background: #f9f7f3;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
             margin-bottom: 25px;
         }
@@ -654,28 +1038,23 @@
         }
 
         .current-price {
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #e9c46a;
             font-weight: 600;
         }
 
         .original-price {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: #999;
             text-decoration: line-through;
         }
 
-        /* .discount-badge {
+        .discount-badge {
             background: #ff6b6b;
             color: white;
             padding: 5px 10px;
             border-radius: 4px;
             font-size: 0.9rem;
-        } */
-
-        .stock-status {
-            color: #28a745;
-            font-weight: 500;
         }
 
         .product-description {
@@ -717,79 +1096,6 @@
         .spec-value {
             color: #333;
             font-weight: 500;
-        }
-
-        /* Product Actions */
-        .product-actions {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .quantity-selector {
-            display: flex;
-            align-items: center;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .quantity-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            background: #f5f5f5;
-            cursor: pointer;
-            font-size: 1.2rem;
-            transition: background 0.3s;
-        }
-
-        .quantity-btn:hover {
-            background: #e9c46a;
-            color: white;
-        }
-
-        #productQuantity {
-            width: 60px;
-            height: 40px;
-            border: none;
-            text-align: center;
-            font-size: 1rem;
-        }
-
-        .add-to-cart-btn, .buy-now-btn {
-            flex: 1;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .add-to-cart-btn {
-            background: #fff;
-            border: 2px solid #e9c46a;
-            color: #5a3d2b;
-        }
-
-        .buy-now-btn {
-            background: #e9c46a;
-            color: #5a3d2b;
-        }
-
-        .add-to-cart-btn:hover {
-            background: #e9c46a;
-            color: white;
-        }
-
-        .buy-now-btn:hover {
-            background: #5a3d2b;
-            color: #e9c46a;
         }
 
         /* Product Features */
@@ -850,6 +1156,97 @@
             font-size: 0.8rem;
             font-weight: bold;
         }
+
+        /* Pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .pagination-item {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            background: #fff;
+            color: #5a3d2b;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid #e9c46a;
+        }
+
+        .pagination-item:hover {
+            background: #e9c46a;
+            color: #fff;
+        }
+
+        .pagination-item.active {
+            background: #e9c46a;
+            color: #fff;
+        }
+
+        .pagination-item.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            border-color: #ddd;
+        }
+
+        .pagination-item.disabled:hover {
+            background: #fff;
+            color: #5a3d2b;
+        }
+
+        /* Thêm style cho trường hợp không có sản phẩm */
+        .no-products {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 40px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            margin: 20px auto;
+            max-width: 350px;
+        }
+
+        /* New styles for product-image-container */
+        .product-image-container {
+            width: 100%;
+            aspect-ratio: 1;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .product-image-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.03);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .product-image-container:hover::after {
+            opacity: 1;
+        }
+
+        .product-name {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .product-name:hover {
+            color: #e9c46a;
+        }
     </style>
 </head>
 <body>
@@ -904,13 +1301,13 @@
                     </div>
                 </div>
             </div>
-            <a href="bo-suu-tap.html" class="nav-btn">Bộ sưu tập</a>
-            <a href="khuyen-mai.html" class="nav-btn">Khuyến mãi</a>
-            <a href="tin-tuc.html" class="nav-btn">Tin tức</a>
+            <a href="collection.html" class="nav-btn">Bộ sưu tập</a>
+            <a href="promotion.html" class="nav-btn">Khuyến mãi</a>
+            <a href="news.html" class="nav-btn">Tin tức</a>
             <a href="member.html" class="nav-btn">Thành viên</a>
-            <a href="chinh-sach.html" class="nav-btn">Chính sách</a>
-            <a href="ve-chung-toi.html" class="nav-btn">Về chúng tôi</a>
-            <a href="card.html" class="cart-btn">
+            <a href="policy.html" class="nav-btn">Chính sách</a>
+            <a href="about.html" class="nav-btn">Về chúng tôi</a>
+            <a href="cart.html" class="cart-btn">
                 <span class="cart-icon">🛒</span>
                 <span>Giỏ hàng</span>
             </a>
@@ -923,25 +1320,58 @@
 
     <!-- Products Section -->
     <section class="products-container">
-        <div class="filters">
-            <div class="filter-group">
-                <select id="categoryFilter" class="filter-select">
-                    <option value="">Tất cả danh mục</option>
-                </select>
+        <div class="products-header">
+            <div class="breadcrumb">
+                <a href="index.html">Trang chủ</a>
+                <span class="breadcrumb-separator">/</span>
+                <span>Sản phẩm</span>
             </div>
-            <div class="filter-group">
-                <select id="priceFilter" class="filter-select">
-                    <option value="">Giá</option>
-                    <option value="0-10000000">Dưới 10 triệu</option>
-                    <option value="10000000-20000000">10 - 20 triệu</option>
-                    <option value="20000000-30000000">20 - 30 triệu</option>
-                    <option value="30000000-999999999">Trên 30 triệu</option>
-                </select>
+            <h1 class="products-title">Sản phẩm</h1>
+            <div class="products-toolbar">
+                <div class="products-count">
+                    Hiển thị <span id="productsCount">0</span> sản phẩm
+                </div>
+                <div class="products-sort">
+                    <span class="sort-label">Sắp xếp theo:</span>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="newest">Mới nhất</option>
+                        <option value="price-asc">Giá tăng dần</option>
+                        <option value="price-desc">Giá giảm dần</option>
+                        <option value="name-asc">Tên A-Z</option>
+                        <option value="name-desc">Tên Z-A</option>
+                    </select>
+                </div>
             </div>
         </div>
 
+        <div class="products-content">
+        <div class="filters">
+            <div class="filter-group">
+                    <h3 class="filter-title">Danh mục</h3>
+                    <ul class="filter-list" id="categoryFilter">
+                        <li class="filter-item active" data-value="">Tất cả danh mục</li>
+                    </ul>
+            </div>
+            <div class="filter-group">
+                    <h3 class="filter-title">Giá</h3>
+                    <ul class="filter-list" id="priceFilter">
+                        <li class="filter-item active" data-value="">Tất cả giá</li>
+                        <li class="filter-item" data-value="0-10000000">Dưới 10 triệu</li>
+                        <li class="filter-item" data-value="10000000-20000000">10 - 20 triệu</li>
+                        <li class="filter-item" data-value="20000000-30000000">20 - 30 triệu</li>
+                        <li class="filter-item" data-value="30000000-999999999">Trên 30 triệu</li>
+                    </ul>
+            </div>
+        </div>
+
+            <div class="products-main">
         <div class="products-grid" id="productsGrid">
             <!-- Products will be loaded here dynamically -->
+                </div>
+                <div class="pagination" id="pagination">
+                    <!-- Pagination will be added here dynamically -->
+                </div>
+            </div>
         </div>
     </section>
 
@@ -1118,23 +1548,9 @@
                             <span class="cart-icon">🛒</span>
                             Thêm vào giỏ hàng
                         </button>
-                        <button class="buy-now-btn">Mua ngay</button>
                     </div>
 
-                    <div class="product-features">
-                        <div class="feature-item">
-                            <span class="feature-icon">🚚</span>
-                            <span class="feature-text">Miễn phí vận chuyển</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">🛡️</span>
-                            <span class="feature-text">Bảo hành chính hãng</span>
-                        </div>
-                        <div class="feature-item">
-                            <span class="feature-icon">↩️</span>
-                            <span class="feature-text">Đổi trả trong 30 ngày</span>
-                        </div>
-                    </div>
+                
                 </div>
             </div>
         </div>
@@ -1166,6 +1582,12 @@
             }).format(price);
         }
 
+        // Global variables for pagination and sorting
+        let currentPage = 1;
+        const productsPerPage = 6;
+        let filteredProducts = [];
+        let allProducts = [];
+
         // Load products from Firebase
         function loadProducts() {
             const productsRef = database.ref('products');
@@ -1177,77 +1599,327 @@
                 
                 // Clear existing products
                 productsGrid.innerHTML = '';
+                allProducts = [];
+                filteredProducts = [];
 
-                // Add products to grid
-                Object.entries(products).forEach(([productId, product]) => {
-                    // Add category to filter options
-                    if (product.danhMucSanPham && product.danhMucSanPham.tenDanhMuc) {
-                        categories.add(product.danhMucSanPham.tenDanhMuc);
-                    }
+                // Add products to array
+                if (products) {
+                    Object.entries(products).forEach(([productId, product]) => {
+                        // Add category to filter options
+                        if (product.danhMucSanPham && product.danhMucSanPham.tenDanhMuc) {
+                            categories.add(product.danhMucSanPham.tenDanhMuc);
+                        }
 
-                    const productCard = document.createElement('div');
-                    productCard.className = 'product-card';
-                    productCard.innerHTML = `
-                        <img src="${product.hinhAnh}" alt="${product.tenSanPham}" class="product-image">
-                        <div class="product-info">
-                            <h3 class="product-name">${product.tenSanPham}</h3>
-                            <p class="product-category" style="display: none;">${product.danhMucSanPham.tenDanhMuc}</p>
-                            <p class="product-price">${formatPrice(product.giaSauGiam)}</p>
-                            <div class="product-actions">
-                                <button class="btn-primary">Mua ngay</button>
-                                <button class="btn-secondary" onclick="showProductDetail('${productId}')">Chi tiết</button>
-                            </div>
-                        </div>
-                    `;
-                    productsGrid.appendChild(productCard);
-                });
+                        allProducts.push({
+                            id: productId,
+                            ...product
+                        });
+                    });
+                }
 
-                // Update category filter options
-                categoryFilter.innerHTML = '<option value="">Tất cả danh mục</option>';
-                categories.forEach(category => {
-                    categoryFilter.innerHTML += `<option value="${category}">${category}</option>`;
-                });
+                // Update category filter options with counts
+                if (categoryFilter) {
+                    categoryFilter.innerHTML = '<li class="filter-item active" data-value="">Tất cả danh mục</li>';
+                    categories.forEach(category => {
+                        const count = allProducts.filter(p => 
+                            p.danhMucSanPham && 
+                            p.danhMucSanPham.tenDanhMuc === category
+                        ).length;
+                        categoryFilter.innerHTML += `
+                            <li class="filter-item" data-value="${category}">
+                                ${category}
+                                <span class="filter-item-count">(${count})</span>
+                            </li>
+                        `;
+                    });
+
+                    // Add click event listeners to new category items
+                    categoryFilter.querySelectorAll('.filter-item').forEach(item => {
+                        item.addEventListener('click', function() {
+                            categoryFilter.querySelectorAll('.filter-item').forEach(i => {
+                                i.classList.remove('active');
+                            });
+                            this.classList.add('active');
+                            currentPage = 1;
+                            filterProducts();
+                        });
+                    });
+                }
+
+                // Initial render
+                filteredProducts = [...allProducts];
+                updateProductsCount();
+                sortProducts();
+                renderProducts();
+                renderPagination();
+
+                // Get category from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category');
+                
+                if (category && categoryFilter) {
+                    // Wait for category filter to be populated
+                    setTimeout(() => {
+                        const categoryItems = categoryFilter.querySelectorAll('.filter-item');
+                        categoryItems.forEach(item => {
+                            if (item.dataset.value === category) {
+                                item.classList.add('active');
+                            } else {
+                                item.classList.remove('active');
+                            }
+                        });
+                        filterProducts();
+                    }, 1000);
+                }
             });
+        }
+
+        // Sort products
+        function sortProducts() {
+            const sortValue = document.getElementById('sortSelect').value;
+            
+            switch(sortValue) {
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => a.giaSauGiam - b.giaSauGiam);
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => b.giaSauGiam - a.giaSauGiam);
+                    break;
+                case 'name-asc':
+                    filteredProducts.sort((a, b) => a.tenSanPham.localeCompare(b.tenSanPham, 'vi'));
+                    break;
+                case 'name-desc':
+                    filteredProducts.sort((a, b) => b.tenSanPham.localeCompare(a.tenSanPham, 'vi'));
+                    break;
+                case 'newest':
+                default:
+                    filteredProducts.sort((a, b) => {
+                        const dateA = a.ngayTao ? new Date(a.ngayTao) : new Date(0);
+                        const dateB = b.ngayTao ? new Date(b.ngayTao) : new Date(0);
+                        return dateB - dateA;
+                    });
+                    break;
+            }
+
+            currentPage = 1;
+            renderProducts();
+            renderPagination();
         }
 
         // Filter products
         function filterProducts() {
             const categoryFilter = document.getElementById('categoryFilter');
             const priceFilter = document.getElementById('priceFilter');
-            const products = document.querySelectorAll('.product-card');
+            
+            // Kiểm tra xem các filter có tồn tại không
+            if (!categoryFilter || !priceFilter) {
+                console.error('Filter elements not found');
+                return;
+            }
 
-            products.forEach(product => {
-                const category = product.querySelector('.product-category').textContent;
-                const priceText = product.querySelector('.product-price').textContent;
-                const price = parseInt(priceText.replace(/[^0-9]/g, ''));
-                const selectedCategory = categoryFilter.value;
-                const selectedPrice = priceFilter.value;
+            // Lấy filter item đang active
+            const activeCategoryItem = categoryFilter.querySelector('.filter-item.active');
+            const activePriceItem = priceFilter.querySelector('.filter-item.active');
+            
+            // Nếu không tìm thấy item active, sử dụng giá trị mặc định
+            const selectedCategory = activeCategoryItem ? activeCategoryItem.dataset.value : '';
+            const selectedPrice = activePriceItem ? activePriceItem.dataset.value : '';
 
-                let showProduct = true;
+            // Reset to all products first
+            filteredProducts = [...allProducts];
 
-                // Filter by category
-                if (selectedCategory && category !== selectedCategory) {
-                    showProduct = false;
-                }
+            // Filter by category
+            if (selectedCategory) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.danhMucSanPham && 
+                    product.danhMucSanPham.tenDanhMuc === selectedCategory
+                );
+            }
 
-                // Filter by price
-                if (selectedPrice) {
-                    const [min, max] = selectedPrice.split('-').map(Number);
-                    if (price < min || price > max) {
-                        showProduct = false;
-                    }
-                }
+            // Filter by price
+            if (selectedPrice) {
+                const [min, max] = selectedPrice.split('-').map(Number);
+                filteredProducts = filteredProducts.filter(product => {
+                    const price = product.giaSauGiam || 0;
+                    return price >= min && price <= max;
+                });
+            }
 
-                product.style.display = showProduct ? 'block' : 'none';
+            // Update count
+            updateProductsCount();
+
+            // Apply current sort
+            sortProducts();
+        }
+
+        // Render products for current page
+        function renderProducts() {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = '';
+
+            const startIndex = (currentPage - 1) * productsPerPage;
+            const endIndex = startIndex + productsPerPage;
+            const productsToShow = filteredProducts.slice(startIndex, endIndex);
+
+            if (productsToShow.length === 0) {
+                productsGrid.innerHTML = `
+                    <div class="no-products">
+                        <p style="color: #666; font-size: 1.1rem;">Không tìm thấy sản phẩm phù hợp</p>
+                    </div>
+                `;
+                return;
+            }
+
+            productsToShow.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                    <div class="product-image-container" onclick="showProductDetail('${product.id}')">
+                        <img src="${product.hinhAnh}" alt="${product.tenSanPham}" class="product-image">
+                    </div>
+                        <div class="product-info">
+                        <h3 class="product-name" onclick="showProductDetail('${product.id}')">${product.tenSanPham}</h3>
+                            <p class="product-category" style="display: none;">${product.danhMucSanPham.tenDanhMuc}</p>
+                            <p class="product-price">${formatPrice(product.giaSauGiam)}</p>
+                            <div class="product-actions">
+                            <button class="btn-secondary" onclick="event.stopPropagation(); showProductDetail('${product.id}')">Chi tiết</button>
+                            </div>
+                        </div>
+                    `;
+                
+                // Thêm sự kiện click cho toàn bộ card
+                productCard.addEventListener('click', () => {
+                    showProductDetail(product.id);
+                });
+                
+                productsGrid.appendChild(productCard);
             });
         }
 
-        // Add event listeners for filters
-        document.getElementById('categoryFilter').addEventListener('change', filterProducts);
-        document.getElementById('priceFilter').addEventListener('change', filterProducts);
+        // Render pagination
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+            
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
 
-        // Load products when page loads
-        window.addEventListener('load', () => {
+            let paginationHTML = `
+                <div class="pagination-item ${currentPage === 1 ? 'disabled' : ''}" 
+                     onclick="${currentPage === 1 ? '' : 'changePage(' + (currentPage - 1) + ')'}">
+                    &lt;
+                </div>
+            `;
+
+            // Show first page
+            if (currentPage > 2) {
+                paginationHTML += `
+                    <div class="pagination-item" onclick="changePage(1)">1</div>
+                    ${currentPage > 3 ? '<div class="pagination-item disabled">...</div>' : ''}
+                `;
+            }
+
+            // Show pages around current page
+            for (let i = Math.max(1, currentPage - 1); i <= Math.min(totalPages, currentPage + 1); i++) {
+                paginationHTML += `
+                    <div class="pagination-item ${currentPage === i ? 'active' : ''}" 
+                         onclick="changePage(${i})">
+                        ${i}
+                    </div>
+                `;
+            }
+
+            // Show last page
+            if (currentPage < totalPages - 1) {
+                paginationHTML += `
+                    ${currentPage < totalPages - 2 ? '<div class="pagination-item disabled">...</div>' : ''}
+                    <div class="pagination-item" onclick="changePage(${totalPages})">${totalPages}</div>
+                `;
+            }
+
+            paginationHTML += `
+                <div class="pagination-item ${currentPage === totalPages ? 'disabled' : ''}" 
+                     onclick="${currentPage === totalPages ? '' : 'changePage(' + (currentPage + 1) + ')'}">
+                    &gt;
+                </div>
+            `;
+
+            pagination.innerHTML = paginationHTML;
+        }
+
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            renderProducts();
+            renderPagination();
+            // Scroll to top of products section
+            document.querySelector('.products-content').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Update products count
+        function updateProductsCount() {
+            const count = filteredProducts.length;
+            document.getElementById('productsCount').textContent = count;
+        }
+
+        // Add to cart function
+        function addToCart(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            // Get current cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: productId,
+                    name: product.tenSanPham,
+                    price: product.giaSauGiam,
+                    image: product.hinhAnh,
+                    quantity: 1
+                });
+            }
+            
+            // Save updated cart
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Show success message
+            showSuccess('Thành công', 'Đã thêm sản phẩm vào giỏ hàng!');
+        }
+
+        // Add event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listener for sort
+            document.getElementById('sortSelect').addEventListener('change', sortProducts);
+
+            // Add event listeners for filter groups
+            document.querySelectorAll('.filter-group').forEach(group => {
+                const title = group.querySelector('.filter-title');
+                title.addEventListener('click', () => {
+                    group.classList.toggle('collapsed');
+                });
+            });
+
+            // Add event listeners for price filter
+            document.querySelectorAll('#priceFilter .filter-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('#priceFilter .filter-item').forEach(i => {
+                        i.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    currentPage = 1;
+                    filterProducts();
+                });
+            });
+
+            // Load products
             loadProducts();
             
             // Get category from URL parameter
@@ -1257,8 +1929,14 @@
             if (category) {
                 // Wait for category filter to be populated
                 setTimeout(() => {
-                    const categoryFilter = document.getElementById('categoryFilter');
-                    categoryFilter.value = category;
+                    const categoryItems = document.querySelectorAll('#categoryFilter .filter-item');
+                    categoryItems.forEach(item => {
+                        if (item.dataset.value === category) {
+                            item.classList.add('active');
+                        } else {
+                            item.classList.remove('active');
+                        }
+                    });
                     filterProducts();
                 }, 1000);
             }
@@ -1306,17 +1984,25 @@
             });
             
             // Hiển thị modal được chọn và overlay
-            document.getElementById(modalId).classList.add('active');
-            document.getElementById('modalOverlay').style.display = 'block';
+            const modal = document.getElementById(modalId);
+            const overlay = document.getElementById('modalOverlay');
+            
+            if (modal && overlay) {
+                modal.classList.add('active');
+                overlay.classList.add('active');
+            }
         }
 
-        // Đóng modal khi click vào overlay
-        document.getElementById('modalOverlay').addEventListener('click', function() {
-            this.style.display = 'none';
-            document.querySelectorAll('.modal').forEach(modal => {
+        // Đóng modal
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            const overlay = document.getElementById('modalOverlay');
+            
+            if (modal && overlay) {
                 modal.classList.remove('active');
-            });
-        });
+                overlay.classList.remove('active');
+            }
+        }
 
         // Cập nhật hàm saveUserData
         async function saveUserData(user, additionalData = {}) {
@@ -1577,8 +2263,8 @@
                         
                         // Cập nhật giá
                         const currentPrice = formatPrice(product.giaSauGiam);
-                        const originalPrice = product.giaGoc ? formatPrice(product.giaGoc) : '';
-                        const discount = product.giaGoc ? Math.round((1 - product.giaSauGiam/product.giaGoc) * 100) : 0;
+                        const originalPrice = product.giaBan ? formatPrice(product.giaBan) : '';
+                        const discount = product.giaBan ? Math.round((1 - product.giaSauGiam/product.giaBan) * 100) : 0;
                         
                         document.getElementById('detailProductPrice').textContent = currentPrice;
                         if (originalPrice) {
@@ -1594,10 +2280,10 @@
                         document.getElementById('detailProductDescription').innerHTML = descriptionHtml;
 
                         // Cập nhật thông số kỹ thuật
-                        const specsHtml = product.thongSoKyThuat ? `
+                        const specsHtml = product.chiTietSanPham ? `
                             <h4>Thông số kỹ thuật</h4>
                             <div class="specs-grid">
-                                ${Object.entries(product.thongSoKyThuat).map(([key, value]) => `
+                                ${Object.entries(product.chiTietSanPham).map(([key, value]) => `
                                     <div class="spec-item">
                                         <span class="spec-label">${key}:</span>
                                         <span class="spec-value">${value}</span>
@@ -1606,24 +2292,6 @@
                             </div>
                         ` : '';
                         document.getElementById('detailProductSpecs').innerHTML = specsHtml;
-
-                        // Cập nhật thumbnail gallery nếu có nhiều hình
-                        const thumbnailList = document.getElementById('thumbnailList');
-                        thumbnailList.innerHTML = '';
-                        if (product.hinhAnhPhu && product.hinhAnhPhu.length > 0) {
-                            [product.hinhAnh, ...product.hinhAnhPhu].forEach((img, index) => {
-                                const thumbnail = document.createElement('img');
-                                thumbnail.src = img;
-                                thumbnail.alt = `${product.tenSanPham} - Hình ${index + 1}`;
-                                thumbnail.className = `thumbnail ${index === 0 ? 'active' : ''}`;
-                                thumbnail.onclick = () => {
-                                    document.getElementById('detailProductImage').src = img;
-                                    document.querySelectorAll('.thumbnail').forEach(thumb => thumb.classList.remove('active'));
-                                    thumbnail.classList.add('active');
-                                };
-                                thumbnailList.appendChild(thumbnail);
-                            });
-                        }
 
                         // Cập nhật nút thêm vào giỏ hàng
                         const addToCartBtn = document.getElementById('addToCartBtn');
@@ -1639,12 +2307,6 @@
                     console.error('Error loading product details:', error);
                     showError('Lỗi', 'Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.');
                 });
-        }
-
-        // Thêm hàm đóng modal
-        function closeModal(modalId) {
-            document.getElementById('modalOverlay').style.display = 'none';
-            document.getElementById(modalId).classList.remove('active');
         }
 
         // Xử lý nút tăng/giảm số lượng
@@ -1696,9 +2358,9 @@
                             // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
                             cart.push({
                                 id: productId,
-                                name: product.tenSanPham,
-                                price: product.giaSauGiam || product.giaBan,
-                                image: product.hinhAnh,
+                                name: product.tenSanPham || 'Sản phẩm không rõ tên',
+                                price: product.giaSauGiam || product.giaBan || 0,
+                                image: product.hinhAnh || 'picture/logo.jpg',
                                 quantity: quantity
                             });
                         }

@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xử lý thanh toán - Nội thất Mộc Nhiên</title>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    
+    <!-- Sweetalert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #5a3d2b;
+            --secondary-color: #e9c46a;
+            --text-color: #2b2d42;
+            --light-bg: #f9f7f3;
+            --white: #ffffff;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --warning-color: #f1c40f;
+            --border-color: rgba(90, 61, 43, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #fff 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(90, 61, 43, 0.1);
+            width: 100%;
+            max-width: 900px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid var(--border-color);
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #4a3223 100%);
+            color: var(--white);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><rect width="1" height="1" fill="rgba(255,255,255,0.05)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .header h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-top: 20px;
+        }
+
+        .content {
+            padding: 50px 40px;
+            text-align: center;
+        }
+
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .loading {
+            width: 100px;
+            height: 100px;
+            border: 4px solid var(--light-bg);
+            border-top: 4px solid var(--secondary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            border: 4px solid transparent;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+        }
+
+        .status-icon {
+            font-size: 64px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .status-icon::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            background: currentColor;
+            opacity: 0.1;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .status-icon.success {
+            color: var(--success-color);
+        }
+
+        .status-icon.error {
+            color: var(--error-color);
+        }
+
+        .status-icon.warning {
+            color: var(--warning-color);
+        }
+
+        .order-details {
+            background: var(--light-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .order-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-size: 20px;
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .order-details h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--secondary-color);
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+            padding-top: 15px;
+            border-top: 2px solid var(--border-color);
+            border-bottom: none;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .detail-item span:first-child {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .button {
+            background: var(--primary-color);
+            color: var(--white);
+            border: none;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(90, 61, 43, 0.2);
+        }
+
+        .button:hover {
+            background: #4a3223;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(90, 61, 43, 0.3);
+        }
+
+        .button.secondary {
+            background: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            box-shadow: none;
+        }
+
+        .button.secondary:hover {
+            background: var(--light-bg);
+            box-shadow: 0 4px 15px rgba(90, 61, 43, 0.1);
+        }
+
+        .button i {
+            font-size: 18px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 16px;
+            }
+
+            .content {
+                padding: 30px 20px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .order-details {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Xử lý thanh toán</h1>
+            <p>Nội thất Mộc Nhiên</p>
+        </div>
+        <div class="content">
+            <div class="loading-container">
+                <div class="loading"></div>
+                <h2>Đang xử lý thanh toán của bạn...</h2>
+                <p>Vui lòng không tắt trình duyệt trong quá trình xử lý</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cấu hình Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHTL0ZIZkmRNi7kRF8UJdjR1qhx8cdre4",
+            authDomain: "webnoithat-de11f.firebaseapp.com",
+            databaseURL: "https://webnoithat-de11f-default-rtdb.firebaseio.com",
+            projectId: "webnoithat-de11f",
+            storageBucket: "webnoithat-de11f.firebasestorage.app",
+            messagingSenderId: "919918511984",
+            appId: "1:919918511984:web:d1b260dc52102fd279b1b5",
+            measurementId: "G-H1G2WJETSH"
+        };
+
+        // Khởi tạo Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Hàm hiển thị thông báo lỗi
+        function showError(title, message) {
+            Swal.fire({
+                icon: 'error',
+                title: title,
+                text: message,
+                confirmButtonColor: '#5a3d2b',
+            });
+        }
+
+        // Hàm hiển thị thông báo thành công
+        function showSuccess(title, message) {
+            Swal.fire({
+                icon: 'success',
+                title: title,
+                text: message,
+                confirmButtonColor: '#5a3d2b',
+            });
+        }
+
+        // Hàm hiển thị thông tin đơn hàng
+        function showOrderDetails(orderData) {
+            const content = document.querySelector('.content');
+            content.innerHTML = `
+                <div class="status-icon success">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>Thanh toán thành công!</h2>
+                <p>Cảm ơn bạn đã đặt hàng tại Nội thất Mộc Nhiên</p>
+                
+                <div class="order-details">
+                    <h3>Thông tin đơn hàng</h3>
+                    <div class="detail-item">
+                        <span>Mã đơn hàng:</span>
+                        <span>${orderData.orderId || 'Đang cập nhật'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Mã giao dịch:</span>
+                        <span>${orderData.paymentDetails.transactionNo}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Ngân hàng:</span>
+                        <span>${orderData.paymentDetails.bankCode}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Người nhận:</span>
+                        <span>${orderData.fullName}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Số điện thoại:</span>
+                        <span>${orderData.phone}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Địa chỉ:</span>
+                        <span>${orderData.address}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Phương thức thanh toán:</span>
+                        <span>VNPAY</span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Tổng tiền:</span>
+                        <span>${orderData.grandTotal.toLocaleString('vi-VN')}đ</span>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <a href="/index.html" class="button">
+                        <i class="fas fa-home"></i>
+                        Về trang chủ
+                    </a>
+                    <a href="/card.html" class="button secondary">
+                        <i class="fas fa-shopping-cart"></i>
+                        Xem đơn hàng
+                    </a>
+                </div>
+            `;
+        }
+
+        // Hàm hiển thị thông báo lỗi
+        function showErrorUI(message) {
+            const content = document.querySelector('.content');
+            content.innerHTML = `
+                <div class="status-icon error">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <h2>Thanh toán không thành công</h2>
+                <p>${message}</p>
+                
+                <div class="buttons">
+                    <a href="/card.html" class="button">
+                        <i class="fas fa-arrow-left"></i>
+                        Quay lại giỏ hàng
+                    </a>
+                    <a href="/index.html" class="button secondary">
+                        <i class="fas fa-home"></i>
+                        Về trang chủ
+                    </a>
+                </div>
+            `;
+        }
+
+        // Hàm hiển thị thông báo yêu cầu đăng nhập
+        function showLoginRequired() {
+            const content = document.querySelector('.content');
+            content.innerHTML = `
+                <div class="status-icon warning">
+                    <i class="fas fa-exclamation-circle"></i>
+                </div>
+                <h2>Vui lòng đăng nhập</h2>
+                <p>Đơn hàng của bạn đã được thanh toán thành công. Vui lòng đăng nhập để hoàn tất quá trình đặt hàng.</p>
+                
+                <div class="buttons">
+                    <a href="/card.html" class="button">
+                        <i class="fas fa-sign-in-alt"></i>
+                        Đăng nhập ngay
+                    </a>
+                    <a href="/index.html" class="button secondary">
+                        <i class="fas fa-home"></i>
+                        Về trang chủ
+                    </a>
+                </div>
+            `;
+        }
+
+        // Hàm lưu đơn hàng vào Firebase
+        async function saveOrderToFirebase(orderData) {
+            try {
+                const user = auth.currentUser;
+                
+                // Tạo reference đến node orders
+                const ordersRef = database.ref('orders');
+                
+                // Thêm thông tin người dùng vào đơn hàng nếu đã đăng nhập
+                if (user) {
+                    orderData.userId = user.uid;
+                }
+                
+                orderData.updatedAt = new Date().toISOString();
+                
+                // Lưu đơn hàng vào Firebase
+                const newOrderRef = await ordersRef.push(orderData);
+                
+                // Cập nhật trạng thái đơn hàng
+                await newOrderRef.update({
+                    status: 'paid',
+                    paymentStatus: 'completed',
+                    paymentDate: new Date().toISOString()
+                });
+
+                return newOrderRef.key;
+            } catch (error) {
+                console.error('Lỗi khi lưu đơn hàng:', error);
+                throw error;
+            }
+        }
+
+        // Hàm xử lý callback từ VNPAY
+        async function handleVNPayCallback() {
+            try {
+                // Lấy thông tin đơn hàng từ localStorage
+                const orderData = JSON.parse(localStorage.getItem('currentOrder'));
+                if (!orderData) {
+                    throw new Error('Không tìm thấy thông tin đơn hàng');
+                }
+
+                // Lấy thông tin từ URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const vnp_ResponseCode = urlParams.get('vnp_ResponseCode');
+                const vnp_TransactionNo = urlParams.get('vnp_TransactionNo');
+                const vnp_TransactionStatus = urlParams.get('vnp_TransactionStatus');
+                const vnp_SecureHash = urlParams.get('vnp_SecureHash');
+                const vnp_TxnRef = urlParams.get('vnp_TxnRef');
+                const vnp_BankCode = urlParams.get('vnp_BankCode');
+                const vnp_BankTranNo = urlParams.get('vnp_BankTranNo');
+                const vnp_PayDate = urlParams.get('vnp_PayDate');
+
+                // Kiểm tra kết quả thanh toán
+                if (vnp_ResponseCode === '00' && vnp_TransactionStatus === '00') {
+                    // Thanh toán thành công
+                    orderData.paymentDetails = {
+                        transactionNo: vnp_TransactionNo,
+                        responseCode: vnp_ResponseCode,
+                        transactionStatus: vnp_TransactionStatus,
+                        secureHash: vnp_SecureHash,
+                        bankCode: vnp_BankCode,
+                        bankTranNo: vnp_BankTranNo,
+                        payDate: vnp_PayDate
+                    };
+
+                    // Cập nhật mã đơn hàng từ VNPAY
+                    orderData.orderId = vnp_TxnRef;
+
+                    try {
+                        // Lưu đơn hàng vào Firebase
+                        const orderId = await saveOrderToFirebase(orderData);
+
+                        // Xóa giỏ hàng và thông tin đơn hàng tạm
+                        localStorage.removeItem('cart');
+                        localStorage.removeItem('currentOrder');
+
+                        // Hiển thị thông tin đơn hàng
+                        showOrderDetails(orderData);
+                    } catch (error) {
+                        // Nếu lỗi là do chưa đăng nhập, lưu đơn hàng tạm thời
+                        if (error.message === 'Người dùng chưa đăng nhập') {
+                            // Lưu đơn hàng vào localStorage để xử lý sau khi đăng nhập
+                            localStorage.setItem('pendingOrder', JSON.stringify(orderData));
+                            
+                            // Hiển thị thông báo yêu cầu đăng nhập
+                            showLoginRequired();
+                        } else {
+                            throw error;
+                        }
+                    }
+                } else {
+                    // Thanh toán thất bại
+                    throw new Error('Thanh toán không thành công');
+                }
+            } catch (error) {
+                console.error('Lỗi xử lý thanh toán:', error);
+                showErrorUI(error.message);
+            }
+        }
+
+        // Xử lý callback khi trang được tải
+        document.addEventListener('DOMContentLoaded', handleVNPayCallback);
+    </script>
+</body>
+</html> 
