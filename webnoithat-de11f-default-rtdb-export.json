@@ -1,4 +1,142 @@
 {
+  "collections": {
+    "bohemian": {
+      "description": "Phóng khoáng, tự do với màu sắc rực rỡ",
+      "id": "bohemian",
+      "image": "https://vistadecor.vn/upload/images/boho/phong-cach-thiet-ke-bohemian-7.jpeg",
+      "products": {
+        "product10": {
+          "giaSauGiam": 11000000,
+          "hinhAnh": "/images/products/ghe-dai-2.jpg",
+          "id": 34,
+          "moTa": "Ghế dài với thiết kế tối giản, đa năng",
+          "style": "bohemian",
+          "tenSanPham": "Ghế dài phòng khách hiện đại"
+        },
+        "product11": {
+          "giaSauGiam": 12500000,
+          "hinhAnh": "/images/products/ghe-dai-5.jpg",
+          "id": 37,
+          "moTa": "Ghế dài với thiết kế đa năng, tiện dụng",
+          "style": "bohemian",
+          "tenSanPham": "Ghế dài phòng khách đa năng"
+        }
+      },
+      "title": "Phong cách Bohemian"
+    },
+    "classic": {
+      "description": "Truyền thống, sang trọng với đường nét tinh xảo",
+      "id": "classic",
+      "image": "https://housedesign.vn/wp-content/uploads/2019/12/phong-cach-thiet-ke-noi-that-classic-1.jpg",
+      "products": {
+        "product6": {
+          "giaSauGiam": 29000000,
+          "hinhAnh": "/images/products/sofa-4.jpg",
+          "id": 32,
+          "moTa": "Sofa da cao cấp với thiết kế sang trọng",
+          "style": "classic",
+          "tenSanPham": "Sofa da cao cấp Roma"
+        },
+        "product7": {
+          "giaSauGiam": 13500000,
+          "hinhAnh": "/images/products/ban-an-2.jpg",
+          "id": 54,
+          "moTa": "Bàn ăn gỗ sồi với thiết kế hiện đại",
+          "style": "classic",
+          "tenSanPham": "Bàn ăn gỗ sồi"
+        }
+      },
+      "title": "Phong cách Classic"
+    },
+    "industrial": {
+      "description": "Phóng khoáng, mạnh mẽ với chất liệu thô mộc",
+      "id": "industrial",
+      "image": "https://www.lanha.vn/wp-content/uploads/2023/07/phong-cach-industrial-7.jpeg",
+      "products": {
+        "product3": {
+          "giaSauGiam": 5000000,
+          "hinhAnh": "/images/products/ghe-bar-2.jpg",
+          "id": 62,
+          "moTa": "Ghế bar gỗ óc chó với thiết kế sang trọng",
+          "style": "industrial",
+          "tenSanPham": "Ghế bar gỗ óc chó"
+        }
+      },
+      "title": "Phong cách Industrial"
+    },
+    "minimalist": {
+      "description": "Tối giản, thanh lịch với thiết kế tinh tế",
+      "id": "minimalist",
+      "image": "https://www.lanha.vn/wp-content/uploads/2023/07/phong-cach-minimalism-2.jpg.webp",
+      "products": {
+        "product8": {
+          "giaSauGiam": 16000000,
+          "hinhAnh": "/images/products/sofa-5.jpg",
+          "id": 33,
+          "moTa": "Sofa vải nỉ với thiết kế hiện đại, êm ái",
+          "style": "minimalist",
+          "tenSanPham": "Sofa vải nỉ cao cấp"
+        },
+        "product9": {
+          "giaSauGiam": 8500000,
+          "hinhAnh": "/images/products/ban-an-4.jpg",
+          "id": 56,
+          "moTa": "Bàn ăn với thiết kế tối giản, hiện đại",
+          "style": "minimalist",
+          "tenSanPham": "Bàn ăn tối giản"
+        }
+      },
+      "title": "Phong cách Minimalist"
+    },
+    "modern": {
+      "description": "Hiện đại, sang trọng với thiết kế tối giản",
+      "id": "modern",
+      "image": "https://fedic.vn/wp-content/uploads/2020/09/Phong-cach-Hien-Dai-Fedic-2-of-11.jpg",
+      "products": {
+        "product4": {
+          "giaSauGiam": 25000000,
+          "hinhAnh": "/images/products/sofa-3.jpg",
+          "id": 31,
+          "moTa": "Sofa góc với thiết kế tối giản, đa năng",
+          "style": "modern",
+          "tenSanPham": "Sofa góc hiện đại"
+        },
+        "product5": {
+          "giaSauGiam": 5800000,
+          "hinhAnh": "/images/products/ban-nuoc-3.jpg",
+          "id": 39,
+          "moTa": "Bàn nước kính với thiết kế sang trọng",
+          "style": "modern",
+          "tenSanPham": "Bàn nước kính cường lực"
+        }
+      },
+      "title": "Phong cách Modern"
+    },
+    "scandinavian": {
+      "description": "Tối giản, ấm áp và tinh tế với những đường nét đơn giản",
+      "id": "scandinavian",
+      "image": "https://www.lanha.vn/wp-content/uploads/2023/07/phong-cach-scandinavian-5.jpeg.webp",
+      "products": {
+        "product1": {
+          "giaSauGiam": 20000000,
+          "hinhAnh": "/images/products/sofa-2.jpg",
+          "id": 30,
+          "moTa": "Sofa vải cao cấp với thiết kế hiện đại, êm ái",
+          "style": "scandinavian",
+          "tenSanPham": "Sofa vải cao cấp Oslo"
+        },
+        "product2": {
+          "giaSauGiam": 6800000,
+          "hinhAnh": "/images/products/ban-nuoc-2.jpg",
+          "id": 38,
+          "moTa": "Bàn nước gỗ sồi với thiết kế hiện đại",
+          "style": "scandinavian",
+          "tenSanPham": "Bàn nước gỗ sồi"
+        }
+      },
+      "title": "Phong cách Scandinavian"
+    }
+  },
   "contacts": {
     "-OQgMoS77XWTOfS6PIy7": {
       "createdAt": 1747722389553,
@@ -8,6 +146,16 @@
       "phone": "0795858583",
       "status": "pending",
       "subject": "đánh giá",
+      "userId": "n65lzlXrhgaNGIUo9n2RdefVm7F2"
+    },
+    "-OR18TSfujIqpDlBYvLZ": {
+      "createdAt": 1748087728225,
+      "email": "baokhangml99@gmail.com",
+      "message": "êm",
+      "name": "Võ Trần Hoàng Bảo Khang",
+      "phone": "0795858583",
+      "status": "pending",
+      "subject": "Đánh giá",
       "userId": "n65lzlXrhgaNGIUo9n2RdefVm7F2"
     }
   },
@@ -65,7 +213,7 @@
       },
       "giaBan": 25000000,
       "giaSauGiam": 22000000,
-      "hinhAnh": "data:image/jpeg;base64,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",
+      "hinhAnh": "https://noithatkenli.vn/wp-content/uploads/2019/08/sofa-da-florence-2.jpg",
       "id": 1,
       "moTa": "Sofa da cao cấp thiết kế hiện đại, êm ái và sang trọng",
       "soLuongTonKho": 5,
@@ -86,7 +234,7 @@
       },
       "giaBan": 15000000,
       "giaSauGiam": 13500000,
-      "hinhAnh": "https://product.hstatic.net/200000670713/product/sofa-olso-4_7808f8b1c61f41f8b4ee9acbbfee21e3_master.jpg",
+      "hinhAnh": "https://product.hstatic.net/200000670713/product/sofa-olso-1_cdc0d3534d21426e8e1e06fb820748ef_master.jpg",
       "id": 2,
       "moTa": "Ghế dài hiện đại với thiết kế tối giản",
       "soLuongTonKho": 8,
@@ -128,7 +276,7 @@
       },
       "giaBan": 12000000,
       "giaSauGiam": 10800000,
-      "hinhAnh": "/images/products/tu-tivi-1.jpg",
+      "hinhAnh": "https://noithatminhkhoi.com/upload/sanpham/large/ke-tivi-go-soi-nga-2m--ktv922-1650615086-64231c.jpg",
       "id": 4,
       "moTa": "Tủ tivi gỗ sồi với thiết kế hiện đại",
       "soLuongTonKho": 6,
@@ -149,7 +297,7 @@
       },
       "giaBan": 6500000,
       "giaSauGiam": 5800000,
-      "hinhAnh": "/images/products/ke-trang-tri-1.jpg",
+      "hinhAnh": "https://api.khanhconcept.vn/storage/images/originals/ke-sach-da-nang-go-tu-nhien-khanhconcept-ts083-1-m7efqmwco1vq5sl.webp",
       "id": 5,
       "moTa": "Kệ trưng bày với thiết kế module đa năng",
       "soLuongTonKho": 15,
@@ -170,7 +318,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/tu-giay-1.jpg",
+      "hinhAnh": "https://api.togihome.vn/storage/images/originals/tu-giay-ket-hop-ke-treo-linh-hoat-kg08-5-ihpeael9eqg2zvr.webp",
       "id": 6,
       "moTa": "Tủ giày thông minh với hệ thống thông gió",
       "soLuongTonKho": 20,
@@ -189,9 +337,9 @@
         "moTa": "Bàn ăn phòng bếp",
         "tenDanhMuc": "Bàn ăn"
       },
-      "giaBan": 18000000,
-      "giaSauGiam": 16000000,
-      "hinhAnh": "/images/products/ban-an-1.jpg",
+      "giaBan": 12000000,
+      "giaSauGiam": 10000000,
+      "hinhAnh": "https://bizweb.dktcdn.net/thumb/grande/100/139/088/products/6-ba-n-a-n-go-o-c-cho-f36499c5-9fd6-4e2a-b78a-b77b6db62b7c.jpg?v=1683601413610",
       "id": 7,
       "moTa": "Bàn ăn gỗ óc chó 6 chỗ ngồi",
       "soLuongTonKho": 4,
@@ -211,8 +359,8 @@
         "tenDanhMuc": "Ghế ăn"
       },
       "giaBan": 3500000,
-      "giaSauGiam": 3200000,
-      "hinhAnh": "/images/products/ghe-an-1.jpg",
+      "giaSauGiam": 820000,
+      "hinhAnh": "https://bizweb.dktcdn.net/100/429/325/products/ghe-an-hien-dai-gia-re-ga-42-kho-noi-that-sai-gon.jpg?v=1691459521990",
       "id": 8,
       "moTa": "Ghế ăn với thiết kế hiện đại, êm ái",
       "soLuongTonKho": 25,
@@ -233,7 +381,7 @@
       },
       "giaBan": 2800000,
       "giaSauGiam": 2500000,
-      "hinhAnh": "/images/products/ghe-bar-1.jpg",
+      "hinhAnh": "https://noithatm8.com/wp-content/uploads/ghe-bar-ma-titan-nhap-khau.jpg",
       "id": 9,
       "moTa": "Ghế bar với thiết kế sang trọng",
       "soLuongTonKho": 15,
@@ -254,7 +402,7 @@
       },
       "giaBan": 7500000,
       "giaSauGiam": 6800000,
-      "hinhAnh": "/images/products/tu-ly-1.jpg",
+      "hinhAnh": "https://bizweb.dktcdn.net/100/448/909/files/kr02-2.jpg?v=1735840355000",
       "id": 10,
       "moTa": "Tủ ly kính với thiết kế hiện đại",
       "soLuongTonKho": 8,
@@ -275,7 +423,7 @@
       },
       "giaBan": 25000000,
       "giaSauGiam": 22000000,
-      "hinhAnh": "/images/products/tu-bep-1.jpg",
+      "hinhAnh": "https://dogolegia.vn/wp-content/uploads/2022/09/Mau-tu-bep-dep-hien-dai-go-cong-nghiep-LG-TB102.jpg",
       "id": 11,
       "moTa": "Tủ bếp với thiết kế hiện đại, đa năng",
       "soLuongTonKho": 3,
@@ -296,7 +444,7 @@
       },
       "giaBan": 35000000,
       "giaSauGiam": 32000000,
-      "hinhAnh": "/images/products/giuong-ngu-1.jpg",
+      "hinhAnh": "https://noithatchauanh.com/uploaded/giuong-go-oc-cho-mau-14-3.jpg",
       "id": 12,
       "moTa": "Giường ngủ gỗ óc chó với thiết kế sang trọng",
       "soLuongTonKho": 2,
@@ -317,7 +465,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/ban-dau-giuong-1.jpg",
+      "hinhAnh": "https://phongkhachdep.org/wp-content/uploads/2021/01/Ba%CC%80n-%C4%90a%CC%82%CC%80u-Giu%CC%9Bo%CC%9B%CC%80ng-Pho%CC%80ng-Ngu%CC%89-.jpg",
       "id": 13,
       "moTa": "Bàn đầu giường với thiết kế tối giản",
       "soLuongTonKho": 10,
@@ -337,8 +485,8 @@
         "tenDanhMuc": "Bàn trang điểm"
       },
       "giaBan": 8500000,
-      "giaSauGiam": 7500000,
-      "hinhAnh": "/images/products/ban-trang-diem-1.jpg",
+      "giaSauGiam": 6500000,
+      "hinhAnh": "https://gotrangtri.vn/wp-content/uploads/2023/10/avar-ban-trang-diem.jpg",
       "id": 14,
       "moTa": "Bàn trang điểm với gương và đèn LED",
       "soLuongTonKho": 5,
@@ -359,7 +507,7 @@
       },
       "giaBan": 28000000,
       "giaSauGiam": 25000000,
-      "hinhAnh": "/images/products/tu-ao-1.jpg",
+      "hinhAnh": "https://golathanh.vn/wp-content/uploads/2024/09/avar.jpg",
       "id": 15,
       "moTa": "Tủ áo gỗ sồi với thiết kế hiện đại",
       "soLuongTonKho": 4,
@@ -380,7 +528,7 @@
       },
       "giaBan": 12000000,
       "giaSauGiam": 10800000,
-      "hinhAnh": "/images/products/nem-1.jpg",
+      "hinhAnh": "https://nemkhuyenmai.com/wp-content/uploads/2022/09/2-2.jpg",
       "id": 16,
       "moTa": "Nệm cao su thiên nhiên với độ đàn hồi tốt",
       "soLuongTonKho": 8,
@@ -399,9 +547,9 @@
         "moTa": "Bàn làm việc văn phòng",
         "tenDanhMuc": "Bàn làm việc"
       },
-      "giaBan": 6500000,
-      "giaSauGiam": 5800000,
-      "hinhAnh": "/images/products/ban-lam-viec-1.jpg",
+      "giaBan": 3500000,
+      "giaSauGiam": 4800000,
+      "hinhAnh": "https://api.thago.vn/storage/images/originals/sku-07-jqh7y342b8qlyfy.webp",
       "id": 17,
       "moTa": "Bàn làm việc với thiết kế tối giản",
       "soLuongTonKho": 12,
@@ -422,7 +570,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/ghe-lam-viec-1.jpg",
+      "hinhAnh": "https://product.hstatic.net/1000069970/product/213_cd36286fd5ef46909864c1786e26dfc3_large.png",
       "id": 18,
       "moTa": "Ghế làm việc với đệm lưng êm ái",
       "soLuongTonKho": 15,
@@ -443,7 +591,7 @@
       },
       "giaBan": 5500000,
       "giaSauGiam": 4800000,
-      "hinhAnh": "/images/products/ke-sach-1.jpg",
+      "hinhAnh": "https://api.khanhconcept.vn/storage/images/originals/ke-sach-da-nang-go-tu-nhien-khanhconcept-ts076-2-awvj3yhtrvycg6l.webp",
       "id": 19,
       "moTa": "Kệ sách với thiết kế module đa năng",
       "soLuongTonKho": 10,
@@ -464,7 +612,7 @@
       },
       "giaBan": 8500000,
       "giaSauGiam": 7500000,
-      "hinhAnh": "/images/products/ban-ngoai-troi-1.jpg",
+      "hinhAnh": "https://product.hstatic.net/1000410017/product/2_63e10f5d94af4a40b193a11f4ed86a2b_large.jpg",
       "id": 20,
       "moTa": "Bàn ngoài trời gỗ teak chống thấm",
       "soLuongTonKho": 6,
@@ -485,7 +633,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/ghe-ngoai-troi-1.jpg",
+      "hinhAnh": "https://sangongoaitroi.co/wp-content/uploads/2018/06/Go-teak-ngoai-troi.jpg",
       "id": 21,
       "moTa": "Ghế ngoài trời gỗ teak chống thấm",
       "soLuongTonKho": 8,
@@ -506,7 +654,7 @@
       },
       "giaBan": 15000000,
       "giaSauGiam": 13500000,
-      "hinhAnh": "/images/products/den-trang-tri-1.jpg",
+      "hinhAnh": "https://denhiendai.vn/wp-content/uploads/2024/03/den-chum-tan-co-dien-phap-8865t15-768x738.jpg",
       "id": 22,
       "moTa": "Đèn chùm pha lê cao cấp",
       "soLuongTonKho": 3,
@@ -526,8 +674,8 @@
         "tenDanhMuc": "Thảm trang trí"
       },
       "giaBan": 8500000,
-      "giaSauGiam": 7500000,
-      "hinhAnh": "/images/products/tham-trang-tri-1.jpg",
+      "giaSauGiam": 2500000,
+      "hinhAnh": "https://product.hstatic.net/1000203256/product/dsc06622_1c28ac4c79db4dc59736a424672fe2f9_1024x1024.jpg",
       "id": 23,
       "moTa": "Thảm lông cừu cao cấp",
       "soLuongTonKho": 5,
@@ -548,7 +696,7 @@
       },
       "giaBan": 2500000,
       "giaSauGiam": 2200000,
-      "hinhAnh": "/images/products/binh-trang-tri-1.jpg",
+      "hinhAnh": "https://gomsunhathan.com.vn/uploads/plugin/product_items/270/20220503-121327.jpg",
       "id": 24,
       "moTa": "Bình gốm sứ thủ công",
       "soLuongTonKho": 15,
@@ -569,9 +717,9 @@
       },
       "giaBan": 3500000,
       "giaSauGiam": 3200000,
-      "hinhAnh": "/images/products/tranh-1.jpg",
+      "hinhAnh": "https://tuongvip.vn/public/uploads/products/48980/tranh-canvas-treo-tuong-nghe-thuat-mau-sac-5.jpg",
       "id": 25,
-      "moTa": "Tranh canvas in kỹ thuật số",
+      "moTa": "Tranh canvas treo tường nghệ thuật",
       "soLuongTonKho": 10,
       "tenSanPham": "Tranh canvas"
     },
@@ -590,7 +738,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/guong-1.jpg",
+      "hinhAnh": "https://guongnoithat.com/images/stories/virtuemart/product/cnc70.jpg",
       "id": 26,
       "moTa": "Gương trang trí với viền gỗ",
       "soLuongTonKho": 8,
@@ -611,7 +759,7 @@
       },
       "giaBan": 2800000,
       "giaSauGiam": 2500000,
-      "hinhAnh": "/images/products/dong-ho-1.jpg",
+      "hinhAnh": "https://donghothanhthuy.com/wp-content/uploads/2021/11/7267.jpg",
       "id": 27,
       "moTa": "Đồng hồ treo tường thiết kế hiện đại",
       "soLuongTonKho": 12,
@@ -632,9 +780,9 @@
       },
       "giaBan": 3500000,
       "giaSauGiam": 3200000,
-      "hinhAnh": "/images/products/tuong-trang-tri-1.jpg",
+      "hinhAnh": "https://ironstyle.vn/uploads/product/1wUQ_tuong%20ngua%20vang%202%20con.jpg",
       "id": 28,
-      "moTa": "Tượng trang trí bằng đồng",
+      "moTa": "Tượng ngực trang trí bằng đồng",
       "soLuongTonKho": 6,
       "tenSanPham": "Tượng trang trí"
     },
@@ -652,8 +800,8 @@
         "tenDanhMuc": "Dụng cụ bếp"
       },
       "giaBan": 2500000,
-      "giaSauGiam": 2200000,
-      "hinhAnh": "/images/products/dung-cu-bep-1.jpg",
+      "giaSauGiam": 400000,
+      "hinhAnh": "https://down-vn.img.susercontent.com/file/2107508fcc2882a15dbc0dd8f5434345",
       "id": 29,
       "moTa": "Bộ dụng cụ bếp cao cấp",
       "soLuongTonKho": 20,
@@ -673,8 +821,8 @@
         "tenDanhMuc": "Sofa"
       },
       "giaBan": 22000000,
-      "giaSauGiam": 20000000,
-      "hinhAnh": "/images/products/sofa-2.jpg",
+      "giaSauGiam": 40000000,
+      "hinhAnh": "https://dogoxuatkhau.com.vn/wp-content/uploads/2024/05/Sofa-goc-vai-long-cuu.jpg",
       "id": 30,
       "moTa": "Sofa vải cao cấp với thiết kế hiện đại, êm ái",
       "soLuongTonKho": 4,
@@ -694,8 +842,8 @@
         "tenDanhMuc": "Sofa"
       },
       "giaBan": 28000000,
-      "giaSauGiam": 25000000,
-      "hinhAnh": "/images/products/sofa-3.jpg",
+      "giaSauGiam": 35000000,
+      "hinhAnh": "https://kingsofa.vn/wp-content/uploads/2024/01/KS-GD-5003.webp",
       "id": 31,
       "moTa": "Sofa góc với thiết kế tối giản, đa năng",
       "soLuongTonKho": 3,
@@ -716,7 +864,7 @@
       },
       "giaBan": 32000000,
       "giaSauGiam": 29000000,
-      "hinhAnh": "/images/products/sofa-4.jpg",
+      "hinhAnh": "https://hally.vn/wp-content/uploads/2023/09/sofa-da-roma-den.jpg",
       "id": 32,
       "moTa": "Sofa da cao cấp với thiết kế sang trọng",
       "soLuongTonKho": 2,
@@ -737,7 +885,7 @@
       },
       "giaBan": 18000000,
       "giaSauGiam": 16000000,
-      "hinhAnh": "/images/products/sofa-5.jpg",
+      "hinhAnh": "https://sofakimphu.com/wp-content/uploads/2023/05/O1CN01ZHAlXg1GB3box8YoP_2212321110583-0-cib.jpg",
       "id": 33,
       "moTa": "Sofa vải nỉ với thiết kế hiện đại, êm ái",
       "soLuongTonKho": 6,
@@ -757,8 +905,8 @@
         "tenDanhMuc": "Ghế dài & đôn"
       },
       "giaBan": 12000000,
-      "giaSauGiam": 11000000,
-      "hinhAnh": "/images/products/ghe-dai-2.jpg",
+      "giaSauGiam": 21000000,
+      "hinhAnh": "https://bizweb.dktcdn.net/100/153/764/products/ghe-sofa-go-hien-dai-806t-1.jpg?v=1705050015063",
       "id": 34,
       "moTa": "Ghế dài với thiết kế tối giản, đa năng",
       "soLuongTonKho": 7,
@@ -779,7 +927,7 @@
       },
       "giaBan": 18000000,
       "giaSauGiam": 16000000,
-      "hinhAnh": "/images/products/ghe-dai-3.jpg",
+      "hinhAnh": "https://noithatm8.com/wp-content/uploads/sofa-goc-L-hien-dai-2-1.jpg",
       "id": 35,
       "moTa": "Ghế dài với thiết kế sang trọng, đẳng cấp",
       "soLuongTonKho": 4,
@@ -800,7 +948,7 @@
       },
       "giaBan": 9500000,
       "giaSauGiam": 8500000,
-      "hinhAnh": "/images/products/ghe-dai-4.jpg",
+      "hinhAnh": "https://galaxyled.vn/wp-content/uploads/2023/05/thiet-ke-phong-khach-toi-gian-thumbnail-1.webp",
       "id": 36,
       "moTa": "Ghế dài với thiết kế tối giản, hiện đại",
       "soLuongTonKho": 10,
@@ -821,7 +969,7 @@
       },
       "giaBan": 14000000,
       "giaSauGiam": 12500000,
-      "hinhAnh": "/images/products/ghe-dai-5.jpg",
+      "hinhAnh": "https://api.togihome.vn/storage/images/originals/sofa-bed-ket-hop-ghe-phu-da-nang-sb21-9-4ezjibxoq1r74x2.webp",
       "id": 37,
       "moTa": "Ghế dài với thiết kế đa năng, tiện dụng",
       "soLuongTonKho": 6,
@@ -842,7 +990,7 @@
       },
       "giaBan": 7500000,
       "giaSauGiam": 6800000,
-      "hinhAnh": "/images/products/ban-nuoc-2.jpg",
+      "hinhAnh": "https://gotrangtri.vn/wp-content/uploads/2019/06/ban-tra-go-soi-tu-nhien-thiet-ke-dep-hien-dai-ghs-4718.jpg",
       "id": 38,
       "moTa": "Bàn nước gỗ sồi với thiết kế hiện đại",
       "soLuongTonKho": 8,
@@ -863,7 +1011,7 @@
       },
       "giaBan": 6500000,
       "giaSauGiam": 5800000,
-      "hinhAnh": "/images/products/ban-nuoc-3.jpg",
+      "hinhAnh": "https://smlife.vn/wp-content/uploads/2022/05/ban-tra-mat-kinh-3.jpg",
       "id": 39,
       "moTa": "Bàn nước kính với thiết kế sang trọng",
       "soLuongTonKho": 10,
@@ -884,7 +1032,7 @@
       },
       "giaBan": 6500000,
       "giaSauGiam": 5800000,
-      "hinhAnh": "/images/products/tu-giay-2.jpg",
+      "hinhAnh": "https://noithatvannguyen.vn/wp-content/uploads/2023/08/mau-tu-giay-go-oc-cho-cao-cap_025605661.jpg",
       "id": 50,
       "moTa": "Tủ giày gỗ óc chó với thiết kế sang trọng",
       "soLuongTonKho": 8,
@@ -905,7 +1053,7 @@
       },
       "giaBan": 5500000,
       "giaSauGiam": 4800000,
-      "hinhAnh": "/images/products/tu-giay-3.jpg",
+      "hinhAnh": "https://api.togihome.vn/storage/images/originals/tu-giay-da-nang-thiet-ke-thong-minh-kg01-18-utavpzlxm2nzotg.webp",
       "id": 51,
       "moTa": "Tủ giày với thiết kế hiện đại, đa năng",
       "soLuongTonKho": 12,
@@ -926,7 +1074,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/tu-giay-4.jpg",
+      "hinhAnh": "https://api.togihome.vn/storage/images/originals/tu-giay-thiet-ke-thanh-lich-toi-gian-kg05-2-gdygceuynexxwe2.webp",
       "id": 52,
       "moTa": "Tủ giày với thiết kế tối giản, hiện đại",
       "soLuongTonKho": 15,
@@ -947,7 +1095,7 @@
       },
       "giaBan": 5000000,
       "giaSauGiam": 4500000,
-      "hinhAnh": "/images/products/tu-giay-5.jpg",
+      "hinhAnh": "https://api.togihome.vn/storage/images/originals/tu-giay-ket-hop-ke-treo-thong-minh-kg13-1-mhdywzygaqk5de0.webp",
       "id": 53,
       "moTa": "Tủ giày với thiết kế đa năng, tiện dụng",
       "soLuongTonKho": 10,
@@ -968,7 +1116,7 @@
       },
       "giaBan": 15000000,
       "giaSauGiam": 13500000,
-      "hinhAnh": "/images/products/ban-an-2.jpg",
+      "hinhAnh": "https://gotrangtri.vn/wp-content/uploads/2018/03/Bo-ban-an-go-soi-co-thiet-ke-dep-hien-dai-GHS-4570-ava-2.png",
       "id": 54,
       "moTa": "Bàn ăn gỗ sồi với thiết kế hiện đại",
       "soLuongTonKho": 5,
@@ -987,9 +1135,9 @@
         "moTa": "Bàn ăn phòng bếp",
         "tenDanhMuc": "Bàn ăn"
       },
-      "giaBan": 12000000,
+      "giaBan": 6000000,
       "giaSauGiam": 10800000,
-      "hinhAnh": "/images/products/ban-an-3.jpg",
+      "hinhAnh": "https://hungphatsaigon.vn/wp-content/uploads/2021/04/ban-an-mat-kinh-1.jpg",
       "id": 55,
       "moTa": "Bàn ăn kính với thiết kế sang trọng",
       "soLuongTonKho": 8,
@@ -1008,9 +1156,9 @@
         "moTa": "Bàn ăn phòng bếp",
         "tenDanhMuc": "Bàn ăn"
       },
-      "giaBan": 9500000,
+      "giaBan": 8500000,
       "giaSauGiam": 8500000,
-      "hinhAnh": "/images/products/ban-an-4.jpg",
+      "hinhAnh": "https://noithatm8.com/wp-content/uploads/B%C3%A0n-tr%C3%B2n-ch%C3%A2n-x%C3%B2e-ava1.jpg",
       "id": 56,
       "moTa": "Bàn ăn với thiết kế tối giản, hiện đại",
       "soLuongTonKho": 10,
@@ -1029,9 +1177,9 @@
         "moTa": "Bàn ăn phòng bếp",
         "tenDanhMuc": "Bàn ăn"
       },
-      "giaBan": 11000000,
+      "giaBan": 5000000,
       "giaSauGiam": 9800000,
-      "hinhAnh": "/images/products/ban-an-5.jpg",
+      "hinhAnh": "https://bizweb.dktcdn.net/100/347/061/files/tb2-xm9aisff1jjsspbxxcskvxa-598869243.jpg?v=1560757303084",
       "id": 57,
       "moTa": "Bàn ăn với thiết kế đa năng, tiện dụng",
       "soLuongTonKho": 6,
@@ -1052,7 +1200,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/ghe-an-2.jpg",
+      "hinhAnh": "https://noithatlacgia.vn/wp-content/uploads/2023/10/ban-ghe-an-go-oc-cho-ba23-3.jpg",
       "id": 58,
       "moTa": "Ghế ăn gỗ óc chó với thiết kế sang trọng",
       "soLuongTonKho": 8,
@@ -1073,7 +1221,7 @@
       },
       "giaBan": 3800000,
       "giaSauGiam": 3500000,
-      "hinhAnh": "/images/products/ghe-an-3.jpg",
+      "hinhAnh": "https://product.hstatic.net/1000372003/product/wishbone_natural_logo_cfdd4e66191a4d84bf74294921038583_master.jpg",
       "id": 59,
       "moTa": "Ghế ăn với thiết kế hiện đại, đa năng",
       "soLuongTonKho": 12,
@@ -1094,7 +1242,7 @@
       },
       "giaBan": 3200000,
       "giaSauGiam": 2800000,
-      "hinhAnh": "/images/products/ghe-an-4.jpg",
+      "hinhAnh": "https://flexhouse.vn/wp-content/uploads/2023/02/Ghe-an-toi-gian-bang-go-uon-nghe-thuat-AH9461-7.jpg",
       "id": 60,
       "moTa": "Ghế ăn với thiết kế tối giản, hiện đại",
       "soLuongTonKho": 15,
@@ -1113,9 +1261,9 @@
         "moTa": "Ghế ăn phòng bếp",
         "tenDanhMuc": "Ghế ăn"
       },
-      "giaBan": 3500000,
+      "giaBan": 1500000,
       "giaSauGiam": 3200000,
-      "hinhAnh": "/images/products/ghe-an-5.jpg",
+      "hinhAnh": "https://taduko.com/wp-content/uploads/2023/02/ghe-ban-an-nhap-khau-sunny-cao-cap.jpg",
       "id": 61,
       "moTa": "Ghế ăn với thiết kế đa năng, tiện dụng",
       "soLuongTonKho": 10,
@@ -1136,7 +1284,7 @@
       },
       "giaBan": 5500000,
       "giaSauGiam": 5000000,
-      "hinhAnh": "/images/products/ghe-bar-2.jpg",
+      "hinhAnh": "https://cdn.dogooccho.com.vn/media/noi-that/ghe-quay-bar-go-oc-cho/ghe-quay-bar-go-oc-cho-04-1.jpg",
       "id": 62,
       "moTa": "Ghế bar gỗ óc chó với thiết kế sang trọng",
       "soLuongTonKho": 8,
@@ -1157,7 +1305,7 @@
       },
       "giaBan": 4500000,
       "giaSauGiam": 4000000,
-      "hinhAnh": "/images/products/ghe-bar-3.jpg",
+      "hinhAnh": "https://flexhouse.vn/wp-content/uploads/2024/04/Ghe-bar-nang-xoay-hien-dai-phong-cach-Bac-Au-OY5252-2.png",
       "id": 63,
       "moTa": "Ghế bar với thiết kế hiện đại, đa năng",
       "soLuongTonKho": 12,
@@ -1178,7 +1326,7 @@
       },
       "giaBan": 3800000,
       "giaSauGiam": 3500000,
-      "hinhAnh": "/images/products/ghe-bar-4.jpg",
+      "hinhAnh": "https://flexhouse.vn/wp-content/uploads/2024/01/Ghe-quay-bar-boc-da-toi-gian-hien-dai-HB6807-6.jpg",
       "id": 64,
       "moTa": "Ghế bar với thiết kế tối giản, hiện đại",
       "soLuongTonKho": 15,
@@ -1199,7 +1347,7 @@
       },
       "giaBan": 4200000,
       "giaSauGiam": 3800000,
-      "hinhAnh": "/images/products/ghe-bar-5.jpg",
+      "hinhAnh": "https://flexhouse.vn/wp-content/uploads/2023/02/Ghe-quay-bar-bang-go-xoay-360-do-nang-ha-JB1018.jpg",
       "id": 65,
       "moTa": "Ghế bar với thiết kế đa năng, tiện dụng",
       "soLuongTonKho": 10,
@@ -1219,8 +1367,8 @@
         "tenDanhMuc": "Tủ ly"
       },
       "giaBan": 8500000,
-      "giaSauGiam": 7500000,
-      "hinhAnh": "/images/products/tu-ly-2.jpg",
+      "giaSauGiam": 55000000,
+      "hinhAnh": "https://anviethouse.vn/wp-content/uploads/2022/02/tu-ruou-go-oc-cho_nhieu-ngan-1.jpg",
       "id": 66,
       "moTa": "Tủ ly gỗ óc chó với thiết kế sang trọng",
       "soLuongTonKho": 8,
@@ -1239,9 +1387,9 @@
         "moTa": "Tủ ly phòng khách",
         "tenDanhMuc": "Tủ ly"
       },
-      "giaBan": 7500000,
+      "giaBan": 35000000,
       "giaSauGiam": 6800000,
-      "hinhAnh": "/images/products/tu-ly-3.jpg",
+      "hinhAnh": "https://noithatvanphonggiare.com/media/product/6072_tu_ruou_go_cong_nghiep_hien_dai_da_nang_kr22.jpg",
       "id": 67,
       "moTa": "Tủ ly với thiết kế hiện đại, đa năng",
       "soLuongTonKho": 12,
@@ -1262,7 +1410,7 @@
       },
       "giaBan": 6500000,
       "giaSauGiam": 5800000,
-      "hinhAnh": "/images/products/tu-ly-4.jpg",
+      "hinhAnh": "https://bizweb.dktcdn.net/100/391/155/products/z4737893861647-54aa78055e44dec0275dfac922c61bb9.jpg?v=1696665046217",
       "id": 68,
       "moTa": "Tủ ly với thiết kế tối giản, hiện đại",
       "soLuongTonKho": 15,
@@ -1281,153 +1429,15 @@
         "moTa": "Tủ ly phòng khách",
         "tenDanhMuc": "Tủ ly"
       },
-      "giaBan": 7000000,
-      "giaSauGiam": 6500000,
-      "hinhAnh": "/images/products/tu-ly-5.jpg",
+      "giaBan": 10000000,
+      "giaSauGiam": 9500000,
+      "hinhAnh": "https://bizweb.dktcdn.net/100/391/155/products/z5938298589985-7f1cee62e88dc38b74a036df51ac5d87.jpg?v=1729136232540",
       "id": 69,
       "moTa": "Tủ ly với thiết kế đa năng, tiện dụng",
       "soLuongTonKho": 10,
       "tenSanPham": "Tủ ly đa năng"
     }
   ],
-  "collections": {
-    "scandinavian": {
-        "id": "scandinavian",
-        "title": "Phong cách Scandinavian",
-        "description": "Tối giản, ấm áp và tinh tế với những đường nét đơn giản",
-        "image": "picture/collection-1.jpg",
-        "products": {
-            "product1": {
-                "id": 30,
-                "tenSanPham": "Sofa vải cao cấp Oslo",
-                "giaSauGiam": 20000000,
-                "hinhAnh": "/images/products/sofa-2.jpg",
-                "style": "scandinavian",
-                "moTa": "Sofa vải cao cấp với thiết kế hiện đại, êm ái"
-            },
-            "product2": {
-                "id": 38,
-                "tenSanPham": "Bàn nước gỗ sồi",
-                "giaSauGiam": 6800000,
-                "hinhAnh": "/images/products/ban-nuoc-2.jpg",
-                "style": "scandinavian",
-                "moTa": "Bàn nước gỗ sồi với thiết kế hiện đại"
-            }
-        }
-    },
-    "industrial": {
-        "id": "industrial",
-        "title": "Phong cách Industrial",
-        "description": "Phóng khoáng, mạnh mẽ với chất liệu thô mộc",
-        "image": "picture/collection-2.jpg",
-        "products": {
-            "product3": {
-                "id": 62,
-                "tenSanPham": "Ghế bar gỗ óc chó",
-                "giaSauGiam": 5000000,
-                "hinhAnh": "/images/products/ghe-bar-2.jpg",
-                "style": "industrial",
-                "moTa": "Ghế bar gỗ óc chó với thiết kế sang trọng"
-            }
-        }
-    },
-    "modern": {
-        "id": "modern",
-        "title": "Phong cách Modern",
-        "description": "Hiện đại, sang trọng với thiết kế tối giản",
-        "image": "picture/collection-3.jpg",
-        "products": {
-            "product4": {
-                "id": 31,
-                "tenSanPham": "Sofa góc hiện đại",
-                "giaSauGiam": 25000000,
-                "hinhAnh": "/images/products/sofa-3.jpg",
-                "style": "modern",
-                "moTa": "Sofa góc với thiết kế tối giản, đa năng"
-            },
-            "product5": {
-                "id": 39,
-                "tenSanPham": "Bàn nước kính cường lực",
-                "giaSauGiam": 5800000,
-                "hinhAnh": "/images/products/ban-nuoc-3.jpg",
-                "style": "modern",
-                "moTa": "Bàn nước kính với thiết kế sang trọng"
-            }
-        }
-    },
-    "classic": {
-        "id": "classic",
-        "title": "Phong cách Classic",
-        "description": "Truyền thống, sang trọng với đường nét tinh xảo",
-        "image": "picture/collection-4.jpg",
-        "products": {
-            "product6": {
-                "id": 32,
-                "tenSanPham": "Sofa da cao cấp Roma",
-                "giaSauGiam": 29000000,
-                "hinhAnh": "/images/products/sofa-4.jpg",
-                "style": "classic",
-                "moTa": "Sofa da cao cấp với thiết kế sang trọng"
-            },
-            "product7": {
-                "id": 54,
-                "tenSanPham": "Bàn ăn gỗ sồi",
-                "giaSauGiam": 13500000,
-                "hinhAnh": "/images/products/ban-an-2.jpg",
-                "style": "classic",
-                "moTa": "Bàn ăn gỗ sồi với thiết kế hiện đại"
-            }
-        }
-    },
-    "minimalist": {
-        "id": "minimalist",
-        "title": "Phong cách Minimalist",
-        "description": "Tối giản, thanh lịch với thiết kế tinh tế",
-        "image": "picture/collection-5.jpg",
-        "products": {
-            "product8": {
-                "id": 33,
-                "tenSanPham": "Sofa vải nỉ cao cấp",
-                "giaSauGiam": 16000000,
-                "hinhAnh": "/images/products/sofa-5.jpg",
-                "style": "minimalist",
-                "moTa": "Sofa vải nỉ với thiết kế hiện đại, êm ái"
-            },
-            "product9": {
-                "id": 56,
-                "tenSanPham": "Bàn ăn tối giản",
-                "giaSauGiam": 8500000,
-                "hinhAnh": "/images/products/ban-an-4.jpg",
-                "style": "minimalist",
-                "moTa": "Bàn ăn với thiết kế tối giản, hiện đại"
-            }
-        }
-    },
-    "bohemian": {
-        "id": "bohemian",
-        "title": "Phong cách Bohemian",
-        "description": "Phóng khoáng, tự do với màu sắc rực rỡ",
-        "image": "picture/collection-6.jpg",
-        "products": {
-            "product10": {
-                "id": 34,
-                "tenSanPham": "Ghế dài phòng khách hiện đại",
-                "giaSauGiam": 11000000,
-                "hinhAnh": "/images/products/ghe-dai-2.jpg",
-                "style": "bohemian",
-                "moTa": "Ghế dài với thiết kế tối giản, đa năng"
-            },
-            "product11": {
-                "id": 37,
-                "tenSanPham": "Ghế dài phòng khách đa năng",
-                "giaSauGiam": 12500000,
-                "hinhAnh": "/images/products/ghe-dai-5.jpg",
-                "style": "bohemian",
-                "moTa": "Ghế dài với thiết kế đa năng, tiện dụng"
-            }
-        }
-    }
-  },
   "users": {
     "JSUInKaq5uREqkODrHstzrP04g13": {
       "accountType": "email",
@@ -1466,14 +1476,142 @@
       "email": "baokhangml99@gmail.com",
       "emailVerified": false,
       "fullName": "Võ Trần Hoàng Bảo Khang",
-      "lastLogin": "2025-05-21T16:02:32.561Z",
+      "lastLogin": "2025-05-23T11:52:14.080Z",
       "loginStatus": {
-        "status": "offline",
-        "timestamp": "2025-05-21T17:14:48.519Z"
+        "status": "online",
+        "timestamp": "2025-05-24T12:11:12.514Z"
       },
       "phone": "0795858583",
       "role": "user",
       "status": "active"
     }
-  }
+  },
+  "promotions": {
+      "tet_2025": {
+        "id": "tet_2025",
+        "promoCode": "TET2025",
+        "title": "Khuyến mãi Tết Nguyên Đán",
+        "description": "Mừng năm mới - Tặng ngay voucher 2.000.000đ cho đơn hàng từ 15 triệu đồng",
+        "startDate": "2025-01-15T00:00:00",
+        "endDate": "2025-02-15T23:59:59",
+        "voucherAmount": 2000000,
+        "minOrderValue": 15000000,
+        "icon": "🏮",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "valentine_2025": {
+        "id": "valentine_2025",
+        "promoCode": "VAL2025",
+        "title": "Lễ Tình Nhân",
+        "description": "Tặng ngay voucher 1.000.000đ cho đơn hàng từ 10 triệu đồng",
+        "startDate": "2025-02-01T00:00:00",
+        "endDate": "2025-02-14T23:59:59",
+        "voucherAmount": 1000000,
+        "minOrderValue": 10000000,
+        "icon": "❤️",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "women_day_2025": {
+        "id": "women_day_2025",
+        "promoCode": "WOMEN2025",
+        "title": "Ngày Quốc tế Phụ nữ",
+        "description": "Tặng ngay voucher 800.000đ cho đơn hàng từ 8 triệu đồng",
+        "startDate": "2025-03-01T00:00:00",
+        "endDate": "2025-03-08T23:59:59",
+        "voucherAmount": 800000,
+        "minOrderValue": 8000000,
+        "icon": "🌸",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "reunification_day_2025": {
+        "id": "reunification_day_2025",
+        "promoCode": "30TH4",
+        "title": "Ngày Giải phóng miền Nam",
+        "description": "Tặng ngay voucher 1.500.000đ cho đơn hàng từ 12 triệu đồng",
+        "startDate": "2025-04-25T00:00:00",
+        "endDate": "2025-05-01T23:59:59",
+        "voucherAmount": 1500000,
+        "minOrderValue": 12000000,
+        "icon": "🎉",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "mother_day_2025": {
+        "id": "mother_day_2025",
+        "promoCode": "MOM2025",
+        "title": "Ngày của Mẹ",
+        "description": "Tặng ngay voucher 500.000đ cho đơn hàng từ 5 triệu đồng",
+        "startDate": "2025-05-01T00:00:00",
+        "endDate": "2025-05-12T23:59:59",
+        "voucherAmount": 500000,
+        "minOrderValue": 5000000,
+        "icon": "🌺",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "father_day_2025": {
+        "id": "father_day_2025",
+        "promoCode": "DAD2025",
+        "title": "Ngày của Cha",
+        "description": "Tặng ngay voucher 600.000đ cho đơn hàng từ 6 triệu đồng",
+        "startDate": "2025-06-10T00:00:00",
+        "endDate": "2025-06-16T23:59:59",
+        "voucherAmount": 600000,
+        "minOrderValue": 6000000,
+        "icon": "👔",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "mid_autumn_2025": {
+        "id": "mid_autumn_2025",
+        "promoCode": "TRUNGTHU2025",
+        "title": "Tết Trung Thu",
+        "description": "Tặng ngay voucher 1.200.000đ cho đơn hàng từ 10 triệu đồng",
+        "startDate": "2025-09-15T00:00:00",
+        "endDate": "2025-09-30T23:59:59",
+        "voucherAmount": 1200000,
+        "minOrderValue": 10000000,
+        "icon": "🌕",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "teacher_day_2025": {
+        "id": "teacher_day_2025",
+        "promoCode": "20TH11",
+        "title": "Ngày Nhà giáo Việt Nam",
+        "description": "Tặng ngay voucher 300.000đ cho đơn hàng từ 3 triệu đồng",
+        "startDate": "2025-11-15T00:00:00",
+        "endDate": "2025-11-20T23:59:59",
+        "voucherAmount": 300000,
+        "minOrderValue": 3000000,
+        "icon": "📚",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      },
+      "christmas_2025": {
+        "id": "christmas_2025",
+        "promoCode": "XMAS2025",
+        "title": "Giáng Sinh",
+        "description": "Tặng ngay voucher 3.000.000đ cho đơn hàng từ 20 triệu đồng",
+        "startDate": "2025-12-15T00:00:00",
+        "endDate": "2025-12-31T23:59:59",
+        "voucherAmount": 3000000,
+        "minOrderValue": 20000000,
+        "icon": "🎄",
+        "status": "active",
+        "createdAt": "2024-12-15T00:00:00",
+        "updatedAt": "2024-12-15T00:00:00"
+      }
+    }
 }

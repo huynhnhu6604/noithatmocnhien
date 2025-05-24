@@ -1045,7 +1045,6 @@
                 </div>
                 <a href="collection.html" class="nav-btn">Bộ sưu tập</a>
                 <a href="promotion.html" class="nav-btn">Khuyến mãi</a>
-                <a href="news.html" class="nav-btn">Tin tức</a>
                 <a href="member.html" class="nav-btn">Thành viên</a>
                 <a href="policy.html" class="nav-btn">Chính sách</a>
                 <a href="about.html" class="nav-btn">Về chúng tôi</a>
@@ -1068,7 +1067,7 @@
             </div>
         </section>
         
-        <section class="posters">
+        <!-- <section class="posters">
             <div class="poster" onclick="window.location.href='product-detail.html?id=1'">
                 <img src="picture/trang-tri-phong-khach-nha-cap-4-06-hungphatsaigon.vn_.jpg" alt="Khuyến mãi mùa hè" class="poster-img" onerror="this.src='picture/logo.jpg'">
                 <div class="poster-content">
@@ -1093,7 +1092,7 @@
                     <a href="product-detail.html?id=3" class="poster-btn">Đọc thêm</a>
                 </div>
             </div>
-        </section>
+        </section> -->
         
         <main>
             <!-- Section Sản phẩm nổi bật -->
@@ -1156,7 +1155,7 @@
                 </div>
             </section>
 
-            <!-- Section Tin tức -->
+            <!-- Section Tin tức
             <section class="news">
                 <div class="section-header">
                     <h2>Tin tức & Sự kiện</h2>
@@ -1172,9 +1171,8 @@
                             <a href="#" class="read-more">Đọc thêm</a>
                         </div>
                     </article>
-                    <!-- Thêm các news-card tương tự -->
                 </div>
-            </section>
+            </section> -->
 
             <!-- Section Đánh giá -->
             <section class="testimonials">
@@ -1934,10 +1932,6 @@
                                             `<span class="current-price">${formatPrice(product.giaBan)}</span>`
                                         }
                                     </div>
-                                    <div class="product-actions">
-                                        <button class="btn-primary" onclick="addToCart('${product.id}')">Mua ngay</button>
-                                        <button class="btn-secondary" onclick="viewProductDetail('${product.id}')">Chi tiết</button>
-                                    </div>
                                 </div>
                             `;
                             
@@ -1980,10 +1974,60 @@
                 window.location.href = `product-detail.html?id=${productId}`;
             }
 
+            // Hàm để load và hiển thị bộ sưu tập từ Firebase
+            function loadCollections() {
+                const collectionGrid = document.querySelector('.collection-grid');
+                
+                // Lắng nghe thay đổi theo thời gian thực
+                database.ref('collections')
+                    .limitToFirst(3) // Chỉ lấy 3 bộ sưu tập đầu tiên
+                    .on('value', (snapshot) => {
+                        const collections = [];
+                        snapshot.forEach((childSnapshot) => {
+                            collections.push({
+                                id: childSnapshot.key,
+                                ...childSnapshot.val()
+                            });
+                        });
+                        
+                        // Xóa nội dung cũ
+                        collectionGrid.innerHTML = '';
+                        
+                        // Hiển thị từng bộ sưu tập
+                        collections.forEach(collection => {
+                            const collectionCard = document.createElement('div');
+                            collectionCard.className = 'collection-card';
+                            
+                            collectionCard.innerHTML = `
+                                <img src="${collection.image}" alt="${collection.title}" class="collection-image" 
+                                    onerror="this.src='picture/logo.jpg'">
+                                <div class="collection-overlay">
+                                    <h3>${collection.title}</h3>
+                                    <p>${collection.description}</p>
+                                    <a href="collection.html?style=${collection.id}" class="btn-outline">Khám phá</a>
+                                </div>
+                            `;
+                            
+                            collectionGrid.appendChild(collectionCard);
+                        });
+                    }, (error) => {
+                        console.error('Lỗi khi load bộ sưu tập:', error);
+                        collectionGrid.innerHTML = `
+                            <div class="collection-card">
+                                <div class="collection-overlay">
+                                    <h3>Lỗi</h3>
+                                    <p>Không thể tải bộ sưu tập. Vui lòng thử lại sau.</p>
+                                </div>
+                            </div>
+                        `;
+                    });
+            }
+
             // Load sản phẩm khi trang được tải
             document.addEventListener('DOMContentLoaded', () => {
                 loadTestimonials();
                 loadFeaturedProducts();
+                loadCollections(); // Thêm dòng này
             });
         </script>
     </body>

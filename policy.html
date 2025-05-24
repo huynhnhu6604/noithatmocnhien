@@ -9,6 +9,9 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
         
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        
         <!-- Firebase SDK -->
         <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
         <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -989,6 +992,131 @@
                     font-size: 2rem;
                 }
             }
+
+            /* Policy Page Styles */
+            .policy-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 40px 20px;
+            }
+
+            .policy-title {
+                text-align: center;
+                color: #5a3d2b;
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+                font-weight: 600;
+                opacity: 0;
+                transform: translateY(20px);
+                animation: fadeInUp 0.8s ease forwards;
+            }
+
+            .policy-section {
+                background: #fff;
+                border-radius: 12px;
+                padding: 30px;
+                margin-bottom: 30px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                opacity: 0;
+                transform: translateY(20px);
+                transition: all 0.6s ease;
+            }
+
+            .policy-section.visible {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            .policy-section h2 {
+                color: #5a3d2b;
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #e9c46a;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .policy-section h2 i {
+                color: #e9c46a;
+                font-size: 1.6rem;
+            }
+
+            .policy-content {
+                color: #4a3322;
+            }
+
+            .policy-content h3 {
+                color: #5a3d2b;
+                font-size: 1.3rem;
+                margin: 25px 0 15px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .policy-content h3 i {
+                color: #e9c46a;
+                font-size: 1.2rem;
+            }
+
+            .policy-content p {
+                margin-bottom: 15px;
+                line-height: 1.6;
+            }
+
+            .policy-content ul, 
+            .policy-content ol {
+                margin: 15px 0;
+                padding-left: 20px;
+            }
+
+            .policy-content li {
+                margin-bottom: 10px;
+                line-height: 1.5;
+            }
+
+            .policy-content ul li {
+                list-style-type: disc;
+            }
+
+            .policy-content ol li {
+                list-style-type: decimal;
+            }
+
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            @media (max-width: 768px) {
+                .policy-container {
+                    padding: 20px 15px;
+                }
+
+                .policy-title {
+                    font-size: 2rem;
+                }
+
+                .policy-section {
+                    padding: 20px;
+                }
+
+                .policy-section h2 {
+                    font-size: 1.5rem;
+                }
+
+                .policy-content h3 {
+                    font-size: 1.2rem;
+                }
+            }
         </style>
     </head>
     <body>
@@ -1045,7 +1173,6 @@
                 </div>
                 <a href="collection.html" class="nav-btn">Bộ sưu tập</a>
                 <a href="promotion.html" class="nav-btn">Khuyến mãi</a>
-                <a href="news.html" class="nav-btn">Tin tức</a>
                 <a href="member.html" class="nav-btn">Thành viên</a>
                 <a href="policy.html" class="nav-btn">Chính sách</a>
                 <a href="about.html" class="nav-btn">Về chúng tôi</a>
@@ -1069,26 +1196,126 @@
         </section>
         
         <main>
-          
+            <div class="policy-container">
+                <h1 class="policy-title">Chính Sách & Điều Khoản</h1>
+                
+                <section class="policy-section visible">
+                    <h2><i class="fas fa-shield-alt"></i> 1. Chính Sách Bảo Mật</h2>
+                    <div class="policy-content">
+                        <h3><i class="fas fa-info-circle"></i> 1.1. Thu thập thông tin</h3>
+                        <p>Chúng tôi thu thập thông tin cá nhân của bạn khi:</p>
+                        <ul>
+                            <li>Đăng ký tài khoản</li>
+                            <li>Đặt hàng trực tuyến</li>
+                            <li>Liên hệ với chúng tôi</li>
+                            <li>Đăng ký nhận bản tin</li>
+                        </ul>
 
+                        <h3>1.2. Sử dụng thông tin</h3>
+                        <p>Thông tin cá nhân của bạn được sử dụng để:</p>
+                        <ul>
+                            <li>Xử lý đơn hàng và giao dịch</li>
+                            <li>Gửi thông tin về sản phẩm và dịch vụ</li>
+                            <li>Cải thiện trải nghiệm khách hàng</li>
+                            <li>Liên lạc khi cần thiết</li>
+                        </ul>
+                    </div>
+                </section>
 
+                <section class="policy-section visible">
+                    <h2><i class="fas fa-exchange-alt"></i> 2. Chính Sách Đổi Trả & Hoàn Tiền</h2>
+                    <div class="policy-content">
+                        <h3><i class="fas fa-clipboard-check"></i> 2.1. Điều kiện đổi trả</h3>
+                        <p>Sản phẩm có thể được đổi trả trong vòng 30 ngày kể từ ngày nhận hàng với các điều kiện:</p>
+                        <ul>
+                            <li>Sản phẩm còn nguyên vẹn, chưa qua sử dụng</li>
+                            <li>Còn đầy đủ hóa đơn, phiếu bảo hành</li>
+                            <li>Không bị lỗi do người dùng gây ra</li>
+                        </ul>
 
+                        <h3>2.2. Quy trình đổi trả</h3>
+                        <ol>
+                            <li>Liên hệ với chúng tôi qua hotline hoặc email</li>
+                            <li>Gửi sản phẩm về địa chỉ của chúng tôi</li>
+                            <li>Kiểm tra và xác nhận tình trạng sản phẩm</li>
+                            <li>Hoàn tiền hoặc đổi sản phẩm mới</li>
+                        </ol>
+                    </div>
+                </section>
 
+                <section class="policy-section visible">
+                    <h2><i class="fas fa-truck"></i> 3. Chính Sách Vận Chuyển</h2>
+                    <div class="policy-content">
+                        <h3><i class="fas fa-map-marked-alt"></i> 3.1. Phạm vi giao hàng</h3>
+                        <p>Chúng tôi giao hàng toàn quốc với các mức phí vận chuyển khác nhau tùy theo khu vực.</p>
 
+                        <h3>3.2. Thời gian giao hàng</h3>
+                        <ul>
+                            <li>Nội thành: 1-2 ngày làm việc</li>
+                            <li>Tỉnh/thành phố khác: 3-5 ngày làm việc</li>
+                            <li>Khu vực xa: 5-7 ngày làm việc</li>
+                        </ul>
 
+                        <h3>3.3. Phí vận chuyển</h3>
+                        <p>Phí vận chuyển được tính dựa trên:</p>
+                        <ul>
+                            <li>Khoảng cách địa lý</li>
+                            <li>Kích thước và trọng lượng sản phẩm</li>
+                            <li>Phương thức vận chuyển</li>
+                        </ul>
+                    </div>
+                </section>
 
+                <section class="policy-section visible">
+                    <h2><i class="fas fa-tools"></i> 4. Chính Sách Bảo Hành</h2>
+                    <div class="policy-content">
+                        <h3><i class="fas fa-clock"></i> 4.1. Thời gian bảo hành</h3>
+                        <ul>
+                            <li>Sản phẩm gỗ tự nhiên: 12 tháng</li>
+                            <li>Sản phẩm gỗ công nghiệp: 6 tháng</li>
+                            <li>Phụ kiện và đồ trang trí: 3 tháng</li>
+                        </ul>
 
+                        <h3>4.2. Phạm vi bảo hành</h3>
+                        <p>Chúng tôi bảo hành các lỗi:</p>
+                        <ul>
+                            <li>Lỗi kỹ thuật từ nhà sản xuất</li>
+                            <li>Lỗi vật liệu</li>
+                            <li>Lỗi lắp ráp</li>
+                        </ul>
 
+                        <h3>4.3. Quy trình bảo hành</h3>
+                        <ol>
+                            <li>Liên hệ trung tâm bảo hành</li>
+                            <li>Kiểm tra và xác nhận lỗi</li>
+                            <li>Sửa chữa hoặc thay thế</li>
+                            <li>Hoàn trả sản phẩm</li>
+                        </ol>
+                    </div>
+                </section>
 
+                <section class="policy-section visible">
+                    <h2><i class="fas fa-file-contract"></i> 5. Điều Khoản Sử Dụng</h2>
+                    <div class="policy-content">
+                        <h3><i class="fas fa-handshake"></i> 5.1. Quyền và nghĩa vụ</h3>
+                        <p>Khi sử dụng dịch vụ của chúng tôi, bạn đồng ý:</p>
+                        <ul>
+                            <li>Cung cấp thông tin chính xác</li>
+                            <li>Tuân thủ các quy định về thanh toán</li>
+                            <li>Không vi phạm bản quyền</li>
+                            <li>Không sử dụng dịch vụ cho mục đích bất hợp pháp</li>
+                        </ul>
 
-
-
-
-
-
-
-
-            
+                        <h3>5.2. Giới hạn trách nhiệm</h3>
+                        <p>Chúng tôi không chịu trách nhiệm về:</p>
+                        <ul>
+                            <li>Thiệt hại gián tiếp</li>
+                            <li>Mất mát dữ liệu</li>
+                            <li>Gián đoạn dịch vụ không mong muốn</li>
+                        </ul>
+                    </div>
+                </section>
+            </div>
         </main>
         
         <footer class="footer">
@@ -1823,6 +2050,28 @@
             document.addEventListener('DOMContentLoaded', () => {
                 loadTestimonials();
                 loadFeaturedProducts();
+
+                // Xử lý hiệu ứng scroll cho policy sections
+                const policySections = document.querySelectorAll('.policy-section');
+                
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '0px',
+                    threshold: 0.1
+                };
+
+                const observer = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, observerOptions);
+
+                policySections.forEach(section => {
+                    observer.observe(section);
+                });
             });
         </script>
     </body>

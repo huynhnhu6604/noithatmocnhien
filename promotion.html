@@ -18,6 +18,64 @@
         <!-- Sweetalert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <script>
+            // Cấu hình Firebase
+            const firebaseConfig = {
+                apiKey: "AIzaSyBHTL0ZIZkmRNi7kRF8UJdjR1qhx8cdre4",
+                authDomain: "webnoithat-de11f.firebaseapp.com",
+                databaseURL: "https://webnoithat-de11f-default-rtdb.firebaseio.com",
+                projectId: "webnoithat-de11f",
+                storageBucket: "webnoithat-de11f.firebasestorage.app",
+                messagingSenderId: "919918511984",
+                appId: "1:919918511984:web:d1b260dc52102fd279b1b5",
+                measurementId: "G-H1G2WJETSH"
+            };
+
+            // Khởi tạo Firebase
+            firebase.initializeApp(firebaseConfig);
+            const analytics = firebase.analytics();
+            const auth = firebase.auth();
+            const database = firebase.database();
+
+            // Hàm hiển thị thông báo thành công
+            function showSuccess(title, text) {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            // Hàm hiển thị thông báo lỗi
+            function showError(title, text) {
+                Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            // Hàm hiển thị xác nhận
+            function showConfirm(title, text) {
+                return Swal.fire({
+                    title: title,
+                    text: text,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy'
+                });
+            }
+
+            // Hàm hiển thị modal
+            function showModal(modalId) {
+                document.getElementById('modalOverlay').style.display = 'block';
+                document.getElementById(modalId).classList.add('active');
+            }
+        </script>
+
         <style>
             * {
                 margin: 0;
@@ -404,17 +462,8 @@
                 height: 100%;
                 background: rgba(0, 0, 0, 0.5);
                 z-index: 1000;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, visibility 0.3s ease;
                 -webkit-backdrop-filter: blur(5px);
                 backdrop-filter: blur(5px);
-            }
-
-            .modal-overlay.active {
-                display: block;
-                opacity: 1;
-                visibility: visible;
             }
 
             .modal {
@@ -738,36 +787,162 @@
 
             .service-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-                gap: 30px;
-                max-width: 1200px;
-                margin: 0 auto;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 2rem;
+                padding: 2rem;
             }
 
             .service-card {
+                background: #fff;
+                border-radius: 15px;
+                padding: 2rem;
                 text-align: center;
-                padding: 30px;
-                background: #f9f7f3;
-                border-radius: 12px;
-                transition: transform 0.3s;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
             }
 
             .service-card:hover {
                 transform: translateY(-5px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            }
+
+            .promotion-status {
+                position: absolute;
+                top: 1rem;
+                right: 1rem;
+                padding: 0.5rem 1rem;
+                border-radius: 20px;
+                font-size: 0.9rem;
+                font-weight: 600;
+            }
+
+            .promotion-status.upcoming {
+                background: #e3f2fd;
+                color: #1976d2;
+            }
+
+            .promotion-status.current {
+                background: #e8f5e9;
+                color: #2e7d32;
+            }
+
+            .promotion-status.ended {
+                background: #ffebee;
+                color: #c62828;
             }
 
             .service-icon {
-                font-size: 2.5rem;
-                margin-bottom: 20px;
+                font-size: 3rem;
+                margin-bottom: 1.5rem;
+                color: #4a90e2;
             }
 
             .service-card h3 {
-                color: #5a3d2b;
-                margin-bottom: 10px;
+                color: #333;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
             }
 
             .service-card p {
                 color: #666;
+                margin-bottom: 1.5rem;
+                line-height: 1.6;
+            }
+
+            .promotion-details {
+                margin-top: auto;
+                padding-top: 1.5rem;
+                border-top: 1px solid #eee;
+            }
+
+            .promo-code-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                margin-bottom: 1rem;
+                background: #f8f9fa;
+                padding: 0.8rem;
+                border-radius: 8px;
+            }
+
+            .promo-code {
+                margin: 0;
+                font-size: 1.1rem;
+            }
+
+            .copy-btn {
+                background: #4a90e2;
+                color: white;
+                border: none;
+                padding: 0.5rem 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s ease;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .copy-btn:hover {
+                background: #357abd;
+            }
+
+            .promo-values {
+                display: flex;
+                flex-direction: column;
+                gap: 0.8rem;
+                margin-bottom: 1rem;
+            }
+
+            .promo-value, .promo-min-order {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin: 0;
+                color: #555;
+            }
+
+            .promo-value i, .promo-min-order i {
+                color: #4a90e2;
+            }
+
+            .promo-period {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                color: #666;
+                font-size: 0.9rem;
+            }
+
+            .promo-period i {
+                color: #4a90e2;
+            }
+
+            @media (max-width: 768px) {
+                .service-grid {
+                    grid-template-columns: 1fr;
+                    padding: 1rem;
+                }
+
+                .service-card {
+                    padding: 1.5rem;
+                }
+
+                .promo-code-container {
+                    flex-direction: column;
+                    gap: 0.5rem;
+                }
+
+                .copy-btn {
+                    width: 100%;
+                    justify-content: center;
+                }
             }
 
             /* News */
@@ -999,608 +1174,378 @@
                 }
             }
 
-            /* Thêm CSS cho modal chi tiết bộ sưu tập */
-            .collection-modal {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #ffffff;
-                padding: 0;
-                border-radius: 16px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-                z-index: 1001;
-                width: 90%;
-                max-width: 1200px;
-                max-height: 90vh;
-                overflow: hidden;
-                display: flex;
-                flex-direction: column;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, visibility 0.3s ease;
-            }
-
-            .collection-modal.active {
-                display: flex;
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .modal-overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 1000;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, visibility 0.3s ease;
-                -webkit-backdrop-filter: blur(5px);
-                backdrop-filter: blur(5px);
-            }
-
-            .modal-overlay.active {
-                display: block;
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .collection-modal-header {
-                position: relative;
-                height: 300px;
-                overflow: hidden;
-                flex-shrink: 0;
-            }
-
-            .collection-modal-header::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
-                z-index: 1;
-            }
-
-            .collection-modal-header img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.3s ease;
-            }
-
-            .collection-modal-header:hover img {
-                transform: scale(1.05);
-            }
-
-            .collection-modal-title {
-                position: absolute;
-                bottom: 30px;
-                left: 30px;
-                color: #ffffff;
-                font-size: 2.5rem;
-                font-weight: 600;
-                z-index: 2;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            }
-
-            .collection-modal-content {
-                padding: 40px;
-                display: grid;
-                grid-template-columns: 1fr;
-                gap: 40px;
-                background: #ffffff;
-                overflow-y: auto;
-                max-height: calc(90vh - 300px);
-                scrollbar-width: thin;
-                scrollbar-color: #e9c46a #f9f7f3;
-            }
-
-            /* Tùy chỉnh thanh cuộn cho Chrome, Safari và Opera */
-            .collection-modal-content::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            .collection-modal-content::-webkit-scrollbar-track {
+            /* Styles cho phần hiển thị khuyến mãi */
+            .service-card {
+                text-align: center;
+                padding: 30px;
                 background: #f9f7f3;
-                border-radius: 4px;
-            }
-
-            .collection-modal-content::-webkit-scrollbar-thumb {
-                background: #e9c46a;
-                border-radius: 4px;
-            }
-
-            .collection-modal-content::-webkit-scrollbar-thumb:hover {
-                background: #5a3d2b;
-            }
-
-            @media (max-width: 992px) {
-                .collection-modal {
-                    max-height: 95vh;
-                }
-
-                .collection-modal-header {
-                    height: 250px;
-                }
-
-                .collection-modal-content {
-                    max-height: calc(95vh - 250px);
-                    padding: 30px;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .collection-modal {
-                    width: 95%;
-                    max-height: 98vh;
-                }
-
-                .collection-modal-header {
-                    height: 200px;
-                }
-
-                .collection-modal-content {
-                    max-height: calc(98vh - 200px);
-                    padding: 20px;
-                }
-            }
-
-            .collection-modal-close {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                background: rgba(255, 255, 255, 0.9);
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                font-size: 1.5rem;
-                color: #5a3d2b;
-                cursor: pointer;
-                z-index: 2;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                transition: all 0.3s;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-
-            .collection-modal-close:hover {
-                background: #5a3d2b;
-                color: white;
-                transform: rotate(90deg);
-            }
-
-            .collection-modal-info {
-                max-width: 1200px;
-                margin: 0 auto;
-            }
-
-            .collection-modal-description {
-                color: #4a3322;
-                font-size: 1.1rem;
-                line-height: 1.8;
-                margin-bottom: 40px;
-                padding-bottom: 30px;
-                border-bottom: 1px solid #e9e2d0;
-                text-align: center;
-                max-width: 800px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .collection-products {
-                margin-top: 40px;
-            }
-
-            .collection-products-title {
-                color: #5a3d2b;
-                font-size: 1.8rem;
-                margin-bottom: 30px;
-                position: relative;
-                padding-bottom: 15px;
-                text-align: center;
-            }
-
-            .collection-products-title::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 80px;
-                height: 3px;
-                background: #e9c46a;
-            }
-
-            .collection-products-grid {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                gap: 30px;
-                padding: 20px 0;
-            }
-
-            .collection-product-card {
-                background: #ffffff;
                 border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-                transition: all 0.3s ease;
-                border: 1px solid #e9e2d0;
-                height: 100%;
-                display: flex;
-                flex-direction: column;
+                transition: transform 0.3s;
+                border: 1px solid #e9c46a;
             }
 
-            @media (max-width: 1200px) {
-                .collection-products-grid {
-                    grid-template-columns: repeat(2, 1fr);
-                }
+            .service-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(90, 61, 43, 0.1);
             }
 
-            @media (max-width: 768px) {
-                .collection-products-grid {
-                    grid-template-columns: 1fr;
-                }
-            }
-
-            .collection-product-card:hover {
-                transform: translateY(-8px);
-                box-shadow: 0 8px 30px rgba(0,0,0,0.12);
-            }
-
-            .collection-product-image {
-                width: 100%;
-                height: 280px;
-                object-fit: cover;
-                transition: transform 0.3s ease;
-            }
-
-            .collection-product-card:hover .collection-product-image {
-                transform: scale(1.05);
-            }
-
-            .collection-product-info {
-                padding: 25px;
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-            }
-
-            .collection-product-name {
-                color: #5a3d2b;
-                font-size: 1.3rem;
-                margin-bottom: 15px;
-                font-weight: 600;
-                line-height: 1.4;
-                min-height: 3.6em;
-            }
-
-            .collection-product-price {
-                color: #e9c46a;
-                font-size: 1.4rem;
-                font-weight: 700;
+            .service-icon {
+                font-size: 2.5rem;
                 margin-bottom: 20px;
             }
 
-            .collection-product-description {
+            .service-card h3 {
+                color: #5a3d2b;
+                margin-bottom: 15px;
+                font-size: 1.3rem;
+            }
+
+            .service-card p {
                 color: #666;
-                font-size: 1rem;
-                line-height: 1.6;
-                margin-bottom: 25px;
-                flex: 1;
+                margin-bottom: 15px;
+                line-height: 1.5;
             }
 
-            .collection-product-actions {
-                margin-top: auto;
-                display: flex;
-                gap: 12px;
-            }
-
-            .collection-product-btn {
-                flex: 1;
-                padding: 12px;
-                border: none;
+            .promotion-details {
+                background: #fff;
+                padding: 15px;
                 border-radius: 8px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s;
-                text-align: center;
-                text-decoration: none;
-                font-size: 1rem;
+                margin: 15px 0;
+                text-align: left;
             }
 
-            .collection-product-btn.primary {
-                background: #e9c46a;
-                color: #5a3d2b;
-            }
-
-            .collection-product-btn.secondary {
-                background: transparent;
-                border: 2px solid #e9c46a;
-                color: #5a3d2b;
-            }
-
-            .collection-product-btn:hover {
-                transform: translateY(-2px);
-            }
-
-            .collection-product-btn.primary:hover {
-                background: #5a3d2b;
+            .promo-code {
                 color: #e9c46a;
-            }
-
-            .collection-product-btn.secondary:hover {
-                background: #e9c46a;
-                color: #5a3d2b;
-            }
-
-            @media (max-width: 992px) {
-                .collection-modal-content {
-                    padding: 30px;
-                }
-
-                .collection-products-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-                    gap: 25px;
-                }
-
-                .collection-product-image {
-                    height: 250px;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .collection-modal-content {
-                    padding: 20px;
-                }
-
-                .collection-products-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-                    gap: 20px;
-                }
-
-                .collection-product-image {
-                    height: 220px;
-                }
-
-                .collection-product-info {
-                    padding: 20px;
-                }
-
-                .collection-product-name {
-                    font-size: 1.2rem;
-                }
-
-                .collection-product-price {
-                    font-size: 1.3rem;
-                }
-            }
-
-            .collection-overlay .btn-outline {
-                display: inline-block;
-                padding: 8px 20px;
-                border: 2px solid white;
-                color: #000000;
-                text-decoration: none;
-                border-radius: 6px;
-                margin-top: 15px;
-                transition: all 0.3s;
-                background-color: white;
-                font-weight: 600;
-            }
-
-            .collection-overlay .btn-outline:hover {
-                background: #5a3d2b;
-                color: white;
-                border-color: #5a3d2b;
-            }
-
-            /* CSS cho modal chi tiết sản phẩm */
-            .product-detail-modal {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background: #ffffff;
-                padding: 0;
-                border-radius: 16px;
-                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-                z-index: 1002;
-                width: 90%;
-                max-width: 1000px;
-                max-height: 90vh;
-                overflow: hidden;
-                opacity: 0;
-                visibility: hidden;
-                transition: opacity 0.3s ease, visibility 0.3s ease;
-            }
-
-            .product-detail-modal.active {
-                display: block;
-                opacity: 1;
-                visibility: visible;
-            }
-
-            .product-detail-content {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 40px;
-                padding: 40px;
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-
-            .product-detail-image {
-                width: 100%;
-                height: 400px;
-                object-fit: cover;
-                border-radius: 12px;
-                transition: transform 0.3s ease;
-            }
-
-            .product-detail-image:hover {
-                transform: scale(1.05);
-            }
-
-            .product-detail-info {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .product-detail-title {
-                font-size: 2rem;
-                color: #5a3d2b;
-                font-weight: 600;
+                font-size: 1.1rem;
                 margin-bottom: 10px;
             }
 
-            .product-detail-price {
-                font-size: 1.8rem;
-                color: #e9c46a;
-                font-weight: 700;
-            }
-
-            .product-detail-description {
-                color: #4a3322;
-                font-size: 1.1rem;
-                line-height: 1.8;
-                margin: 20px 0;
-            }
-
-            .product-detail-specs {
-                background: #f9f7f3;
-                padding: 20px;
-                border-radius: 12px;
-                margin: 20px 0;
-            }
-
-            .product-detail-specs h3 {
+            .promo-value, .promo-min-order {
                 color: #5a3d2b;
-                font-size: 1.2rem;
-                margin-bottom: 15px;
+                margin-bottom: 8px;
             }
 
-            .product-detail-specs ul {
-                list-style: none;
-                padding: 0;
-            }
-
-            .product-detail-specs li {
+            .promo-period {
+                color: #666;
+                font-size: 0.9rem;
                 display: flex;
-                justify-content: space-between;
-                padding: 8px 0;
-                border-bottom: 1px solid #e9e2d0;
+                align-items: center;
+                gap: 5px;
             }
 
-            .product-detail-specs li:last-child {
-                border-bottom: none;
+            .promo-period i {
+                color: #e9c46a;
             }
 
-            .product-detail-actions {
-                display: flex;
-                gap: 15px;
-                margin-top: auto;
-            }
-
-            .product-detail-btn {
-                flex: 1;
-                padding: 15px;
+            .btn-primary {
+                background: #e9c46a;
+                color: #5a3d2b;
+                padding: 10px 20px;
                 border: none;
-                border-radius: 8px;
+                border-radius: 6px;
                 font-weight: 600;
                 cursor: pointer;
                 transition: all 0.3s;
-                text-align: center;
-                font-size: 1rem;
+                width: 100%;
+                margin-top: 15px;
             }
 
-            .product-detail-btn.primary {
-                background: #e9c46a;
-                color: #5a3d2b;
-            }
-
-            .product-detail-btn.secondary {
-                background: transparent;
-                border: 2px solid #e9c46a;
-                color: #5a3d2b;
-            }
-
-            .product-detail-btn:hover {
-                transform: translateY(-2px);
-            }
-
-            .product-detail-btn.primary:hover {
+            .btn-primary:hover {
                 background: #5a3d2b;
                 color: #e9c46a;
             }
 
-            .product-detail-btn.secondary:hover {
-                background: #e9c46a;
-                color: #5a3d2b;
+            /* Styles cho banner khuyến mãi */
+            .promotion-banner {
+                background: linear-gradient(rgba(90, 61, 43, 0.8), rgba(90, 61, 43, 0.8)), url('picture/banner1.webp');
+                background-size: cover;
+                background-position: center;
+                padding: 80px 20px;
+                text-align: center;
+                color: #fff;
+                margin-bottom: 40px;
             }
 
-            .product-detail-close {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                background: rgba(255, 255, 255, 0.9);
-                border: none;
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-                font-size: 1.5rem;
+            .banner-content h1 {
+                font-size: 3rem;
+                margin-bottom: 20px;
+                font-weight: 600;
+            }
+
+            .banner-content p {
+                font-size: 1.2rem;
+                opacity: 0.9;
+            }
+
+            /* Styles cho danh mục khuyến mãi */
+            .promotion-categories {
+                background: #fff;
+                padding: 20px 0;
+                margin-bottom: 40px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+
+            .category-tabs {
+                display: flex;
+                gap: 15px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                padding: 10px 25px;
+                border: 2px solid #e9c46a;
+                border-radius: 25px;
+                background: transparent;
                 color: #5a3d2b;
+                font-weight: 600;
                 cursor: pointer;
-                z-index: 2;
+                transition: all 0.3s;
+            }
+
+            .tab-btn:hover, .tab-btn.active {
+                background: #e9c46a;
+                color: #fff;
+            }
+
+            /* Styles cho danh sách khuyến mãi */
+            .promotion-list {
+                padding: 40px 0;
+            }
+
+            .promotion-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 30px;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            /* Styles cho thông tin thêm */
+            .promotion-info {
+                background: #f9f7f3;
+                padding: 60px 0;
+                margin-top: 40px;
+            }
+
+            .info-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+            }
+
+            .info-card {
+                text-align: center;
+                padding: 30px;
+                background: #fff;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+                transition: transform 0.3s;
+            }
+
+            .info-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .info-icon {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            .info-card h3 {
+                color: #5a3d2b;
+                margin-bottom: 15px;
+                font-size: 1.3rem;
+            }
+
+            .info-card p {
+                color: #666;
+                line-height: 1.6;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .banner-content h1 {
+                    font-size: 2rem;
+                }
+
+                .banner-content p {
+                    font-size: 1rem;
+                }
+
+                .category-tabs {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+
+                .tab-btn {
+                    width: 100%;
+                }
+            }
+
+            /* Styles cho phần hiển thị khuyến mãi */
+            .service-card {
+                position: relative;
+                text-align: center;
+                padding: 30px;
+                background: #fff;
+                border-radius: 12px;
+                transition: all 0.3s;
+                border: 1px solid #e9c46a;
+                overflow: hidden;
+            }
+
+            .service-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 5px 15px rgba(90, 61, 43, 0.1);
+            }
+
+            .promotion-status {
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                padding: 5px 15px;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 600;
+                z-index: 1;
+            }
+
+            .promotion-status.current {
+                background: #4CAF50;
+                color: white;
+            }
+
+            .promotion-status.upcoming {
+                background: #2196F3;
+                color: white;
+            }
+
+            .promotion-status.ended {
+                background: #9E9E9E;
+                color: white;
+            }
+
+            .service-icon {
+                font-size: 3rem;
+                margin-bottom: 20px;
+                color: #e9c46a;
+            }
+
+            .service-card h3 {
+                color: #5a3d2b;
+                margin-bottom: 15px;
+                font-size: 1.3rem;
+                min-height: 40px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+
+            .service-card p {
+                color: #666;
+                margin-bottom: 15px;
+                line-height: 1.5;
+                flex-grow: 1;
+            }
+
+            .promotion-details {
+                background: #f9f7f3;
+                padding: 20px;
+                border-radius: 8px;
+                margin-top: auto;
+            }
+
+            .promo-code-container {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: #fff;
+                padding: 10px 15px;
+                border-radius: 6px;
+                margin-bottom: 15px;
+                border: 1px solid #e9c46a;
+            }
+
+            .promo-code {
+                color: #e9c46a;
+                font-size: 1.1rem;
+                margin: 0;
+                font-weight: 600;
+            }
+
+            .copy-btn {
+                background: none;
+                border: none;
+                color: #5a3d2b;
+                cursor: pointer;
+                padding: 5px;
                 transition: all 0.3s;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }
 
-            .product-detail-close:hover {
-                background: #5a3d2b;
-                color: white;
-                transform: rotate(90deg);
+            .copy-btn:hover {
+                color: #e9c46a;
             }
 
-            @media (max-width: 992px) {
-                .product-detail-content {
-                    grid-template-columns: 1fr;
-                    padding: 30px;
-                }
+            .promo-values {
+                display: grid;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
 
-                .product-detail-image {
-                    height: 300px;
-                }
+            .promo-value, .promo-min-order {
+                color: #5a3d2b;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 0.95rem;
+            }
+
+            .promo-value i, .promo-min-order i {
+                color: #e9c46a;
+                font-size: 1.1rem;
+            }
+
+            .promo-period {
+                color: #666;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding-top: 10px;
+                border-top: 1px solid #e9c46a;
+            }
+
+            .promo-period i {
+                color: #e9c46a;
             }
 
             @media (max-width: 768px) {
-                .product-detail-content {
+                .promotion-grid {
+                    grid-template-columns: 1fr;
+                    padding: 10px;
+                }
+
+                .service-card {
                     padding: 20px;
                 }
 
-                .product-detail-image {
-                    height: 250px;
+                .promotion-details {
+                    padding: 15px;
                 }
 
-                .product-detail-title {
-                    font-size: 1.6rem;
-                }
-
-                .product-detail-price {
-                    font-size: 1.4rem;
+                .promo-code-container {
+                    flex-direction: column;
+                    gap: 10px;
+                    text-align: center;
                 }
             }
         </style>
@@ -1659,6 +1604,7 @@
                 </div>
                 <a href="collection.html" class="nav-btn">Bộ sưu tập</a>
                 <a href="promotion.html" class="nav-btn">Khuyến mãi</a>
+                <a href="news.html" class="nav-btn">Tin tức</a>
                 <a href="member.html" class="nav-btn">Thành viên</a>
                 <a href="policy.html" class="nav-btn">Chính sách</a>
                 <a href="about.html" class="nav-btn">Về chúng tôi</a>
@@ -1672,298 +1618,377 @@
                 </a>
             </div>
         </nav>
+        
         <main>
-            <!-- Banner Section -->
-            <div class="banner">
-                <img src="https://kienviet.net/wp-content/uploads/2021/01/Bower-Studios-Melt-Collection-c.jpg" alt="Bộ sưu tập Mộc Nhiên" class="banner-image">
-                <div class="banner-overlay">
-                    <h1 class="banner-title">Bộ Sưu Tập</h1>
-                    <p class="banner-subtitle">Khám phá những bộ sưu tập nội thất độc đáo từ Mộc Nhiên</p>
+            <!-- Banner Khuyến mãi -->
+            <section class="promotion-banner">
+                <div class="banner-content">
+                    <h1>Khuyến mãi đặc biệt</h1>
+                    <p>Những ưu đãi hấp dẫn dành riêng cho bạn</p>
                 </div>
-            </div>
-
-            <!-- Collection Introduction -->
-            <section class="section-header">
-                <h2>Bộ Sưu Tập Đặc Biệt</h2>
-                <p>Mỗi bộ sưu tập của chúng tôi đều được thiết kế với sự tinh tế và chú trọng đến từng chi tiết, mang đến không gian sống hoàn hảo cho gia đình bạn.</p>
             </section>
 
-            <!-- Collections Grid -->
-            <div class="collection-grid" id="collectionsContainer">
-                <!-- Collections will be loaded here dynamically -->
-            </div>
-
-            <!-- Collection Features -->
-            <section class="services">
-                <div class="section-header">
-                    <h2>Tại Sao Chọn Chúng Tôi?</h2>
-                    <p>Mộc Nhiên cam kết mang đến những sản phẩm chất lượng nhất cho không gian sống của bạn</p>
+            <!-- Danh mục khuyến mãi -->
+            <section class="promotion-categories">
+                <div class="container">
+                    <div class="category-tabs">
+                        <button class="tab-btn active" data-category="all">Tất cả</button>
+                        <button class="tab-btn" data-category="current">Đang diễn ra</button>
+                        <button class="tab-btn" data-category="upcoming">Sắp diễn ra</button>
+                        <button class="tab-btn" data-category="ended">Đã kết thúc</button>
+                    </div>
                 </div>
-                <div class="service-grid">
-                    <div class="service-card">
-                        <div class="service-icon">🎨</div>
-                        <h3>Thiết Kế Độc Đáo</h3>
-                        <p>Mỗi sản phẩm đều được thiết kế với sự tinh tế và độc đáo riêng</p>
+            </section>
+
+            <!-- Danh sách khuyến mãi -->
+            <section class="promotion-list">
+                <div class="container">
+                    <div class="promotion-grid" id="promotionGrid">
+                        <!-- Nội dung sẽ được load động từ Firebase -->
                     </div>
-                    <div class="service-card">
-                        <div class="service-icon">🌳</div>
-                        <h3>Chất Liệu Tự Nhiên</h3>
-                        <p>Sử dụng gỗ tự nhiên cao cấp, thân thiện với môi trường</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">⚡</div>
-                        <h3>Chất Lượng Cao Cấp</h3>
-                        <p>Cam kết chất lượng sản phẩm với độ bền cao</p>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">🚚</div>
-                        <h3>Giao Hàng Toàn Quốc</h3>
-                        <p>Dịch vụ giao hàng nhanh chóng và an toàn</p>
+                </div>
+            </section>
+
+            <!-- Thông tin thêm -->
+            <section class="promotion-info">
+                <div class="container">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-icon">🎁</div>
+                            <h3>Ưu đãi độc quyền</h3>
+                            <p>Nhận thông báo sớm nhất về các chương trình khuyến mãi đặc biệt</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">💎</div>
+                            <h3>Thành viên VIP</h3>
+                            <p>Hưởng thêm nhiều ưu đãi đặc biệt dành riêng cho thành viên</p>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-icon">📱</div>
+                            <h3>Thông báo qua SMS</h3>
+                            <p>Nhận thông báo khuyến mãi qua SMS để không bỏ lỡ cơ hội</p>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
-        
-        <footer class="footer">
-            <div class="footer-container">
-                <div class="footer-section">
-                    <h3 class="footer-title">Về Mộc Nhiên</h3>
-                    <p>Với nhiểu năm nghiên cứu về các sản phẩm nội thất, Mộc Nhiên tự hào mang đến những sản phẩm nội thất gỗ tự nhiên chất lượng cao, thiết kế độc đáo và tinh tế.</p>
-                </div>
-                
-                <div class="footer-section">
-                    <h3 class="footer-title">Liên hệ</h3>
-                    <div class="footer-contact-item">
-                        <span class="footer-contact-icon">📍</span>
-                        <span>Nguyễn Văn Cừ, An Khánh, Ninh Kiều, Cần Thơ </span>
-                    </div>
-                    <div class="footer-contact-item">
-                        <span class="footer-contact-icon">📱</span>
-                        <span>0123456789</span>
-                    </div>
-                    <div class="footer-contact-item">
-                        <span class="footer-contact-icon">✉️</span>
-                        <span>noithatmocnhien@gmail.com</span>
-                    </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h3 class="footer-title">Danh mục</h3>  
-                    <ul class="footer-links">
-                        <li><a href="#">Phòng khách</a></li>
-                        <li><a href="#">Phòng ngủ</a></li>
-                        <li><a href="#">Phòng bếp</a></li>
-                        <li><a href="#">Phòng làm việc</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3 class="footer-title">Theo dõi</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Facebook</a></li>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Email</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>&copy; 2025 Nội thất Mộc Nhiên. Tất cả quyền được bảo lưu.</p>
-            </div>
-        </footer>
-
-        <!-- Modal Overlay -->
-        <div class="modal-overlay" id="modalOverlay"></div>
-
-        <!-- Modal Đăng nhập -->
-        <div class="modal" id="loginModal">
-            <div class="modal-header">
-                <h2 class="modal-title">Đăng nhập</h2>
-                <p class="modal-subtitle">Đăng nhập để trải nghiệm dịch vụ tốt nhất từ Mộc Nhiên</p>
-            </div>
-            <form class="modal-form" onsubmit="handleLogin(event)">
-                <div class="form-group">
-                    <input type="email" class="form-input" placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-input" placeholder="Mật khẩu" required>
-                </div>
-                <button type="submit" class="form-button">
-                    <span>Đăng nhập</span>
-                    <div class="spinner"></div>
-                </button>
-            </form>
-            <div class="modal-links">
-                <a class="modal-link" onclick="showModal('registerModal')">Đăng ký tài khoản mới</a>
-                <br>
-                <a class="modal-link" onclick="showModal('forgotModal')">Quên mật khẩu?</a>
-            </div>
-        </div>
-
-        <!-- Modal Đăng ký -->
-        <div class="modal" id="registerModal">
-            <div class="modal-header">
-                <h2 class="modal-title">Đăng ký</h2>
-                <p class="modal-subtitle">Tạo tài khoản để nhận nhiều ưu đãi từ Mộc Nhiên</p>
-            </div>
-            <form class="modal-form" onsubmit="handleRegister(event)">
-                <div class="form-group">
-                    <input type="text" class="form-input" placeholder="Họ và tên" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" class="form-input" placeholder="Email" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-input" placeholder="Mật khẩu" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" class="form-input" placeholder="Xác nhận mật khẩu" required>
-                </div>
-                <button type="submit" class="form-button">
-                    <span>Đăng ký</span>
-                    <div class="spinner"></div>
-                </button>
-            </form>
-            <div class="modal-links">
-                <a class="modal-link" onclick="showModal('loginModal')">Đã có tài khoản? Đăng nhập</a>
-            </div>
-        </div>
-
-        <!-- Modal Quên mật khẩu -->
-        <div class="modal" id="forgotModal">
-            <div class="modal-header">
-                <h2 class="modal-title">Quên mật khẩu</h2>
-                <p class="modal-subtitle">Nhập email để nhận link đặt lại mật khẩu</p>
-            </div>
-            <form class="modal-form" onsubmit="handleForgotPassword(event)">
-                <div class="form-group">
-                    <input type="email" class="form-input" placeholder="Email" required>
-                </div>
-                <button type="submit" class="form-button">
-                    <span>Gửi yêu cầu</span>
-                    <div class="spinner"></div>
-                </button>
-            </form>
-            <div class="modal-links">
-                <a class="modal-link" onclick="showModal('loginModal')">Quay lại đăng nhập</a>
-            </div>
-        </div>
-
-        <!-- Modal Chi tiết Bộ sưu tập -->
-        <div class="collection-modal" id="collectionDetailModal">
-            <div class="collection-modal-header">
-                <img id="collectionDetailImage" src="" alt="">
-                <h2 class="collection-modal-title" id="collectionDetailTitle"></h2>
-                <button class="collection-modal-close" onclick="closeCollectionModal()">&times;</button>
-            </div>
-            <div class="collection-modal-content">
-                <div class="collection-modal-info">
-                    <p id="collectionDetailDescription" class="collection-modal-description"></p>
-                    <div class="collection-products">
-                        <h3 class="collection-products-title">Sản phẩm trong bộ sưu tập</h3>
-                        <div id="collectionProductsGrid" class="collection-products-grid">
-                            <!-- Products will be loaded here -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Thêm modal chi tiết sản phẩm vào cuối body -->
-        <div class="product-detail-modal" id="productDetailModal">
-            <button class="product-detail-close" onclick="closeProductDetail()">&times;</button>
-            <div class="product-detail-content">
-                <div class="product-detail-image-container">
-                    <img id="productDetailImage" src="" alt="" class="product-detail-image">
-                </div>
-                <div class="product-detail-info">
-                    <h2 id="productDetailTitle" class="product-detail-title"></h2>
-                    <div id="productDetailPrice" class="product-detail-price"></div>
-                    <p id="productDetailDescription" class="product-detail-description"></p>
-                    <div class="product-detail-specs">
-                        <h3>Thông số kỹ thuật</h3>
-                        <ul id="productDetailSpecs"></ul>
-                    </div>
-                    <div class="product-detail-actions">
-                        <button class="product-detail-btn primary" onclick="addToCart(currentProductId)">Mua ngay</button>
-                        <button class="product-detail-btn secondary" onclick="closeProductDetail()">Đóng</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 
         <script>
-            // Hàm hiển thị thông báo lỗi
-            function showError(title, message) {
-                Swal.fire({
-                    icon: 'error',
-                    title: title,
-                    text: message,
-                    confirmButtonColor: '#5a3d2b',
-                });
-            }
-
-            // Hàm hiển thị thông báo thành công
-            function showSuccess(title, message) {
-                Swal.fire({
-                    icon: 'success',
-                    title: title,
-                    text: message,
-                    confirmButtonColor: '#5a3d2b',
-                });
-            }
-
-            // Hàm hiển thị xác nhận
-            function showConfirm(title, message) {
-                return Swal.fire({
-                    icon: 'question',
-                    title: title,
-                    text: message,
-                    showCancelButton: true,
-                    confirmButtonColor: '#5a3d2b',
-                    cancelButtonColor: '#6c757d',
-                    confirmButtonText: 'Đồng ý',
-                    cancelButtonText: 'Hủy'
-                });
-            }
-
-            // Cấu hình Firebase
-            const firebaseConfig = {
-                apiKey: "AIzaSyBHTL0ZIZkmRNi7kRF8UJdjR1qhx8cdre4",
-                authDomain: "webnoithat-de11f.firebaseapp.com",
-                databaseURL: "https://webnoithat-de11f-default-rtdb.firebaseio.com",
-                projectId: "webnoithat-de11f",
-                storageBucket: "webnoithat-de11f.firebasestorage.app",
-                messagingSenderId: "919918511984",
-                appId: "1:919918511984:web:d1b260dc52102fd279b1b5",
-                measurementId: "G-H1G2WJETSH"
-            };
-
-            // Khởi tạo Firebase
-            firebase.initializeApp(firebaseConfig);
-            const analytics = firebase.analytics();
-            const auth = firebase.auth();
-            const database = firebase.database();
-
-            // Hiển thị modal
-            function showModal(modalId) {
-                // Ẩn tất cả các modal
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.classList.remove('active');
-                });
+            // Thêm hàm xử lý tab
+            function handleTabClick(event) {
+                const tabs = document.querySelectorAll('.tab-btn');
+                tabs.forEach(tab => tab.classList.remove('active'));
+                event.target.classList.add('active');
                 
-                // Hiển thị modal được chọn và overlay
-                document.getElementById(modalId).classList.add('active');
-                document.getElementById('modalOverlay').style.display = 'block';
+                const category = event.target.dataset.category;
+                filterPromotions(category);
             }
 
-            // Đóng modal khi click vào overlay
-            document.getElementById('modalOverlay').addEventListener('click', function() {
-                this.style.display = 'none';
-                document.querySelectorAll('.modal').forEach(modal => {
-                    modal.classList.remove('active');
-                });
+            // Thêm event listeners cho các tab
+            document.querySelectorAll('.tab-btn').forEach(tab => {
+                tab.addEventListener('click', handleTabClick);
             });
+
+            // Hàm lọc khuyến mãi theo danh mục
+            function filterPromotions(category) {
+                const now = new Date();
+                const promotions = document.querySelectorAll('.service-card');
+                
+                promotions.forEach(promotion => {
+                    const startDate = new Date(promotion.dataset.startDate);
+                    const endDate = new Date(promotion.dataset.endDate);
+                    
+                    switch(category) {
+                        case 'current':
+                            promotion.style.display = (now >= startDate && now <= endDate) ? 'block' : 'none';
+                            break;
+                        case 'upcoming':
+                            promotion.style.display = (now < startDate) ? 'block' : 'none';
+                            break;
+                        case 'ended':
+                            promotion.style.display = (now > endDate) ? 'block' : 'none';
+                            break;
+                        default:
+                            promotion.style.display = 'block';
+                    }
+                });
+            }
+
+            // Cập nhật hàm loadPromotions
+            function loadPromotions() {
+                const serviceGrid = document.getElementById('promotionGrid');
+                if (!serviceGrid) {
+                    console.warn('Promotion grid container not found');
+                    return;
+                }
+                
+                // Lắng nghe thay đổi theo thời gian thực
+                database.ref('promotions')
+                    .orderByChild('status')
+                    .equalTo('active')
+                    .on('value', (snapshot) => {
+                        const promotions = [];
+                        snapshot.forEach((childSnapshot) => {
+                            promotions.push({
+                                id: childSnapshot.key,
+                                ...childSnapshot.val()
+                            });
+                        });
+                        
+                        // Sắp xếp khuyến mãi theo thời gian bắt đầu
+                        promotions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                        
+                        // Xóa nội dung cũ
+                        serviceGrid.innerHTML = '';
+                        
+                        if (promotions.length === 0) {
+                            serviceGrid.innerHTML = `
+                                <div class="service-card">
+                                    <div class="service-icon">🎁</div>
+                                    <h3>Hiện không có khuyến mãi</h3>
+                                    <p>Vui lòng quay lại sau để xem các chương trình khuyến mãi mới.</p>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        // Hiển thị từng chương trình khuyến mãi
+                        promotions.forEach(promotion => {
+                            const serviceCard = document.createElement('div');
+                            serviceCard.className = 'service-card';
+                            serviceCard.dataset.startDate = promotion.startDate;
+                            serviceCard.dataset.endDate = promotion.endDate;
+                            
+                            // Format giá tiền
+                            const formatPrice = (price) => {
+                                return new Intl.NumberFormat('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND'
+                                }).format(price);
+                            };
+
+                            // Format ngày tháng
+                            const formatDate = (dateString) => {
+                                const date = new Date(dateString);
+                                return date.toLocaleDateString('vi-VN', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
+                                });
+                            };
+
+                            // Kiểm tra trạng thái khuyến mãi
+                            const now = new Date();
+                            const startDate = new Date(promotion.startDate);
+                            const endDate = new Date(promotion.endDate);
+                            let statusClass = '';
+                            let statusText = '';
+
+                            if (now < startDate) {
+                                statusClass = 'upcoming';
+                                statusText = 'Sắp diễn ra';
+                            } else if (now > endDate) {
+                                statusClass = 'ended';
+                                statusText = 'Đã kết thúc';
+                            } else {
+                                statusClass = 'current';
+                                statusText = 'Đang diễn ra';
+                            }
+                            
+                            serviceCard.innerHTML = `
+                                <div class="promotion-status ${statusClass}">${statusText}</div>
+                                <div class="service-icon">${promotion.icon || '🎁'}</div>
+                                <h3>${promotion.title}</h3>
+                                <p>${promotion.description}</p>
+                                <div class="promotion-details">
+                                    <div class="promo-code-container">
+                                        <p class="promo-code">Mã khuyến mãi: <strong>${promotion.promoCode}</strong></p>
+                                        <button class="copy-btn" onclick="copyPromoCode('${promotion.promoCode}')">
+                                            <i class="fas fa-copy"></i> Sao chép
+                                        </button>
+                                    </div>
+                                    <div class="promo-values">
+                                        <p class="promo-value">
+                                            <i class="fas fa-gift"></i>
+                                            Giá trị voucher: <strong>${formatPrice(promotion.voucherAmount)}</strong>
+                                        </p>
+                                        <p class="promo-min-order">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            Áp dụng cho đơn hàng từ: <strong>${formatPrice(promotion.minOrderValue)}</strong>
+                                        </p>
+                                    </div>
+                                    <div class="promo-period">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Thời gian: ${formatDate(promotion.startDate)} - ${formatDate(promotion.endDate)}</span>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            serviceGrid.appendChild(serviceCard);
+                        });
+
+                        // Lọc khuyến mãi theo tab mặc định
+                        filterPromotions('all');
+                    }, (error) => {
+                        console.error('Lỗi khi load khuyến mãi:', error);
+                        if (serviceGrid) {
+                            serviceGrid.innerHTML = `
+                                <div class="service-card">
+                                    <div class="service-icon">⚠️</div>
+                                    <h3>Không thể tải khuyến mãi</h3>
+                                    <p>Vui lòng thử lại sau hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp tục.</p>
+                                </div>
+                            `;
+                        }
+                    });
+            }
+
+            // Thêm CSS cho phần hiển thị khuyến mãi
+            const promotionStyles = document.createElement('style');
+            promotionStyles.textContent = `
+                .service-card {
+                    position: relative;
+                    text-align: center;
+                    padding: 30px;
+                    background: #fff;
+                    border-radius: 12px;
+                    transition: all 0.3s;
+                    border: 1px solid #e9c46a;
+                    overflow: hidden;
+                }
+
+                .service-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 5px 15px rgba(90, 61, 43, 0.1);
+                }
+
+                .promotion-status {
+                    position: absolute;
+                    top: 15px;
+                    right: 15px;
+                    padding: 5px 15px;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                }
+
+                .promotion-status.current {
+                    background: #4CAF50;
+                    color: white;
+                }
+
+                .promotion-status.upcoming {
+                    background: #2196F3;
+                    color: white;
+                }
+
+                .promotion-status.ended {
+                    background: #9E9E9E;
+                    color: white;
+                }
+
+                .service-icon {
+                    font-size: 3rem;
+                    margin-bottom: 20px;
+                }
+
+                .service-card h3 {
+                    color: #5a3d2b;
+                    margin-bottom: 15px;
+                    font-size: 1.3rem;
+                }
+
+                .service-card p {
+                    color: #666;
+                    margin-bottom: 15px;
+                    line-height: 1.5;
+                }
+
+                .promotion-details {
+                    background: #f9f7f3;
+                    padding: 20px;
+                    border-radius: 8px;
+                    margin: 15px 0;
+                    text-align: left;
+                }
+
+                .promo-code-container {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    background: #fff;
+                    padding: 10px 15px;
+                    border-radius: 6px;
+                    margin-bottom: 15px;
+                }
+
+                .promo-code {
+                    color: #e9c46a;
+                    font-size: 1.1rem;
+                    margin: 0;
+                }
+
+                .copy-btn {
+                    background: none;
+                    border: none;
+                    color: #5a3d2b;
+                    cursor: pointer;
+                    padding: 5px;
+                    transition: all 0.3s;
+                }
+
+                .copy-btn:hover {
+                    color: #e9c46a;
+                }
+
+                .promo-values {
+                    display: grid;
+                    gap: 10px;
+                    margin-bottom: 15px;
+                }
+
+                .promo-value, .promo-min-order {
+                    color: #5a3d2b;
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                }
+
+                .promo-value i, .promo-min-order i {
+                    color: #e9c46a;
+                }
+
+                .promo-period {
+                    color: #666;
+                    font-size: 0.9rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    padding-top: 10px;
+                    border-top: 1px solid #e9c46a;
+                }
+
+                .promo-period i {
+                    color: #e9c46a;
+                }
+
+                @media (max-width: 768px) {
+                    .service-card {
+                        padding: 20px;
+                    }
+
+                    .promotion-details {
+                        padding: 15px;
+                    }
+
+                    .promo-code-container {
+                        flex-direction: column;
+                        gap: 10px;
+                    }
+                }
+            `;
+            document.head.appendChild(promotionStyles);
 
             // Cập nhật hàm saveUserData
             async function saveUserData(user, additionalData = {}) {
@@ -2483,280 +2508,422 @@
                     return;
                 }
 
-                // Tìm sản phẩm trong collections
-                database.ref('collections').once('value')
-                    .then((snapshot) => {
-                        let foundProduct = null;
-                        
-                        // Duyệt qua tất cả các collections
-                        snapshot.forEach((collectionSnapshot) => {
-                            const collection = collectionSnapshot.val();
-                            if (collection.products) {
-                                // Tìm sản phẩm trong collection hiện tại
-                                Object.values(collection.products).forEach(product => {
-                                    if (product.id === parseInt(productId)) {
-                                        foundProduct = product;
-                                    }
-                                });
-                            }
-                        });
-                        
-                        if (foundProduct) {
-                            // Lấy giỏ hàng hiện tại từ localStorage
-                            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-                            
-                            // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-                            const existingProductIndex = cart.findIndex(item => item.id === foundProduct.id);
-                            
-                            if (existingProductIndex > -1) {
-                                // Nếu sản phẩm đã có, tăng số lượng
-                                cart[existingProductIndex].quantity += 1;
-                            } else {
-                                // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
-                                cart.push({
-                                    id: foundProduct.id,
-                                    name: foundProduct.tenSanPham || 'Sản phẩm không rõ tên',
-                                    price: foundProduct.giaSauGiam || foundProduct.giaBan || 0,
-                                    image: foundProduct.hinhAnh || 'picture/logo.jpg',
-                                    quantity: 1
-                                });
-                            }
-                            
-                            // Lưu giỏ hàng mới vào localStorage
-                            localStorage.setItem('cart', JSON.stringify(cart));
-                            
-                            // Hiển thị thông báo thành công
+                // Thêm vào giỏ hàng logic sẽ được implement sau
                 showSuccess('Thành công', 'Sản phẩm đã được thêm vào giỏ hàng');
-                            
-                            // Đóng modal chi tiết sản phẩm nếu đang mở
-                            closeProductDetail();
-                        } else {
-                            showError('Lỗi', 'Không tìm thấy thông tin sản phẩm');
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Lỗi khi thêm vào giỏ hàng:', error);
-                        showError('Lỗi', 'Không thể thêm sản phẩm vào giỏ hàng. Vui lòng thử lại sau.');
-                    });
             }
 
-            // Cập nhật hàm viewProductDetail
+            // Hàm xem chi tiết sản phẩm
             function viewProductDetail(productId) {
-                console.log('Opening product detail for ID:', productId);
-                currentProductId = productId;
-                const modal = document.getElementById('productDetailModal');
-                const modalOverlay = document.getElementById('modalOverlay');
-                
-                if (!modal || !modalOverlay) {
-                    console.error('Modal elements not found');
+                // Lưu ID sản phẩm vào localStorage để sử dụng ở trang chi tiết
+                localStorage.setItem('selectedProductId', productId);
+                // Chuyển hướng đến trang chi tiết
+                window.location.href = `product-detail.html?id=${productId}`;
+            }
+
+            // Hàm load và hiển thị chương trình khuyến mãi
+            function loadPromotions() {
+                const serviceGrid = document.getElementById('promotionGrid');
+                if (!serviceGrid) {
+                    console.warn('Promotion grid container not found');
                     return;
                 }
                 
-                modalOverlay.classList.add('active');
-                modal.classList.add('active');
-                
-                // Tìm sản phẩm trong tất cả các collections
-                database.ref('collections').once('value')
-                    .then((snapshot) => {
-                        let foundProduct = null;
-                        let collectionName = '';
-                        
-                        // Duyệt qua tất cả các collections
-                        snapshot.forEach((collectionSnapshot) => {
-                            const collection = collectionSnapshot.val();
-                            if (collection.products) {
-                                // Tìm sản phẩm trong collection hiện tại
-                                Object.values(collection.products).forEach(product => {
-                                    if (product.id === parseInt(productId)) {
-                                        foundProduct = product;
-                                        collectionName = collection.title;
-                                    }
-                                });
-                            }
+                // Lắng nghe thay đổi theo thời gian thực
+                database.ref('promotions')
+                    .orderByChild('status')
+                    .equalTo('active')
+                    .on('value', (snapshot) => {
+                        const promotions = [];
+                        snapshot.forEach((childSnapshot) => {
+                            promotions.push({
+                                id: childSnapshot.key,
+                                ...childSnapshot.val()
+                            });
                         });
                         
-                        if (foundProduct) {
-                            console.log('Product found:', foundProduct);
-                            document.getElementById('productDetailImage').src = foundProduct.hinhAnh;
-                            document.getElementById('productDetailTitle').textContent = foundProduct.tenSanPham;
+                        // Sắp xếp khuyến mãi theo thời gian bắt đầu
+                        promotions.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                        
+                        // Xóa nội dung cũ
+                        serviceGrid.innerHTML = '';
+                        
+                        if (promotions.length === 0) {
+                            serviceGrid.innerHTML = `
+                                <div class="service-card">
+                                    <div class="service-icon">🎁</div>
+                                    <h3>Hiện không có khuyến mãi</h3>
+                                    <p>Vui lòng quay lại sau để xem các chương trình khuyến mãi mới.</p>
+                                </div>
+                            `;
+                            return;
+                        }
+                        
+                        // Hiển thị từng chương trình khuyến mãi
+                        promotions.forEach(promotion => {
+                            const serviceCard = document.createElement('div');
+                            serviceCard.className = 'service-card';
+                            serviceCard.dataset.startDate = promotion.startDate;
+                            serviceCard.dataset.endDate = promotion.endDate;
                             
+                            // Format giá tiền
                             const formatPrice = (price) => {
                                 return new Intl.NumberFormat('vi-VN', {
                                     style: 'currency',
                                     currency: 'VND'
                                 }).format(price);
                             };
-                            
-                            document.getElementById('productDetailPrice').textContent = formatPrice(foundProduct.giaSauGiam);
-                            document.getElementById('productDetailDescription').textContent = foundProduct.moTa;
-                            
-                            // Hiển thị thông số kỹ thuật
-                            const specsList = document.getElementById('productDetailSpecs');
-                            specsList.innerHTML = '';
-                            
-                            // Thêm thông tin style vào thông số kỹ thuật
-                            const li = document.createElement('li');
-                            li.innerHTML = `<span>Phong cách</span><span>${collectionName}</span>`;
-                            specsList.appendChild(li);
-                            
-                            if (foundProduct.thongSo) {
-                                Object.entries(foundProduct.thongSo).forEach(([key, value]) => {
-                                    const li = document.createElement('li');
-                                    li.innerHTML = `<span>${key}</span><span>${value}</span>`;
-                                    specsList.appendChild(li);
+
+                            // Format ngày tháng
+                            const formatDate = (dateString) => {
+                                const date = new Date(dateString);
+                                return date.toLocaleDateString('vi-VN', {
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric'
                                 });
+                            };
+
+                            // Kiểm tra trạng thái khuyến mãi
+                            const now = new Date();
+                            const startDate = new Date(promotion.startDate);
+                            const endDate = new Date(promotion.endDate);
+                            let statusClass = '';
+                            let statusText = '';
+
+                            if (now < startDate) {
+                                statusClass = 'upcoming';
+                                statusText = 'Sắp diễn ra';
+                            } else if (now > endDate) {
+                                statusClass = 'ended';
+                                statusText = 'Đã kết thúc';
+                            } else {
+                                statusClass = 'current';
+                                statusText = 'Đang diễn ra';
                             }
-                        } else {
-                            console.error('Product not found');
-                            showError('Lỗi', 'Không tìm thấy thông tin sản phẩm');
+                            
+                            serviceCard.innerHTML = `
+                                <div class="promotion-status ${statusClass}">${statusText}</div>
+                                <div class="service-icon">${promotion.icon || '🎁'}</div>
+                                <h3>${promotion.title}</h3>
+                                <p>${promotion.description}</p>
+                                <div class="promotion-details">
+                                    <div class="promo-code-container">
+                                        <p class="promo-code">Mã khuyến mãi: <strong>${promotion.promoCode}</strong></p>
+                                        <button class="copy-btn" onclick="copyPromoCode('${promotion.promoCode}')">
+                                            <i class="fas fa-copy"></i> Sao chép
+                                        </button>
+                                    </div>
+                                    <div class="promo-values">
+                                        <p class="promo-value">
+                                            <i class="fas fa-gift"></i>
+                                            Giá trị voucher: <strong>${formatPrice(promotion.voucherAmount)}</strong>
+                                        </p>
+                                        <p class="promo-min-order">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            Áp dụng cho đơn hàng từ: <strong>${formatPrice(promotion.minOrderValue)}</strong>
+                                        </p>
+                                    </div>
+                                    <div class="promo-period">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Thời gian: ${formatDate(promotion.startDate)} - ${formatDate(promotion.endDate)}</span>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            serviceGrid.appendChild(serviceCard);
+                        });
+
+                        // Lọc khuyến mãi theo tab mặc định
+                        filterPromotions('all');
+                    }, (error) => {
+                        console.error('Lỗi khi load khuyến mãi:', error);
+                        if (serviceGrid) {
+                            serviceGrid.innerHTML = `
+                                <div class="service-card">
+                                    <div class="service-icon">⚠️</div>
+                                    <h3>Không thể tải khuyến mãi</h3>
+                                    <p>Vui lòng thử lại sau hoặc liên hệ hỗ trợ nếu vấn đề vẫn tiếp tục.</p>
+                                </div>
+                            `;
                         }
-                    })
-                    .catch((error) => {
-                        console.error('Lỗi khi load chi tiết sản phẩm:', error);
-                        showError('Lỗi', 'Không thể tải thông tin sản phẩm. Vui lòng thử lại sau.');
                     });
             }
 
-            // Hàm để load và hiển thị các bộ sưu tập từ Firebase
-            function loadCollections() {
-                const collectionsContainer = document.getElementById('collectionsContainer');
-                
-                database.ref('collections').on('value', (snapshot) => {
-                    const collections = [];
-                    snapshot.forEach((childSnapshot) => {
-                        collections.push({
-                            id: childSnapshot.key,
-                            ...childSnapshot.val()
-                        });
-                    });
-                    
-                    collectionsContainer.innerHTML = '';
-                    
-                    collections.forEach(collection => {
-                        const collectionCard = document.createElement('div');
-                        collectionCard.className = 'collection-card';
-                        
-                        collectionCard.innerHTML = `
-                            <img src="${collection.image}" alt="${collection.title}" class="collection-image" 
-                                onerror="this.src='picture/logo.jpg'">
-                            <div class="collection-overlay">
-                                <h3>${collection.title}</h3>
-                                <p>${collection.description}</p>
-                                <button onclick="showCollectionDetail('${collection.id}')" class="btn-outline">Xem thêm</button>
-                            </div>
-                        `;
-                        
-                        collectionsContainer.appendChild(collectionCard);
-                    });
-                }, (error) => {
-                    console.error('Lỗi khi load bộ sưu tập:', error);
-                    collectionsContainer.innerHTML = `
-                        <div class="collection-card">
-                            <div class="collection-overlay">
-                                <p>Không thể tải bộ sưu tập. Vui lòng thử lại sau.</p>
-                            </div>
-                        </div>
-                    `;
+            // Hàm sao chép mã khuyến mãi
+            function copyPromoCode(code) {
+                navigator.clipboard.writeText(code).then(() => {
+                    showSuccess('Thành công', 'Đã sao chép mã khuyến mãi vào clipboard!');
+                }).catch(() => {
+                    showError('Lỗi', 'Không thể sao chép mã khuyến mãi. Vui lòng thử lại.');
                 });
             }
 
-            // Hàm hiển thị modal chi tiết bộ sưu tập
-            function showCollectionDetail(collectionId) {
-                const modal = document.getElementById('collectionDetailModal');
-                const modalOverlay = document.getElementById('modalOverlay');
+            // Hàm load và hiển thị sản phẩm khuyến mãi
+            function loadPromotionProducts() {
+                const productsContainer = document.getElementById('promotionProductsContainer');
                 
-                modalOverlay.classList.add('active');
-                modal.classList.add('active');
-                
-                const productsGrid = document.getElementById('collectionProductsGrid');
-                productsGrid.innerHTML = `
-                    <div style="text-align: center; padding: 20px;">
-                        <div class="spinner" style="display: inline-block;"></div>
-                        <p style="margin-top: 10px; color: #5a3d2b;">Đang tải thông tin...</p>
-                    </div>
-                `;
-                
-                database.ref(`collections/${collectionId}`).once('value')
-                    .then((snapshot) => {
-                        const collection = snapshot.val();
-                        if (collection) {
-                            document.getElementById('collectionDetailTitle').textContent = collection.title;
-                            document.getElementById('collectionDetailImage').src = collection.image;
-                            document.getElementById('collectionDetailDescription').textContent = collection.description;
+                // Lắng nghe thay đổi theo thời gian thực
+                database.ref('promotion_products')
+                    .orderByChild('status')
+                    .equalTo('active')
+                    .on('value', (snapshot) => {
+                        const products = [];
+                        snapshot.forEach((childSnapshot) => {
+                            products.push({
+                                id: childSnapshot.key,
+                                ...childSnapshot.val()
+                            });
+                        });
+                        
+                        // Xóa nội dung cũ
+                        productsContainer.innerHTML = '';
+                        
+                        // Hiển thị từng sản phẩm
+                        products.forEach(product => {
+                            const productCard = document.createElement('div');
+                            productCard.className = 'product-card';
                             
-                            productsGrid.innerHTML = '';
-                            
-                            if (collection.products && Object.keys(collection.products).length > 0) {
-                                Object.values(collection.products).forEach(product => {
-                                    const productCard = document.createElement('div');
-                                    productCard.className = 'collection-product-card';
-                                    
-                                    const formatPrice = (price) => {
-                                        return new Intl.NumberFormat('vi-VN', {
-                                            style: 'currency',
-                                            currency: 'VND'
-                                        }).format(price);
-                                    };
-                                    
-                                    productCard.innerHTML = `
-                                        <img src="${product.hinhAnh}" alt="${product.tenSanPham}" class="collection-product-image"
-                                            onerror="this.src='picture/logo.jpg'">
-                                        <div class="collection-product-info">
-                                            <h3 class="collection-product-name">${product.tenSanPham}</h3>
-                                            <div class="collection-product-price">${formatPrice(product.giaSauGiam)}</div>
-                                            <p class="collection-product-description">${product.moTa}</p>
-                                            <div class="collection-product-actions">
-                                                <button class="collection-product-btn secondary" onclick="viewProductDetail('${product.id}')">Chi tiết</button>
-                                            </div>
-                                        </div>
-                                    `;
-                                    
-                                    productsGrid.appendChild(productCard);
-                                });
-                            } else {
-                                productsGrid.innerHTML = `
-                                    <div style="text-align: center; padding: 20px; color: #5a3d2b;">
-                                        <p>Chưa có sản phẩm trong bộ sưu tập này.</p>
+                            // Format giá tiền
+                            const formatPrice = (price) => {
+                                return new Intl.NumberFormat('vi-VN', {
+                                    style: 'currency',
+                                    currency: 'VND'
+                                }).format(price);
+                            };
+
+                            productCard.innerHTML = `
+                                <div class="product-badge">-${product.discountPercentage}%</div>
+                                <img src="${product.image}" alt="${product.name}" class="product-image" 
+                                    onerror="this.src='picture/logo.jpg'">
+                                <div class="product-info">
+                                    <h3>${product.name}</h3>
+                                    <p class="product-desc">${product.description}</p>
+                                    <div class="product-price">
+                                        <span class="original-price">${formatPrice(product.originalPrice)}</span>
+                                        <span class="discounted-price">${formatPrice(product.discountedPrice)}</span>
                                     </div>
-                                `;
-                            }
-                        }
-                    })
-                    .catch((error) => {
-                        console.error('Lỗi khi load chi tiết bộ sưu tập:', error);
-                        productsGrid.innerHTML = `
-                            <div style="text-align: center; padding: 20px; color: #5a3d2b;">
-                                <p>Không thể tải thông tin bộ sưu tập. Vui lòng thử lại sau.</p>
+                                    <div class="product-actions">
+                                        <button class="btn-primary" onclick="addToCart('${product.id}')">Mua ngay</button>
+                                        <button class="btn-secondary" onclick="viewProductDetail('${product.id}')">Chi tiết</button>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            productsContainer.appendChild(productCard);
+                        });
+                    }, (error) => {
+                        console.error('Lỗi khi load sản phẩm khuyến mãi:', error);
+                        productsContainer.innerHTML = `
+                            <div class="product-card">
+                                <div class="product-info">
+                                    <p>Không thể tải sản phẩm khuyến mãi. Vui lòng thử lại sau.</p>
+                                </div>
                             </div>
                         `;
                     });
             }
 
-            // Hàm đóng modal chi tiết bộ sưu tập
-            function closeCollectionModal() {
-                const modal = document.getElementById('collectionDetailModal');
-                const modalOverlay = document.getElementById('modalOverlay');
+            // Hàm xử lý đăng ký nhận thông tin khuyến mãi
+            function submitPromotion(event) {
+                event.preventDefault();
                 
-                modal.classList.remove('active');
-                modalOverlay.classList.remove('active');
+                const user = auth.currentUser;
+                const form = event.target;
+                const button = form.querySelector('button');
+                
+                const promotionData = {
+                    fullName: form.querySelector('#promotionName').value.trim(),
+                    email: form.querySelector('#promotionEmail').value.trim(),
+                    phone: form.querySelector('#promotionPhone').value.trim(),
+                    status: 'active',
+                    createdAt: firebase.database.ServerValue.TIMESTAMP,
+                    updatedAt: firebase.database.ServerValue.TIMESTAMP
+                };
+
+                // Validate dữ liệu
+                if (!promotionData.fullName || !promotionData.email || !promotionData.phone) {
+                    showError('Lỗi', 'Vui lòng điền đầy đủ thông tin');
+                    return;
+                }
+
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(promotionData.email)) {
+                    showError('Lỗi', 'Email không hợp lệ');
+                    return;
+                }
+
+                // Validate phone
+                const phoneRegex = /^[0-9]{10,11}$/;
+                if (!phoneRegex.test(promotionData.phone)) {
+                    showError('Lỗi', 'Số điện thoại không hợp lệ');
+                    return;
+                }
+
+                button.disabled = true;
+
+                // Kiểm tra đăng nhập trước khi gửi
+                if (!user) {
+                    showConfirm('Vui lòng đăng nhập', 'Bạn cần đăng nhập để đăng ký nhận thông tin khuyến mãi')
+                        .then((result) => {
+                            if (result.isConfirmed) {
+                                showModal('loginModal');
+                            }
+                        });
+                    button.disabled = false;
+                    return;
+                }
+
+                // Thêm userId vào dữ liệu
+                promotionData.userId = user.uid;
+
+                // Lưu thông tin đăng ký vào Firebase
+                const registrationRef = database.ref('promotion_registrations').push();
+                registrationRef.set(promotionData)
+                    .then(() => {
+                        showSuccess('Thành công', 'Cảm ơn bạn đã đăng ký nhận thông tin khuyến mãi!');
+                        form.reset();
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi khi đăng ký:', error);
+                        showError('Lỗi', 'Không thể đăng ký. Vui lòng thử lại sau.');
+                    })
+                    .finally(() => {
+                        button.disabled = false;
+                    });
             }
 
-            // Thêm biến để lưu ID sản phẩm hiện tại
-            let currentProductId = null;
-
-            // Thêm hàm đóng modal chi tiết sản phẩm
-            function closeProductDetail() {
-                const modal = document.getElementById('productDetailModal');
-                const modalOverlay = document.getElementById('modalOverlay');
-                
-                modal.classList.remove('active');
-                modalOverlay.classList.remove('active');
-            }
-
-            // Load bộ sưu tập khi trang được tải
+            // Load dữ liệu khi trang được tải
             document.addEventListener('DOMContentLoaded', () => {
-                loadCollections();
+                loadTestimonials();
+                loadPromotions();
+                loadPromotionProducts();
             });
         </script>
+
+        <footer class="footer">
+            <div class="footer-container">
+                <div class="footer-section">
+                    <h3 class="footer-title">Về Mộc Nhiên</h3>
+                    <p>Với nhiểu năm nghiên cứu về các sản phẩm nội thất, Mộc Nhiên tự hào mang đến những sản phẩm nội thất gỗ tự nhiên chất lượng cao, thiết kế độc đáo và tinh tế.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Liên hệ</h3>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">📍</span>
+                        <span>Nguyễn Văn Cừ, An Khánh, Ninh Kiều, Cần Thơ </span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">📱</span>
+                        <span>0123456789</span>
+                    </div>
+                    <div class="footer-contact-item">
+                        <span class="footer-contact-icon">✉️</span>
+                        <span>noithatmocnhien@gmail.com</span>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Danh mục</h3>  
+                    <ul class="footer-links">
+                        <li><a href="#">Phòng khách</a></li>
+                        <li><a href="#">Phòng ngủ</a></li>
+                        <li><a href="#">Phòng bếp</a></li>
+                        <li><a href="#">Phòng làm việc</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3 class="footer-title">Theo dõi</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Facebook</a></li>
+                        <li><a href="#">Instagram</a></li>
+                        <li><a href="#">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Nội thất Mộc Nhiên. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </footer>
+
+        <!-- Modal Overlay -->
+        <div class="modal-overlay" id="modalOverlay"></div>
+
+        <!-- Modal Đăng nhập -->
+        <div class="modal" id="loginModal">
+            <div class="modal-header">
+                <h2 class="modal-title">Đăng nhập</h2>
+                <p class="modal-subtitle">Đăng nhập để trải nghiệm dịch vụ tốt nhất từ Mộc Nhiên</p>
+            </div>
+            <form class="modal-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Mật khẩu" required>
+                </div>
+                <button type="submit" class="form-button">
+                    <span>Đăng nhập</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+            <div class="modal-links">
+                <a class="modal-link" onclick="showModal('registerModal')">Đăng ký tài khoản mới</a>
+                <br>
+                <a class="modal-link" onclick="showModal('forgotModal')">Quên mật khẩu?</a>
+            </div>
+        </div>
+
+        <!-- Modal Đăng ký -->
+        <div class="modal" id="registerModal">
+            <div class="modal-header">
+                <h2 class="modal-title">Đăng ký</h2>
+                <p class="modal-subtitle">Tạo tài khoản để nhận nhiều ưu đãi từ Mộc Nhiên</p>
+            </div>
+            <form class="modal-form" onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Họ và tên" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Mật khẩu" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Xác nhận mật khẩu" required>
+                </div>
+                <button type="submit" class="form-button">
+                    <span>Đăng ký</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+            <div class="modal-links">
+                <a class="modal-link" onclick="showModal('loginModal')">Đã có tài khoản? Đăng nhập</a>
+            </div>
+        </div>
+
+        <!-- Modal Quên mật khẩu -->
+        <div class="modal" id="forgotModal">
+            <div class="modal-header">
+                <h2 class="modal-title">Quên mật khẩu</h2>
+                <p class="modal-subtitle">Nhập email để nhận link đặt lại mật khẩu</p>
+            </div>
+            <form class="modal-form" onsubmit="handleForgotPassword(event)">
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email" required>
+                </div>
+                <button type="submit" class="form-button">
+                    <span>Gửi yêu cầu</span>
+                    <div class="spinner"></div>
+                </button>
+            </form>
+            <div class="modal-links">
+                <a class="modal-link" onclick="showModal('loginModal')">Quay lại đăng nhập</a>
+            </div>
+        </div>
     </body>
 </html>

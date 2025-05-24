@@ -989,6 +989,205 @@
                     font-size: 2rem;
                 }
             }
+
+            /* About Section */
+            .about-section {
+                padding: 60px 20px;
+                background: #fff;
+            }
+
+            .about-content {
+                max-width: 1200px;
+                margin: 0 auto;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+                align-items: center;
+            }
+
+            .about-image {
+                position: relative;
+                overflow: hidden;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            }
+
+            .about-img {
+                width: 100%;
+                height: auto;
+                display: block;
+                transition: transform 0.3s;
+            }
+
+            .about-image:hover .about-img {
+                transform: scale(1.05);
+            }
+
+            .about-text h3 {
+                color: #5a3d2b;
+                font-size: 1.5rem;
+                margin-bottom: 15px;
+                font-weight: 600;
+            }
+
+            .about-text p {
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 25px;
+            }
+
+            /* Values Section */
+            .values-section {
+                padding: 60px 20px;
+                background: #f9f7f3;
+            }
+
+            .values-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 30px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .value-card {
+                background: #fff;
+                padding: 30px;
+                border-radius: 12px;
+                text-align: center;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+                transition: transform 0.3s;
+            }
+
+            .value-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .value-icon {
+                font-size: 2.5rem;
+                margin-bottom: 20px;
+            }
+
+            .value-card h3 {
+                color: #5a3d2b;
+                margin-bottom: 15px;
+                font-size: 1.3rem;
+            }
+
+            .value-card p {
+                color: #666;
+                line-height: 1.6;
+            }
+
+            /* Team Section */
+            .team-section {
+                padding: 60px 20px;
+                background: #fff;
+            }
+
+            .team-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                gap: 30px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .team-member {
+                background: #f9f7f3;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+            .member-image {
+                width: 100%;
+                height: 300px;
+                object-fit: cover;
+            }
+
+            .team-member h3 {
+                color: #5a3d2b;
+                font-size: 1.3rem;
+                margin: 20px 20px 5px;
+            }
+
+            .member-position {
+                color: #e9c46a;
+                font-weight: 600;
+                margin: 0 20px 15px;
+            }
+
+            .member-desc {
+                color: #666;
+                line-height: 1.6;
+                padding: 0 20px 20px;
+            }
+
+            /* Contact Section */
+            .contact-section {
+                padding: 60px 20px;
+                background: #f9f7f3;
+            }
+
+            .contact-grid {
+                display: grid;
+                grid-template-columns: 1fr 2fr;
+                gap: 40px;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
+            .contact-info {
+                background: #fff;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+            .info-item {
+                display: flex;
+                align-items: flex-start;
+                gap: 15px;
+                margin-bottom: 25px;
+            }
+
+            .info-icon {
+                font-size: 1.5rem;
+                color: #e9c46a;
+            }
+
+            .info-item h3 {
+                color: #5a3d2b;
+                font-size: 1.2rem;
+                margin-bottom: 5px;
+            }
+
+            .info-item p {
+                color: #666;
+                line-height: 1.6;
+            }
+
+            .contact-form {
+                background: #fff;
+                padding: 30px;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            }
+
+            @media (max-width: 768px) {
+                .about-content {
+                    grid-template-columns: 1fr;
+                }
+
+                .contact-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .team-grid {
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                }
+            }
         </style>
     </head>
     <body>
@@ -1045,7 +1244,6 @@
                 </div>
                 <a href="collection.html" class="nav-btn">Bộ sưu tập</a>
                 <a href="promotion.html" class="nav-btn">Khuyến mãi</a>
-                <a href="news.html" class="nav-btn">Tin tức</a>
                 <a href="member.html" class="nav-btn">Thành viên</a>
                 <a href="policy.html" class="nav-btn">Chính sách</a>
                 <a href="about.html" class="nav-btn">Về chúng tôi</a>
@@ -1069,26 +1267,160 @@
         </section>
         
         <main>
-          
+            <section class="about-section">
+                <div class="section-header">
+                    <h2>Về Mộc Nhiên</h2>
+                    <p>Hành trình phát triển và sứ mệnh của chúng tôi</p>
+                </div>
+                
+                <div class="about-content">
+                    <div class="about-image">
+                        <img src="picture/logo.jpg" alt="Mộc Nhiên Showroom" class="about-img">
+                    </div>
+                    
+                    <div class="about-text">
+                        <h3>Câu chuyện của chúng tôi</h3>
+                        <p>Mộc Nhiên được thành lập với tình yêu và đam mê dành cho nội thất gỗ tự nhiên. Chúng tôi tin rằng mỗi không gian sống đều xứng đáng được tô điểm bởi những sản phẩm nội thất chất lượng, mang đậm tính thẩm mỹ và bền vững.</p>
+                        
+                        <h3>Tầm nhìn</h3>
+                        <p>Chúng tôi mong muốn trở thành thương hiệu nội thất hàng đầu, mang đến những giải pháp nội thất toàn diện, kết hợp giữa truyền thống và hiện đại, tạo nên không gian sống hoàn hảo cho mọi gia đình Việt Nam.</p>
+                        
+                        <h3>Sứ mệnh</h3>
+                        <p>Mang đến những sản phẩm nội thất chất lượng cao, thiết kế độc đáo và tinh tế, góp phần nâng cao chất lượng cuộc sống của khách hàng thông qua việc tạo dựng những không gian sống đẹp và tiện nghi.</p>
+                    </div>
+                </div>
+            </section>
 
+            <section class="values-section">
+                <div class="section-header">
+                    <h2>Giá trị cốt lõi</h2>
+                    <p>Những nguyên tắc định hướng hoạt động của chúng tôi</p>
+                </div>
+                
+                <div class="values-grid">
+                    <div class="value-card">
+                        <div class="value-icon">🌟</div>
+                        <h3>Chất lượng</h3>
+                        <p>Cam kết mang đến những sản phẩm chất lượng cao, được chọn lọc kỹ lưỡng từ nguyên liệu đến quy trình sản xuất.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">💡</div>
+                        <h3>Sáng tạo</h3>
+                        <p>Không ngừng đổi mới và sáng tạo trong thiết kế, mang đến những giải pháp nội thất độc đáo và phù hợp.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">🤝</div>
+                        <h3>Uy tín</h3>
+                        <p>Xây dựng niềm tin với khách hàng thông qua sự minh bạch, trách nhiệm và cam kết trong mọi hoạt động.</p>
+                    </div>
+                    
+                    <div class="value-card">
+                        <div class="value-icon">🌱</div>
+                        <h3>Bền vững</h3>
+                        <p>Hướng đến phát triển bền vững, tôn trọng môi trường và sử dụng nguồn nguyên liệu có trách nhiệm.</p>
+                    </div>
+                </div>
+            </section>
 
+            <section class="team-section">
+                <div class="section-header">
+                    <h2>Đội ngũ của chúng tôi</h2>
+                    <p>Những người tạo nên Mộc Nhiên</p>
+                </div>
+                
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="picture/nhu.png" alt="Nguyễn Thị Huỳnh Như" class="member-image">
+                        <h3>Nguyễn Thị Huỳnh Như</h3>
+                        <p class="member-position">Giám đốc điều hành</p>
+                        <p class="member-desc">Với hơn 15 năm kinh nghiệm trong ngành nội thất, anh A đã dẫn dắt Mộc Nhiên phát triển thành thương hiệu uy tín như ngày nay.</p>
+                    </div>
+                    
+                    <div class="team-member">
+                        <img src="picture/team2.jpg" alt="Trần Thị B" class="member-image">
+                        <h3>Trần Thị B</h3>
+                        <p class="member-position">Trưởng phòng thiết kế</p>
+                        <p class="member-desc">Chị B là người tạo nên những thiết kế độc đáo, kết hợp hoàn hảo giữa truyền thống và hiện đại.</p>
+                    </div>
+                </div>
+            </section>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
+            <section class="contact-section">
+                <div class="section-header">
+                    <h2>Liên hệ với chúng tôi</h2>
+                    <p>Hãy để chúng tôi giúp bạn tạo nên không gian sống hoàn hảo</p>
+                </div>
+                
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="info-item">
+                            <span class="info-icon">📍</span>
+                            <div>
+                                <h3>Địa chỉ</h3>
+                                <p>Nguyễn Văn Cừ, An Khánh, Ninh Kiều, Cần Thơ</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-icon">📞</span>
+                            <div>
+                                <h3>Điện thoại</h3>
+                                <p>0123456789</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-icon">✉️</span>
+                            <div>
+                                <h3>Email</h3>
+                                <p>noithatmocnhien@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <span class="info-icon">⏰</span>
+                            <div>
+                                <h3>Giờ làm việc</h3>
+                                <p>Thứ 2 - Thứ 7: 8:00 - 20:00</p>
+                                <p>Chủ nhật: 9:00 - 17:00</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-form">
+                        <form id="contactForm" onsubmit="submitContact(event)">
+                            <div class="form-group">
+                                <label for="contactName">Họ và tên</label>
+                                <input type="text" id="contactName" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactEmail">Email</label>
+                                <input type="email" id="contactEmail" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactPhone">Số điện thoại</label>
+                                <input type="tel" id="contactPhone" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactSubject">Tiêu đề</label>
+                                <input type="text" id="contactSubject" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="contactMessage">Nội dung</label>
+                                <textarea id="contactMessage" class="form-control" rows="5" required></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Gửi tin nhắn</button>
+                        </form>
+                    </div>
+                </div>
+            </section>
         </main>
         
         <footer class="footer">
