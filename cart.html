@@ -2176,15 +2176,15 @@
                             <h3>Thông tin người nhận</h3>
                             <div class="form-group">
                                 <label for="fullName">Họ và tên *</label>
-                                <input type="text" id="fullName" class="form-input" required>
+                                <input type="text" id="fullName" name="fullName" class="form-input" required>
                             </div>
                             <div class="form-group">
                                 <label for="phone">Số điện thoại *</label>
-                                <input type="tel" id="phone" class="form-input" required>
+                                <input type="tel" id="phone" name="phone" class="form-input" required>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email *</label>
-                                <input type="email" id="email" class="form-input" required>
+                                <input type="email" id="email" name="email" class="form-input" required>
                             </div>
                         </div>
 
@@ -2192,11 +2192,11 @@
                             <h3>Địa chỉ giao hàng</h3>
                             <div class="form-group">
                                 <label for="address">Địa chỉ chi tiết *</label>
-                                <textarea id="address" class="form-input" rows="3" required></textarea>
+                                <textarea id="address" name="address" class="form-input" rows="3" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="note">Ghi chú</label>
-                                <textarea id="note" class="form-input" rows="2" placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn."></textarea>
+                                <textarea id="note" name="note" class="form-input" rows="2" placeholder="Ghi chú về đơn hàng, ví dụ: thời gian hay chỉ dẫn địa điểm giao hàng chi tiết hơn."></textarea>
                             </div>
                         </div>
 
@@ -2282,7 +2282,7 @@
 
                         <div class="form-actions">
                             <button type="button" class="btn-secondary" onclick="prevStep(3)">Quay lại</button>
-                            <button type="submit" class="btn-primary">Đặt hàng</button>
+                            <button type="button" class="btn-primary" onclick="submitOrder()">Đặt hàng</button>
                         </div>
                     </div>
                 </form>
@@ -2943,30 +2943,59 @@
             // Hàm xử lý thanh toán
             async function handlePayment(event) {
                 event.preventDefault();
+                
+                // Kiểm tra form validation
+                const form = document.getElementById('paymentForm');
+                if (!form.checkValidity()) {
+                    // Hiển thị validation message
+                    form.reportValidity();
+                    return;
+                }
+
                 const button = event.target.querySelector('button[type="submit"]');
                 button.disabled = true;
 
                 try {
                     // Lấy thông tin từ form
                     const formData = {
-                        fullName: document.getElementById('fullName').value,
-                        phone: document.getElementById('phone').value,
-                        email: document.getElementById('email').value,
-                        address: document.getElementById('address').value,
-                        note: document.getElementById('note').value,
+                        fullName: document.getElementById('fullName').value.trim(),
+                        phone: document.getElementById('phone').value.trim(),
+                        email: document.getElementById('email').value.trim(),
+                        address: document.getElementById('address').value.trim(),
+                        note: document.getElementById('note').value.trim(),
                         paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
                         cart: JSON.parse(localStorage.getItem('cart')) || [],
                         totalAmount: calculateTotal()
                     };
 
+                    // Validate dữ liệu
+                    if (!formData.fullName || !formData.phone || !formData.email || !formData.address) {
+                        showError('Lỗi', 'Vui lòng điền đầy đủ thông tin bắt buộc');
+                        return;
+                    }
+
+                    // Validate email
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(formData.email)) {
+                        showError('Lỗi', 'Email không hợp lệ');
+                        return;
+                    }
+
+                    // Validate phone
+                    const phoneRegex = /^[0-9]{10,11}$/;
+                    if (!phoneRegex.test(formData.phone)) {
+                        showError('Lỗi', 'Số điện thoại không hợp lệ');
+                        return;
+                    }
+
                     if (formData.paymentMethod === 'vnpay') {
-                        // Tích hợp VNPAY
+                        // Xử lý thanh toán VNPAY
                         const vnp_TmnCode = 'HPVOQ9TR';
                         const vnp_HashSecret = '7BLLKO9FCUWR84YAX28XZN5SP8D36YV0';
                         const vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
                         const vnp_ReturnUrl = window.location.origin + '/vnpay_return.html';
                         const vnp_TxnRef = Date.now().toString();
-                        const vnp_Amount = formData.totalAmount * 100; // VNPAY yêu cầu nhân 100
+                        const vnp_Amount = formData.totalAmount * 100;
                         const vnp_OrderInfo = `Thanh toán đơn hàng cho ${formData.fullName}`;
 
                         // Tạo đối tượng chứa thông tin thanh toán
@@ -2995,9 +3024,7 @@
                         const signData = Object.keys(sortedParams)
                             .map(key => {
                                 const value = sortedParams[key];
-                                // Đảm bảo giá trị là string và được encode đúng cách
-                                const encodedValue = encodeURIComponent(String(value)).replace(/%20/g, '+');
-                                return `${key}=${encodedValue}`;
+                                return `${key}=${encodeURIComponent(String(value)).replace(/%20/g, '+')}`;
                             })
                             .join('&');
 
@@ -3012,25 +3039,14 @@
                         const paymentUrl = vnp_Url + '?' + Object.keys(sortedParams)
                             .map(key => {
                                 const value = sortedParams[key];
-                                // Đảm bảo giá trị là string và được encode đúng cách
-                                const encodedValue = encodeURIComponent(String(value)).replace(/%20/g, '+');
-                                return `${key}=${encodedValue}`;
+                                return `${key}=${encodeURIComponent(String(value)).replace(/%20/g, '+')}`;
                             })
                             .join('&');
 
                         // Lưu thông tin đơn hàng vào localStorage
                         const orderInfo = {
                             orderId: vnp_TxnRef,
-                            fullName: formData.fullName,
-                            phone: formData.phone,
-                            email: formData.email,
-                            address: formData.address,
-                            note: formData.note,
-                            items: formData.cart,
-                            subtotal: formData.cart.reduce((total, item) => total + (item.price * item.quantity), 0),
-                            shipping: formData.cart.reduce((total, item) => total + (item.price * item.quantity), 0) > 1000000 ? 0 : 50000,
-                            grandTotal: formData.totalAmount,
-                            paymentMethod: 'vnpay',
+                            ...formData,
                             status: 'pending',
                             createdAt: new Date().toISOString(),
                             vnpParams: {
@@ -3046,13 +3062,14 @@
                         return;
                     }
 
-                    // Nếu không phải VNPAY thì xử lý như cũ
+                    // Xử lý thanh toán COD
                     showSuccess('Đặt hàng thành công', 'Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
                     localStorage.removeItem('cart');
                     closeModal('paymentModal');
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 2000);
+
                 } catch (error) {
                     console.error('Lỗi xử lý thanh toán:', error);
                     showError('Lỗi thanh toán', 'Có lỗi xảy ra trong quá trình xử lý thanh toán. Vui lòng thử lại sau.');
@@ -3743,6 +3760,129 @@
                 document.getElementById('shipping').textContent = formatPrice(shipping);
                 document.getElementById('discount').textContent = formatPrice(discount);
                 document.getElementById('total').textContent = formatPrice(total);
+            }
+
+            // Thêm hàm submitOrder mới
+            async function submitOrder() {
+                // Lấy thông tin từ form
+                const formData = {
+                    fullName: document.getElementById('fullName').value.trim(),
+                    phone: document.getElementById('phone').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    address: document.getElementById('address').value.trim(),
+                    note: document.getElementById('note').value.trim(),
+                    paymentMethod: document.querySelector('input[name="paymentMethod"]:checked').value,
+                    cart: JSON.parse(localStorage.getItem('cart')) || [],
+                    totalAmount: calculateTotal()
+                };
+
+                // Validate dữ liệu
+                if (!formData.fullName || !formData.phone || !formData.email || !formData.address) {
+                    showError('Lỗi', 'Vui lòng điền đầy đủ thông tin bắt buộc');
+                    return;
+                }
+
+                // Validate email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    showError('Lỗi', 'Email không hợp lệ');
+                    return;
+                }
+
+                // Validate phone
+                const phoneRegex = /^[0-9]{10,11}$/;
+                if (!phoneRegex.test(formData.phone)) {
+                    showError('Lỗi', 'Số điện thoại không hợp lệ');
+                    return;
+                }
+
+                try {
+                    if (formData.paymentMethod === 'vnpay') {
+                        // Xử lý thanh toán VNPAY
+                        const vnp_TmnCode = 'HPVOQ9TR';
+                        const vnp_HashSecret = '7BLLKO9FCUWR84YAX28XZN5SP8D36YV0';
+                        const vnp_Url = 'https://sandbox.vnpayment.vn/paymentv2/vpcpay.html';
+                        const vnp_ReturnUrl = window.location.origin + '/vnpay_return.html';
+                        const vnp_TxnRef = Date.now().toString();
+                        const vnp_Amount = formData.totalAmount * 100;
+                        const vnp_OrderInfo = `Thanh toán đơn hàng cho ${formData.fullName}`;
+
+                        // Tạo đối tượng chứa thông tin thanh toán
+                        const vnpParams = {
+                            vnp_Version: '2.1.0',
+                            vnp_Command: 'pay',
+                            vnp_TmnCode: vnp_TmnCode,
+                            vnp_Amount: vnp_Amount,
+                            vnp_CurrCode: 'VND',
+                            vnp_TxnRef: vnp_TxnRef,
+                            vnp_OrderInfo: vnp_OrderInfo,
+                            vnp_OrderType: 'other',
+                            vnp_Locale: 'vn',
+                            vnp_ReturnUrl: vnp_ReturnUrl,
+                            vnp_IpAddr: '127.0.0.1',
+                            vnp_CreateDate: moment().format('YYYYMMDDHHmmss')
+                        };
+
+                        // Sắp xếp các tham số theo thứ tự alphabet
+                        const sortedParams = {};
+                        Object.keys(vnpParams).sort().forEach(key => {
+                            sortedParams[key] = vnpParams[key];
+                        });
+
+                        // Tạo chuỗi ký tự cần mã hóa
+                        const signData = Object.keys(sortedParams)
+                            .map(key => {
+                                const value = sortedParams[key];
+                                return `${key}=${encodeURIComponent(String(value)).replace(/%20/g, '+')}`;
+                            })
+                            .join('&');
+
+                        // Tạo chữ ký
+                        const hmac = CryptoJS.HmacSHA512(signData, vnp_HashSecret);
+                        const vnp_SecureHash = hmac.toString(CryptoJS.enc.Hex);
+
+                        // Thêm chữ ký vào tham số
+                        sortedParams.vnp_SecureHash = vnp_SecureHash;
+
+                        // Tạo URL thanh toán
+                        const paymentUrl = vnp_Url + '?' + Object.keys(sortedParams)
+                            .map(key => {
+                                const value = sortedParams[key];
+                                return `${key}=${encodeURIComponent(String(value)).replace(/%20/g, '+')}`;
+                            })
+                            .join('&');
+
+                        // Lưu thông tin đơn hàng vào localStorage
+                        const orderInfo = {
+                            orderId: vnp_TxnRef,
+                            ...formData,
+                            status: 'pending',
+                            createdAt: new Date().toISOString(),
+                            vnpParams: {
+                                txnRef: vnp_TxnRef,
+                                amount: vnp_Amount,
+                                orderInfo: vnp_OrderInfo
+                            }
+                        };
+                        localStorage.setItem('currentOrder', JSON.stringify(orderInfo));
+
+                        // Chuyển hướng đến trang thanh toán VNPAY
+                        window.location.href = paymentUrl;
+                        return;
+                    }
+
+                    // Xử lý thanh toán COD
+                    showSuccess('Đặt hàng thành công', 'Cảm ơn bạn đã đặt hàng! Chúng tôi sẽ liên hệ với bạn sớm nhất.');
+                    localStorage.removeItem('cart');
+                    closeModal('paymentModal');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 2000);
+
+                } catch (error) {
+                    console.error('Lỗi xử lý thanh toán:', error);
+                    showError('Lỗi thanh toán', 'Có lỗi xảy ra trong quá trình xử lý thanh toán. Vui lòng thử lại sau.');
+                }
             }
         </script>
     </body>

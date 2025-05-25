@@ -1,0 +1,2667 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Nội thất Mộc Nhiên</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        :root {
+            --primary-color: #5a3d2b;
+            --secondary-color: #e9c46a;
+            --background-color: #f9f7f3;
+            --text-color: #333;
+            --sidebar-width: 250px;
+            --header-height: 60px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: var(--sidebar-width);
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--secondary-color);
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            margin-top: 30px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 5px;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(233, 196, 106, 0.1);
+        }
+
+        .nav-item.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #666;
+        }
+
+        .card-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        /* Data Tables */
+        .data-table {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .table-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            font-weight: 600;
+            color: #666;
+        }
+
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+
+        /* Charts */
+        .charts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .chart-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .charts-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Spinner */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255,255,255,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="picture/logo.jpg" alt="Logo">
+            <h2>Mộc Nhiên</h2>
+        </div>
+        <div class="nav-menu">
+            <div class="nav-item active" data-section="dashboard">
+                <i class="fas fa-home"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-section="products">
+                <i class="fas fa-box"></i>
+                <span>Sản phẩm</span>
+            </div>
+            <div class="nav-item" data-section="orders">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Đơn hàng</span>
+            </div>
+            <div class="nav-item" data-section="users">
+                <i class="fas fa-users"></i>
+                <span>Người dùng</span>
+            </div>
+            <div class="nav-item" data-section="promotions">
+                <i class="fas fa-gift"></i>
+                <span>Khuyến mãi</span>
+            </div>
+            <div class="nav-item" data-section="collections">
+                <i class="fas fa-layer-group"></i>
+                <span>Bộ sưu tập</span>
+            </div>
+            <div class="nav-item" data-section="contacts">
+                <i class="fas fa-envelope"></i>
+                <span>Liên hệ</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Dashboard</h1>
+            <div class="user-info">
+                <img src="picture/logo.jpg" alt="User">
+                <span>Admin</span>
+                <button class="btn btn-primary" onclick="handleLogout()" style="margin-left: 10px;">
+                    <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard Section -->
+        <div class="section" id="dashboard">
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Tổng sản phẩm</div>
+                        <div class="card-icon" style="background-color: #4CAF50;">
+                            <i class="fas fa-box"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="totalProducts">0</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Tổng đơn hàng</div>
+                        <div class="card-icon" style="background-color: #2196F3;">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="totalOrders">0</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Tổng người dùng</div>
+                        <div class="card-icon" style="background-color: #FF9800;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="totalUsers">0</div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Doanh thu</div>
+                        <div class="card-icon" style="background-color: #9C27B0;">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                    <div class="card-value" id="totalRevenue">0đ</div>
+                </div>
+            </div>
+
+            <div class="charts-container">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Doanh thu theo tháng</div>
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Sản phẩm bán chạy</div>
+                    </div>
+                    <canvas id="productsChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Section -->
+        <div class="section" id="products" style="display: none;">
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Danh sách sản phẩm</div>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="addProduct()">
+                            <i class="fas fa-plus"></i> Thêm sản phẩm
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bộ lọc sản phẩm -->
+                <div class="filter-section" style="margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Danh mục</label>
+                            <select id="categoryFilter" class="swal2-input" style="width: 100%; margin: 0;">
+                                <option value="">Tất cả danh mục</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Khoảng giá</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="number" id="minPrice" class="swal2-input" placeholder="Giá thấp nhất" style="width: 100%; margin: 0;">
+                                <input type="number" id="maxPrice" class="swal2-input" placeholder="Giá cao nhất" style="width: 100%; margin: 0;">
+                            </div>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Tồn kho</label>
+                            <select id="stockFilter" class="swal2-input" style="width: 100%; margin: 0;">
+                                <option value="">Tất cả</option>
+                                <option value="inStock">Còn hàng</option>
+                                <option value="lowStock">Sắp hết hàng</option>
+                                <option value="outOfStock">Hết hàng</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Tìm kiếm</label>
+                            <input type="text" id="searchProduct" class="swal2-input" placeholder="Tìm theo tên sản phẩm..." style="width: 100%; margin: 0;">
+                        </div>
+                        <div style="display: flex; align-items: flex-end; gap: 10px;">
+                            <button class="btn btn-primary" onclick="applyFilters()">
+                                <i class="fas fa-filter"></i> Lọc
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetFilters()">
+                                <i class="fas fa-undo"></i> Đặt lại
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <table id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá bán</th>
+                            <th>Giá sau giảm</th>
+                            <th>Số lượng</th>
+                            <th>Chất liệu</th>
+                            <th>Kích thước</th>
+                            <th>Màu sắc</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="section" id="orders" style="display: none;">
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Danh sách đơn hàng</div>
+                </div>
+                <table id="ordersTable">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn hàng</th>
+                            <th>Khách hàng</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày đặt</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div class="section" id="users" style="display: none;">
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Danh sách người dùng</div>
+                </div>
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Tên hiển thị</th>
+                            <th>Ngày tạo</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Promotions Section -->
+        <div class="section" id="promotions" style="display: none;">
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Danh sách khuyến mãi</div>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="addPromotion()">
+                            <i class="fas fa-plus"></i> Thêm khuyến mãi
+                        </button>
+                    </div>
+                </div>
+                <table id="promotionsTable">
+                    <thead>
+                        <tr>
+                            <th>Mã khuyến mãi</th>
+                            <th>Tên chương trình</th>
+                            <th>Giá trị</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày kết thúc</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Collections Section -->
+        <div class="section" id="collections" style="display: none;">
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Danh sách bộ sưu tập</div>
+                    <div class="table-actions">
+                        <button class="btn btn-primary" onclick="addCollection()">
+                            <i class="fas fa-plus"></i> Thêm bộ sưu tập
+                        </button>
+                    </div>
+                </div>
+                <table id="collectionsTable">
+                    <thead>
+                        <tr>
+                            <th>Tên bộ sưu tập</th>
+                            <th>Số sản phẩm</th>
+                            <th>Mô tả</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Contacts Section -->
+        <div class="section" id="contacts" style="display: none;">
+            <div class="data-table">
+                <div class="table-header">
+                    <div class="table-title">Danh sách liên hệ</div>
+                </div>
+                <table id="contactsTable">
+                    <thead>
+                        <tr>
+                            <th>Tên</th>
+                            <th>Email</th>
+                            <th>Số điện thoại</th>
+                            <th>Chủ đề</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBHTL0ZIZkmRNi7kRF8UJdjR1qhx8cdre4",
+            authDomain: "webnoithat-de11f.firebaseapp.com",
+            databaseURL: "https://webnoithat-de11f-default-rtdb.firebaseio.com",
+            projectId: "webnoithat-de11f",
+            storageBucket: "webnoithat-de11f.firebasestorage.app",
+            messagingSenderId: "919918511984",
+            appId: "1:919918511984:web:d1b260dc52102fd279b1b5",
+            measurementId: "G-H1G2WJETSH"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+
+        // Check admin authentication
+        auth.onAuthStateChanged((user) => {
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                // If not admin, redirect to login page
+                window.location.href = 'index.html';
+            } else {
+                // If admin, load all data
+                loadDashboardData();
+                loadProducts();
+                loadOrders();
+                loadUsers();
+                loadPromotions();
+                loadCollections();
+                loadContacts();
+            }
+        });
+
+        // Show loading spinner
+        function showLoading() {
+            document.getElementById('loading').style.display = 'flex';
+        }
+
+        // Hide loading spinner
+        function hideLoading() {
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(amount);
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString('vi-VN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Navigation
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all items
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                item.classList.add('active');
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => section.style.display = 'none');
+                // Show selected section
+                document.getElementById(item.dataset.section).style.display = 'block';
+                // Update header title
+                document.querySelector('.header h1').textContent = item.querySelector('span').textContent;
+            });
+        });
+
+        // Load Dashboard Data
+        async function loadDashboardData() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/').once('value');
+                const data = snapshot.val();
+
+                // Update total products
+                document.getElementById('totalProducts').textContent = data.products.length;
+
+                // Update total orders
+                const orders = Object.values(data.orders || {});
+                document.getElementById('totalOrders').textContent = orders.length;
+
+                // Update total users
+                const users = Object.values(data.users || {});
+                document.getElementById('totalUsers').textContent = users.length;
+
+                // Calculate total revenue
+                const totalRevenue = orders.reduce((sum, order) => sum + (order.grandTotal || 0), 0);
+                document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
+
+                // Create revenue chart
+                const revenueChart = new Chart(document.getElementById('revenueChart'), {
+                    type: 'line',
+                    data: {
+                        labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
+                        datasets: [{
+                            label: 'Doanh thu',
+                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                            borderColor: '#5a3d2b',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+
+                // Create products chart
+                const productsChart = new Chart(document.getElementById('productsChart'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Sofa', 'Ghế', 'Bàn', 'Tủ'],
+                        datasets: [{
+                            data: [30, 25, 25, 20],
+                            backgroundColor: ['#5a3d2b', '#e9c46a', '#4CAF50', '#2196F3']
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                Swal.fire('Lỗi', 'Không thể tải dữ liệu dashboard', 'error');
+            }
+            hideLoading();
+        }
+
+        // Load Products
+        async function loadProducts() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/products').once('value');
+                const products = snapshot.val() || [];
+                const tbody = document.querySelector('#productsTable tbody');
+                tbody.innerHTML = '';
+
+                // Lấy danh sách danh mục duy nhất
+                const categories = new Set();
+                if (Array.isArray(products)) {
+                    products.forEach(product => {
+                        if (product.danhMucSanPham?.tenDanhMuc) {
+                            categories.add(product.danhMucSanPham.tenDanhMuc);
+                        }
+                    });
+                }
+
+                // Cập nhật select danh mục
+                const categoryFilter = document.getElementById('categoryFilter');
+                categoryFilter.innerHTML = '<option value="">Tất cả danh mục</option>';
+                categories.forEach(category => {
+                    categoryFilter.innerHTML += `<option value="${category}">${category}</option>`;
+                });
+
+                // Hiển thị sản phẩm
+                if (Array.isArray(products)) {
+                    products.forEach(product => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${product.id}</td>
+                            <td>${product.tenSanPham}</td>
+                            <td>${product.danhMucSanPham?.tenDanhMuc || 'N/A'}</td>
+                            <td>${formatCurrency(product.giaBan)}</td>
+                            <td>${formatCurrency(product.giaSauGiam)}</td>
+                            <td>${product.soLuongTonKho}</td>
+                            <td>${product.chiTietSanPham?.chatLieu || 'N/A'}</td>
+                            <td>${product.chiTietSanPham?.kichThuoc || 'N/A'}</td>
+                            <td>${product.chiTietSanPham?.mauSac || 'N/A'}</td>
+                            <td>
+                                <button class="btn btn-secondary" onclick="editProduct('${product.id}')" style="margin-right: 5px;">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="btn btn-primary" onclick="deleteProduct('${product.id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách sản phẩm', 'error');
+            }
+            hideLoading();
+        }
+
+        // Hàm lọc sản phẩm
+        function applyFilters() {
+            const category = document.getElementById('categoryFilter').value;
+            const minPrice = document.getElementById('minPrice').value;
+            const maxPrice = document.getElementById('maxPrice').value;
+            const stockFilter = document.getElementById('stockFilter').value;
+            const searchText = document.getElementById('searchProduct').value.toLowerCase();
+
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+            rows.forEach(row => {
+                const productName = row.cells[1].textContent.toLowerCase();
+                const productCategory = row.cells[2].textContent;
+                const price = parseInt(row.cells[3].textContent.replace(/[^0-9]/g, ''));
+                const stock = parseInt(row.cells[5].textContent);
+
+                let show = true;
+
+                // Lọc theo danh mục
+                if (category && productCategory !== category) {
+                    show = false;
+                }
+
+                // Lọc theo khoảng giá
+                if (minPrice && price < parseInt(minPrice)) {
+                    show = false;
+                }
+                if (maxPrice && price > parseInt(maxPrice)) {
+                    show = false;
+                }
+
+                // Lọc theo tồn kho
+                if (stockFilter) {
+                    if (stockFilter === 'inStock' && stock <= 0) {
+                        show = false;
+                    } else if (stockFilter === 'lowStock' && (stock > 5 || stock <= 0)) {
+                        show = false;
+                    } else if (stockFilter === 'outOfStock' && stock > 0) {
+                        show = false;
+                    }
+                }
+
+                // Lọc theo tên sản phẩm
+                if (searchText && !productName.includes(searchText)) {
+                    show = false;
+                }
+
+                row.style.display = show ? '' : 'none';
+            });
+        }
+
+        // Hàm đặt lại bộ lọc
+        function resetFilters() {
+            document.getElementById('categoryFilter').value = '';
+            document.getElementById('minPrice').value = '';
+            document.getElementById('maxPrice').value = '';
+            document.getElementById('stockFilter').value = '';
+            document.getElementById('searchProduct').value = '';
+            
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        }
+
+        // Hàm xóa sản phẩm
+        function deleteProduct(id) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa sản phẩm này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    database.ref('/products').once('value').then((snapshot) => {
+                        const products = snapshot.val() || [];
+                        if (Array.isArray(products)) {
+                            const updatedProducts = products.filter(product => product.id !== parseInt(id));
+                            
+                            database.ref('/products').set(updatedProducts).then(() => {
+                                hideLoading();
+                                Swal.fire({
+                                    title: 'Thành công!',
+                                    text: 'Sản phẩm đã được xóa',
+                                    icon: 'success',
+                                    confirmButtonColor: '#5a3d2b'
+                                });
+                                loadProducts(); // Tải lại danh sách sản phẩm
+                            }).catch((error) => {
+                                hideLoading();
+                                console.error('Error deleting product:', error);
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Không thể xóa sản phẩm: ' + error.message,
+                                    icon: 'error',
+                                    confirmButtonColor: '#5a3d2b'
+                                });
+                            });
+                        }
+                    }).catch((error) => {
+                        hideLoading();
+                        console.error('Error fetching products:', error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể tải danh sách sản phẩm: ' + error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#5a3d2b'
+                        });
+                    });
+                }
+            });
+        }
+
+        // Load Orders
+        async function loadOrders() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/orders').once('value');
+                const orders = snapshot.val();
+                const tbody = document.querySelector('#ordersTable tbody');
+                tbody.innerHTML = '';
+
+                Object.entries(orders).forEach(([key, order]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${order.orderId}</td>
+                        <td>${order.fullName}</td>
+                        <td>${formatCurrency(order.grandTotal)}</td>
+                        <td>${order.status}</td>
+                        <td>${formatDate(order.createdAt)}</td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="viewOrder('${key}')" style="margin-right: 5px;">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-primary" onclick="deleteOrder('${key}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách đơn hàng', 'error');
+            }
+            hideLoading();
+        }
+
+        // Thêm hàm xóa đơn hàng
+        function deleteOrder(orderId) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa đơn hàng này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    database.ref('/orders/' + orderId).remove().then(() => {
+                        hideLoading();
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Đơn hàng đã được xóa',
+                            icon: 'success',
+                            confirmButtonColor: '#5a3d2b'
+                        });
+                        loadOrders(); // Tải lại danh sách đơn hàng
+                    }).catch((error) => {
+                        hideLoading();
+                        console.error('Error deleting order:', error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể xóa đơn hàng: ' + error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#5a3d2b'
+                        });
+                    });
+                }
+            });
+        }
+
+        // Load Users
+        async function loadUsers() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/users').once('value');
+                const users = snapshot.val();
+                const tbody = document.querySelector('#usersTable tbody');
+                tbody.innerHTML = '';
+
+                Object.entries(users).forEach(([key, user]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${user.email}</td>
+                        <td>${user.displayName || 'N/A'}</td>
+                        <td>${formatDate(user.createdAt)}</td>
+                        <td>${user.status || 'active'}</td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="editUser('${key}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error loading users:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách người dùng', 'error');
+            }
+            hideLoading();
+        }
+
+        // Load Promotions
+        async function loadPromotions() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/promotions').once('value');
+                const promotions = snapshot.val();
+                const tbody = document.querySelector('#promotionsTable tbody');
+                tbody.innerHTML = '';
+
+                Object.entries(promotions).forEach(([key, promo]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${promo.promoCode}</td>
+                        <td>${promo.title}</td>
+                        <td>${formatCurrency(promo.voucherAmount)}</td>
+                        <td>${formatDate(promo.startDate)}</td>
+                        <td>${formatDate(promo.endDate)}</td>
+                        <td>${promo.status}</td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="editPromotion('${key}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-primary" onclick="deletePromotion('${key}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error loading promotions:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách khuyến mãi', 'error');
+            }
+            hideLoading();
+        }
+
+        // Load Collections
+        async function loadCollections() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/collections').once('value');
+                const collections = snapshot.val();
+                const tbody = document.querySelector('#collectionsTable tbody');
+                tbody.innerHTML = '';
+
+                Object.entries(collections).forEach(([key, collection]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${collection.title}</td>
+                        <td>${Object.keys(collection.products || {}).length}</td>
+                        <td>${collection.description}</td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="editCollection('${key}')">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-primary" onclick="deleteCollection('${key}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error loading collections:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách bộ sưu tập', 'error');
+            }
+            hideLoading();
+        }
+
+        // Load Contacts
+        async function loadContacts() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/contacts').once('value');
+                const contacts = snapshot.val();
+                const tbody = document.querySelector('#contactsTable tbody');
+                tbody.innerHTML = '';
+
+                Object.entries(contacts).forEach(([key, contact]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${contact.name}</td>
+                        <td>${contact.email}</td>
+                        <td>${contact.phone}</td>
+                        <td>${contact.subject}</td>
+                        <td>${contact.status}</td>
+                        <td>
+                            <button class="btn btn-secondary" onclick="viewContact('${key}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-primary" onclick="deleteContact('${key}')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                Swal.fire('Lỗi', 'Không thể tải danh sách liên hệ', 'error');
+            }
+            hideLoading();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Remove the direct loading calls since they're now handled in onAuthStateChanged
+        });
+
+        // CRUD Functions
+        function addProduct() {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            // Lấy danh sách danh mục hiện có
+            database.ref('/products').once('value').then((snapshot) => {
+                const products = snapshot.val() || [];
+                const categories = new Set();
+                
+                if (Array.isArray(products)) {
+                    products.forEach(product => {
+                        if (product.danhMucSanPham?.tenDanhMuc) {
+                            categories.add(product.danhMucSanPham.tenDanhMuc);
+                        }
+                    });
+                }
+
+                // Tạo options cho select danh mục
+                let categoryOptions = '<option value="">Chọn danh mục</option>';
+                categories.forEach(category => {
+                    categoryOptions += `<option value="${category}">${category}</option>`;
+                });
+
+            Swal.fire({
+                    title: '<h2 style="color: #5a3d2b; margin-bottom: 20px;">Thêm sản phẩm mới</h2>',
+                html: `
+                        <div style="display: flex; gap: 20px;">
+                            <!-- Cột trái -->
+                            <div style="flex: 1;">
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Tên sản phẩm</label>
+                                    <input id="tenSanPham" class="swal2-input" placeholder="Nhập tên sản phẩm" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Danh mục sản phẩm</label>
+                                    <select id="tenDanhMuc" class="swal2-input" style="width: 100%; margin: 0 0 15px 0;">
+                                        ${categoryOptions}
+                                        <option value="new">+ Thêm danh mục mới</option>
+                                    </select>
+                                </div>
+                                <div id="newCategoryInput" style="text-align: left; margin-bottom: 15px; display: none;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Tên danh mục mới</label>
+                                    <input id="newTenDanhMuc" class="swal2-input" placeholder="Nhập tên danh mục mới" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Mô tả danh mục</label>
+                                    <textarea id="moTaDanhMuc" class="swal2-textarea" placeholder="Nhập mô tả danh mục" style="width: 100%; margin: 0 0 15px 0;"></textarea>
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Giá bán</label>
+                                    <input id="giaBan" type="number" class="swal2-input" placeholder="Nhập giá bán" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Giá sau giảm</label>
+                                    <input id="giaSauGiam" type="number" class="swal2-input" placeholder="Nhập giá sau giảm" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Số lượng tồn kho</label>
+                                    <input id="soLuongTonKho" type="number" class="swal2-input" placeholder="Nhập số lượng tồn kho" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                            </div>
+                            <!-- Cột phải -->
+                            <div style="flex: 1;">
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Mô tả sản phẩm</label>
+                                    <textarea id="moTa" class="swal2-textarea" placeholder="Nhập mô tả sản phẩm" style="width: 100%; margin: 0 0 15px 0;"></textarea>
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">URL hình ảnh</label>
+                                    <input id="hinhAnh" class="swal2-input" placeholder="Nhập URL hình ảnh" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Chất liệu</label>
+                                    <input id="chatLieu" class="swal2-input" placeholder="Nhập chất liệu" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Kích thước</label>
+                                    <input id="kichThuoc" class="swal2-input" placeholder="Nhập kích thước" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Màu sắc</label>
+                                    <input id="mauSac" class="swal2-input" placeholder="Nhập màu sắc" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                                <div style="text-align: left; margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Trọng lượng</label>
+                                    <input id="trongLuong" class="swal2-input" placeholder="Nhập trọng lượng" style="width: 100%; margin: 0 0 15px 0;">
+                                </div>
+                            </div>
+                        </div>
+                `,
+                showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-plus"></i> Thêm mới',
+                    cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                confirmButtonColor: '#5a3d2b',
+                cancelButtonColor: '#6c757d',
+                    width: '900px',
+                    customClass: {
+                        container: 'add-product-modal',
+                        popup: 'add-product-popup',
+                        title: 'add-product-title',
+                        htmlContainer: 'add-product-content',
+                        confirmButton: 'add-product-confirm-btn',
+                        cancelButton: 'add-product-cancel-btn'
+                    },
+                    didOpen: () => {
+                        // Xử lý sự kiện khi chọn "Thêm danh mục mới"
+                        const categorySelect = document.getElementById('tenDanhMuc');
+                        const newCategoryInput = document.getElementById('newCategoryInput');
+                        
+                        categorySelect.addEventListener('change', () => {
+                            if (categorySelect.value === 'new') {
+                                newCategoryInput.style.display = 'block';
+                            } else {
+                                newCategoryInput.style.display = 'none';
+                            }
+                        });
+                    },
+                preConfirm: () => {
+                        const tenSanPham = document.getElementById('tenSanPham').value;
+                        const categorySelect = document.getElementById('tenDanhMuc');
+                        const tenDanhMuc = categorySelect.value === 'new' 
+                            ? document.getElementById('newTenDanhMuc').value 
+                            : categorySelect.value;
+                        const moTaDanhMuc = document.getElementById('moTaDanhMuc').value;
+                        const giaBan = parseInt(document.getElementById('giaBan').value);
+                        const giaSauGiam = parseInt(document.getElementById('giaSauGiam').value);
+                        const soLuongTonKho = parseInt(document.getElementById('soLuongTonKho').value);
+                        const moTa = document.getElementById('moTa').value;
+                        const hinhAnh = document.getElementById('hinhAnh').value;
+                        const chatLieu = document.getElementById('chatLieu').value;
+                        const kichThuoc = document.getElementById('kichThuoc').value;
+                        const mauSac = document.getElementById('mauSac').value;
+                        const trongLuong = document.getElementById('trongLuong').value;
+
+                        if (!tenSanPham || !tenDanhMuc || !moTaDanhMuc || !giaBan || !giaSauGiam || !soLuongTonKho || !moTa || !hinhAnh || !chatLieu || !kichThuoc || !mauSac || !trongLuong) {
+                            Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
+                            return false;
+                        }
+
+                        if (giaSauGiam > giaBan) {
+                            Swal.showValidationMessage('Giá sau giảm không được lớn hơn giá bán');
+                            return false;
+                        }
+
+                        if (soLuongTonKho < 0) {
+                            Swal.showValidationMessage('Số lượng tồn kho không được âm');
+                            return false;
+                        }
+
+                        const currentDate = new Date().toISOString().split('T')[0];
+
+                    return {
+                            tenSanPham: tenSanPham,
+                            danhMucSanPham: {
+                                tenDanhMuc: tenDanhMuc,
+                                moTa: moTaDanhMuc
+                            },
+                            giaBan: giaBan,
+                            giaSauGiam: giaSauGiam,
+                            soLuongTonKho: soLuongTonKho,
+                            moTa: moTa,
+                            hinhAnh: hinhAnh,
+                            chiTietSanPham: {
+                                chatLieu: chatLieu,
+                                kichThuoc: kichThuoc,
+                                mauSac: mauSac,
+                                trongLuong: trongLuong,
+                                ngayThem: currentDate,
+                                ngayCapNhat: currentDate
+                            }
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    const newProduct = result.value;
+
+                        // Get the current products to determine the next ID
+                    database.ref('/products').once('value').then((snapshot) => {
+                        const products = snapshot.val() || [];
+                            const nextId = Array.isArray(products) ? products.length + 1 : 1;
+                            newProduct.id = nextId;
+
+                            // Add the new product
+                            database.ref('/products').push(newProduct).then(() => {
+                            hideLoading();
+                                Swal.fire({
+                                    title: 'Thành công!',
+                                    text: 'Sản phẩm đã được thêm mới',
+                                    icon: 'success',
+                                    confirmButtonColor: '#5a3d2b',
+                                    confirmButtonText: '<i class="fas fa-check"></i> OK'
+                                });
+                            loadProducts();
+                        }).catch((error) => {
+                            hideLoading();
+                                console.error('Error adding product:', error);
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Không thể thêm sản phẩm mới: ' + error.message,
+                                    icon: 'error',
+                                    confirmButtonColor: '#5a3d2b',
+                                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                                });
+                            });
+                        }).catch((error) => {
+                            hideLoading();
+                            console.error('Error getting products:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể lấy danh sách sản phẩm: ' + error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                        });
+                    });
+                }
+                });
+            }).catch((error) => {
+                console.error('Error fetching categories:', error);
+                Swal.fire('Lỗi!', 'Không thể tải danh sách danh mục', 'error');
+            });
+        }
+
+        function editProduct(id) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            showLoading();
+            database.ref('/products').once('value').then((snapshot) => {
+                hideLoading();
+                const products = snapshot.val() || [];
+                const product = products.find(p => p.id === parseInt(id));
+                
+                if (product) {
+                    Swal.fire({
+                        title: '<h2 style="color: #5a3d2b; margin-bottom: 20px;">Sửa sản phẩm</h2>',
+                        html: `
+                            <div style="display: flex; gap: 20px;">
+                                <!-- Cột trái -->
+                                <div style="flex: 1;">
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Tên sản phẩm</label>
+                                        <input id="tenSanPham" class="swal2-input" placeholder="Nhập tên sản phẩm" value="${product.tenSanPham || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Danh mục sản phẩm</label>
+                                        <input id="tenDanhMuc" class="swal2-input" placeholder="Nhập tên danh mục" value="${product.danhMucSanPham?.tenDanhMuc || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Mô tả danh mục</label>
+                                        <textarea id="moTaDanhMuc" class="swal2-textarea" placeholder="Nhập mô tả danh mục" style="width: 100%; margin: 0 0 15px 0;">${product.danhMucSanPham?.moTa || ''}</textarea>
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Giá bán</label>
+                                        <input id="giaBan" type="number" class="swal2-input" placeholder="Nhập giá bán" value="${product.giaBan || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Giá sau giảm</label>
+                                        <input id="giaSauGiam" type="number" class="swal2-input" placeholder="Nhập giá sau giảm" value="${product.giaSauGiam || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Số lượng tồn kho</label>
+                                        <input id="soLuongTonKho" type="number" class="swal2-input" placeholder="Nhập số lượng tồn kho" value="${product.soLuongTonKho || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                </div>
+                                <!-- Cột phải -->
+                                <div style="flex: 1;">
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Mô tả sản phẩm</label>
+                                        <textarea id="moTa" class="swal2-textarea" placeholder="Nhập mô tả sản phẩm" style="width: 100%; margin: 0 0 15px 0;">${product.moTa || ''}</textarea>
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">URL hình ảnh</label>
+                                        <input id="hinhAnh" class="swal2-input" placeholder="Nhập URL hình ảnh" value="${product.hinhAnh || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Chất liệu</label>
+                                        <input id="chatLieu" class="swal2-input" placeholder="Nhập chất liệu" value="${product.chiTietSanPham?.chatLieu || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Kích thước</label>
+                                        <input id="kichThuoc" class="swal2-input" placeholder="Nhập kích thước" value="${product.chiTietSanPham?.kichThuoc || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Màu sắc</label>
+                                        <input id="mauSac" class="swal2-input" placeholder="Nhập màu sắc" value="${product.chiTietSanPham?.mauSac || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                    <div style="text-align: left; margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; color: #666; font-weight: 500;">Trọng lượng</label>
+                                        <input id="trongLuong" class="swal2-input" placeholder="Nhập trọng lượng" value="${product.chiTietSanPham?.trongLuong || ''}" style="width: 100%; margin: 0 0 15px 0;">
+                                    </div>
+                                </div>
+                            </div>
+                        `,
+                        showCancelButton: true,
+                        confirmButtonText: '<i class="fas fa-save"></i> Lưu thay đổi',
+                        cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                        confirmButtonColor: '#5a3d2b',
+                        cancelButtonColor: '#6c757d',
+                        width: '900px',
+                        customClass: {
+                            container: 'edit-product-modal',
+                            popup: 'edit-product-popup',
+                            title: 'edit-product-title',
+                            htmlContainer: 'edit-product-content',
+                            confirmButton: 'edit-product-confirm-btn',
+                            cancelButton: 'edit-product-cancel-btn'
+                        },
+                        preConfirm: () => {
+                            const tenSanPham = document.getElementById('tenSanPham').value;
+                            const tenDanhMuc = document.getElementById('tenDanhMuc').value;
+                            const moTaDanhMuc = document.getElementById('moTaDanhMuc').value;
+                            const giaBan = parseInt(document.getElementById('giaBan').value);
+                            const giaSauGiam = parseInt(document.getElementById('giaSauGiam').value);
+                            const soLuongTonKho = parseInt(document.getElementById('soLuongTonKho').value);
+                            const moTa = document.getElementById('moTa').value;
+                            const hinhAnh = document.getElementById('hinhAnh').value;
+                            const chatLieu = document.getElementById('chatLieu').value;
+                            const kichThuoc = document.getElementById('kichThuoc').value;
+                            const mauSac = document.getElementById('mauSac').value;
+                            const trongLuong = document.getElementById('trongLuong').value;
+
+                            if (!tenSanPham || !tenDanhMuc || !moTaDanhMuc || !giaBan || !giaSauGiam || !soLuongTonKho || !moTa || !hinhAnh || !chatLieu || !kichThuoc || !mauSac || !trongLuong) {
+                                Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
+                                return false;
+                            }
+
+                            if (giaSauGiam > giaBan) {
+                                Swal.showValidationMessage('Giá sau giảm không được lớn hơn giá bán');
+                                return false;
+                            }
+
+                            if (soLuongTonKho < 0) {
+                                Swal.showValidationMessage('Số lượng tồn kho không được âm');
+                                return false;
+                            }
+
+                            const currentDate = new Date().toISOString().split('T')[0];
+
+                            return {
+                                id: parseInt(id),
+                                tenSanPham: tenSanPham,
+                                danhMucSanPham: {
+                                    tenDanhMuc: tenDanhMuc,
+                                    moTa: moTaDanhMuc
+                                },
+                                giaBan: giaBan,
+                                giaSauGiam: giaSauGiam,
+                                soLuongTonKho: soLuongTonKho,
+                                moTa: moTa,
+                                hinhAnh: hinhAnh,
+                                chiTietSanPham: {
+                                    chatLieu: chatLieu,
+                                    kichThuoc: kichThuoc,
+                                    mauSac: mauSac,
+                                    trongLuong: trongLuong,
+                                    ngayThem: product.chiTietSanPham?.ngayThem || currentDate,
+                                    ngayCapNhat: currentDate
+                                }
+                            }
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            showLoading();
+                            const updatedProduct = result.value;
+                            const productIndex = products.findIndex(p => p.id === parseInt(id));
+                            
+                            if (productIndex !== -1) {
+                                products[productIndex] = updatedProduct;
+                                
+                                database.ref('/products').set(products).then(() => {
+                                    hideLoading();
+                                    Swal.fire({
+                                        title: 'Thành công!',
+                                        text: 'Sản phẩm đã được cập nhật',
+                                        icon: 'success',
+                                        confirmButtonColor: '#5a3d2b',
+                                        confirmButtonText: '<i class="fas fa-check"></i> OK'
+                                    });
+                                    loadProducts();
+                                }).catch((error) => {
+                                    hideLoading();
+                                    console.error('Error updating product:', error);
+                                    Swal.fire({
+                                        title: 'Lỗi!',
+                                        text: 'Không thể cập nhật sản phẩm',
+                                        icon: 'error',
+                                        confirmButtonColor: '#5a3d2b',
+                                        confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                                    });
+                                });
+                            } else {
+                                hideLoading();
+                                Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Không tìm thấy sản phẩm',
+                                    icon: 'error',
+                                    confirmButtonColor: '#5a3d2b',
+                                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                                });
+                            }
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Lỗi!',
+                        text: 'Không tìm thấy sản phẩm',
+                        icon: 'error',
+                        confirmButtonColor: '#5a3d2b',
+                        confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                    });
+                }
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error fetching product:', error);
+            Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể tải thông tin sản phẩm',
+                    icon: 'error',
+                    confirmButtonColor: '#5a3d2b',
+                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                });
+            });
+        }
+
+        function addCollection() {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: '<h2 style="color: #5a3d2b; margin-bottom: 30px; font-size: 24px;">Thêm bộ sưu tập mới</h2>',
+                html: `
+                    <div style="text-align: left; padding: 20px;">
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">ID bộ sưu tập</label>
+                            <input id="collectionId" class="swal2-input" placeholder="Nhập ID bộ sưu tập (ví dụ: bohemian, modern)" style="font-size: 16px; padding: 12px; height: auto;">
+                            <small style="color: #666; display: block; margin-top: 5px;">ID phải là chữ thường, không dấu, không khoảng trắng</small>
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Tên bộ sưu tập</label>
+                            <input id="title" class="swal2-input" placeholder="Nhập tên bộ sưu tập" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Mô tả</label>
+                            <textarea id="description" class="swal2-textarea" placeholder="Nhập mô tả bộ sưu tập" style="font-size: 16px; padding: 12px; height: auto;"></textarea>
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">URL hình ảnh</label>
+                            <input id="image" class="swal2-input" placeholder="Nhập URL hình ảnh" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: '<i class="fas fa-plus"></i> Thêm mới',
+                cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                confirmButtonColor: '#5a3d2b',
+                cancelButtonColor: '#6c757d',
+                width: '600px',
+                preConfirm: () => {
+                    const collectionId = document.getElementById('collectionId').value.toLowerCase().trim();
+                    const title = document.getElementById('title').value;
+                    const description = document.getElementById('description').value;
+                    const image = document.getElementById('image').value;
+
+                    if (!collectionId || !title || !description || !image) {
+                        Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
+                        return false;
+                    }
+
+                    // Kiểm tra ID hợp lệ
+                    if (!/^[a-z0-9]+$/.test(collectionId)) {
+                        Swal.showValidationMessage('ID chỉ được chứa chữ thường và số');
+                        return false;
+                    }
+
+                    return {
+                        id: collectionId,
+                        title: title,
+                        description: description,
+                        image: image,
+                        products: {}
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    const newCollection = result.value;
+                    
+                    // Kiểm tra xem ID đã tồn tại chưa
+                    database.ref('/collections/' + newCollection.id).once('value').then((snapshot) => {
+                        if (snapshot.exists()) {
+                            hideLoading();
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'ID bộ sưu tập đã tồn tại',
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                            });
+                            return;
+                        }
+
+                        // Thêm bộ sưu tập mới
+                        database.ref('/collections/' + newCollection.id).set(newCollection).then(() => {
+                            hideLoading();
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Bộ sưu tập đã được thêm mới',
+                                icon: 'success',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-check"></i> OK'
+                            });
+                            loadCollections();
+                        }).catch((error) => {
+                            hideLoading();
+                            console.error('Error adding collection:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể thêm bộ sưu tập: ' + error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                            });
+                        });
+                    });
+                }
+            });
+        }
+
+        function editCollection(collectionId) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            showLoading();
+            // Lấy thông tin bộ sưu tập và danh sách sản phẩm
+            Promise.all([
+                database.ref('/collections/' + collectionId).once('value'),
+                database.ref('/products').once('value')
+            ]).then(([collectionSnapshot, productsSnapshot]) => {
+                hideLoading();
+                const collectionData = collectionSnapshot.val();
+                const products = productsSnapshot.val() || [];
+                
+                if (!collectionData) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin bộ sưu tập', 'error');
+                    return;
+                }
+
+                // Tạo danh sách sản phẩm đã chọn
+                const selectedProducts = collectionData.products || {};
+                const selectedProductIds = Object.values(selectedProducts).map(p => p.id);
+
+                // Tạo HTML cho danh sách sản phẩm
+                let productsListHtml = '';
+                if (Array.isArray(products)) {
+                    products.forEach(product => {
+                        const isSelected = selectedProductIds.includes(product.id);
+                        productsListHtml += `
+                            <div class="product-item" style="display: flex; align-items: center; padding: 10px; border-bottom: 1px solid #eee;">
+                                <input type="checkbox" id="product_${product.id}" 
+                                    ${isSelected ? 'checked' : ''} 
+                                    style="margin-right: 10px;">
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 500;">${product.tenSanPham}</div>
+                                    <div style="color: #666; font-size: 0.9em;">${product.danhMucSanPham?.tenDanhMuc || 'N/A'}</div>
+                                </div>
+                                <div style="margin-left: 10px;">
+                                    ${formatCurrency(product.giaSauGiam)}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                Swal.fire({
+                    title: '<h2 style="color: #5a3d2b; margin-bottom: 30px; font-size: 24px;">Chỉnh sửa bộ sưu tập</h2>',
+                    html: `
+                        <div style="text-align: left; padding: 20px;">
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">ID bộ sưu tập</label>
+                                <input id="collectionId" class="swal2-input" value="${collectionData.id}" readonly style="background-color: #f8f9fa; font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Tên bộ sưu tập</label>
+                                <input id="title" class="swal2-input" value="${collectionData.title}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Mô tả</label>
+                                <textarea id="description" class="swal2-textarea" style="font-size: 16px; padding: 12px; height: auto;">${collectionData.description}</textarea>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">URL hình ảnh</label>
+                                <input id="image" class="swal2-input" value="${collectionData.image}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Chọn sản phẩm</label>
+                                <div style="max-height: 300px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px;">
+                                    ${productsListHtml}
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-save"></i> Lưu thay đổi',
+                    cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                    confirmButtonColor: '#5a3d2b',
+                    cancelButtonColor: '#6c757d',
+                    width: '800px',
+                    preConfirm: () => {
+                        const title = document.getElementById('title').value;
+                        const description = document.getElementById('description').value;
+                        const image = document.getElementById('image').value;
+
+                        if (!title || !description || !image) {
+                            Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
+                            return false;
+                        }
+
+                        // Lấy danh sách sản phẩm đã chọn
+                        const selectedProducts = {};
+                        let productCount = 1;
+                        if (Array.isArray(products)) {
+                            products.forEach(product => {
+                                const checkbox = document.getElementById(`product_${product.id}`);
+                                if (checkbox && checkbox.checked) {
+                                    selectedProducts[`product${productCount}`] = {
+                                        id: product.id,
+                                        tenSanPham: product.tenSanPham,
+                                        giaSauGiam: product.giaSauGiam,
+                                        hinhAnh: product.hinhAnh,
+                                        moTa: product.moTa,
+                                        style: collectionId
+                                    };
+                                    productCount++;
+                                }
+                            });
+                        }
+
+                        return {
+                            id: collectionData.id,
+                            title: title,
+                            description: description,
+                            image: image,
+                            products: selectedProducts
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showLoading();
+                        const updatedCollection = result.value;
+                        
+                        database.ref('/collections/' + collectionId).update(updatedCollection).then(() => {
+                            hideLoading();
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Bộ sưu tập đã được cập nhật',
+                                icon: 'success',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-check"></i> OK'
+                            });
+                            loadCollections();
+                        }).catch((error) => {
+                            hideLoading();
+                            console.error('Error updating collection:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể cập nhật bộ sưu tập: ' + error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                            });
+                        });
+                    }
+                });
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error fetching data:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể tải thông tin: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#5a3d2b',
+                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                });
+            });
+        }
+
+        function deleteCollection(collectionId) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            // Kiểm tra xem bộ sưu tập có sản phẩm không
+            database.ref('/collections/' + collectionId).once('value').then((snapshot) => {
+                const collectionData = snapshot.val();
+                const productCount = Object.keys(collectionData.products || {}).length;
+
+                if (productCount > 0) {
+                    Swal.fire({
+                        title: 'Cảnh báo!',
+                        text: `Bộ sưu tập này có ${productCount} sản phẩm. Bạn có chắc chắn muốn xóa?`,
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Xóa',
+                        cancelButtonText: 'Hủy',
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            performDelete(collectionId);
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Xác nhận xóa',
+                        text: 'Bạn có chắc chắn muốn xóa bộ sưu tập này?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Xóa',
+                        cancelButtonText: 'Hủy',
+                        confirmButtonColor: '#dc3545',
+                        cancelButtonColor: '#6c757d'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            performDelete(collectionId);
+                        }
+                    });
+                }
+            });
+        }
+
+        function performDelete(collectionId) {
+            showLoading();
+            database.ref('/collections/' + collectionId).remove().then(() => {
+                hideLoading();
+                Swal.fire({
+                    title: 'Thành công!',
+                    text: 'Bộ sưu tập đã được xóa',
+                    icon: 'success',
+                    confirmButtonColor: '#5a3d2b',
+                    confirmButtonText: '<i class="fas fa-check"></i> OK'
+                });
+                loadCollections();
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error deleting collection:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể xóa bộ sưu tập: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#5a3d2b',
+                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                });
+            });
+        }
+
+        function viewContact(id) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            showLoading();
+            database.ref('/contacts/' + id).once('value').then((snapshot) => {
+                hideLoading();
+                const contact = snapshot.val();
+                if (!contact) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin liên hệ', 'error');
+                    return;
+                }
+
+                Swal.fire({
+                    title: '<h2 style="color: #5a3d2b; margin-bottom: 30px; font-size: 24px;">Chi tiết liên hệ</h2>',
+                    html: `
+                        <div style="text-align: left; padding: 20px;">
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Họ và tên</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px;">${contact.name || 'N/A'}</div>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Email</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px;">${contact.email || 'N/A'}</div>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Số điện thoại</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px;">${contact.phone || 'N/A'}</div>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Chủ đề</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px;">${contact.subject || 'N/A'}</div>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Nội dung</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px; white-space: pre-wrap;">${contact.message || 'N/A'}</div>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Ngày gửi</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px;">${contact.createdAt ? formatDate(contact.createdAt) : 'N/A'}</div>
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Trạng thái</label>
+                                <div style="font-size: 16px; padding: 12px; background-color: #f8f9fa; border-radius: 4px;">
+                                    <span style="color: ${contact.status === 'read' ? '#28a745' : '#dc3545'}">
+                                        ${contact.status === 'read' ? 'Đã đọc' : 'Chưa đọc'}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: 'Đóng',
+                    cancelButtonText: 'Đánh dấu đã đọc',
+                    confirmButtonColor: '#5a3d2b',
+                    cancelButtonColor: '#28a745',
+                    width: '600px'
+                }).then((result) => {
+                    if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Đánh dấu đã đọc
+                        showLoading();
+                        database.ref('/contacts/' + id).update({
+                            status: 'read',
+                            updatedAt: new Date().toISOString()
+                        }).then(() => {
+                            hideLoading();
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Đã đánh dấu liên hệ là đã đọc',
+                                icon: 'success',
+                                confirmButtonColor: '#5a3d2b'
+                            });
+                            loadContacts(); // Tải lại danh sách liên hệ
+                        }).catch((error) => {
+                            hideLoading();
+                            console.error('Error updating contact:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể cập nhật trạng thái liên hệ: ' + error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b'
+                            });
+                        });
+                    }
+                });
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error fetching contact:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể tải thông tin liên hệ: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#5a3d2b'
+                });
+            });
+        }
+
+        function deleteContact(id) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa liên hệ này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    database.ref('/contacts/' + id).remove().then(() => {
+                        hideLoading();
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Liên hệ đã được xóa',
+                            icon: 'success',
+                            confirmButtonColor: '#5a3d2b'
+                        });
+                        loadContacts(); // Tải lại danh sách liên hệ
+                    }).catch((error) => {
+                        hideLoading();
+                        console.error('Error deleting contact:', error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể xóa liên hệ: ' + error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#5a3d2b'
+                        });
+                    });
+                }
+            });
+        }
+
+        // Hàm xem chi tiết đơn hàng
+        function viewOrder(orderId) {
+            showLoading();
+            database.ref('/orders/' + orderId).once('value').then((snapshot) => {
+                hideLoading();
+                const order = snapshot.val();
+                if (!order) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy đơn hàng', 'error');
+                    return;
+                }
+
+                // Format danh sách sản phẩm
+                let productsList = '';
+                if (order.cart && Array.isArray(order.cart)) {
+                    productsList = order.cart.map(item => `
+                        <tr>
+                            <td style="padding: 10px; text-align: left;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px; object-fit: cover;">
+                                    <span>${item.name}</span>
+                                </div>
+                            </td>
+                            <td style="padding: 10px; text-align: right;">${formatCurrency(item.price)}</td>
+                            <td style="padding: 10px; text-align: center;">${item.quantity}</td>
+                            <td style="padding: 10px; text-align: right;">${formatCurrency(item.price * item.quantity)}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Format thông tin khách hàng
+                const customerInfo = `
+                    <div style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <h3 style="color: #5a3d2b; margin-bottom: 10px;">Thông tin khách hàng</h3>
+                        <p><strong>Họ tên:</strong> ${order.fullName || 'N/A'}</p>
+                        <p><strong>Email:</strong> ${order.email || 'N/A'}</p>
+                        <p><strong>Số điện thoại:</strong> ${order.phone || 'N/A'}</p>
+                        <p><strong>Địa chỉ:</strong> ${order.address || 'N/A'}</p>
+                        ${order.note ? `<p><strong>Ghi chú:</strong> ${order.note}</p>` : ''}
+                    </div>
+                `;
+
+                // Format thông tin đơn hàng
+                const orderInfo = `
+                    <div style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <h3 style="color: #5a3d2b; margin-bottom: 10px;">Thông tin đơn hàng</h3>
+                        <p><strong>Mã đơn hàng:</strong> ${order.orderId || 'N/A'}</p>
+                        <p><strong>Ngày đặt:</strong> ${order.createdAt ? formatDate(order.createdAt) : 'N/A'}</p>
+                        <p><strong>Trạng thái:</strong> <span style="color: ${order.status === 'paid' ? '#28a745' : '#dc3545'}">${order.status === 'paid' ? 'Đã thanh toán' : 'Chưa thanh toán'}</span></p>
+                        <p><strong>Phương thức thanh toán:</strong> ${order.paymentMethod === 'vnpay' ? 'VNPay' : order.paymentMethod || 'N/A'}</p>
+                        <p><strong>Trạng thái thanh toán:</strong> <span style="color: ${order.paymentStatus === 'completed' ? '#28a745' : '#dc3545'}">${order.paymentStatus === 'completed' ? 'Hoàn thành' : 'Chưa hoàn thành'}</span></p>
+                        ${order.paymentDetails ? `
+                            <div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #dee2e6;">
+                                <p><strong>Mã giao dịch:</strong> ${order.paymentDetails.transactionNo || 'N/A'}</p>
+                                <p><strong>Ngân hàng:</strong> ${order.paymentDetails.bankCode || 'N/A'}</p>
+                                <p><strong>Ngày thanh toán:</strong> ${order.paymentDetails.payDate || 'N/A'}</p>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+
+                // Format bảng sản phẩm
+                const productsTable = `
+                    <div style="margin-bottom: 20px; background-color: #f8f9fa; padding: 15px; border-radius: 8px;">
+                        <h3 style="color: #5a3d2b; margin-bottom: 10px;">Chi tiết sản phẩm</h3>
+                        <table style="width: 100%; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #fff;">
+                                    <th style="padding: 10px; text-align: left; border-bottom: 1px solid #dee2e6;">Sản phẩm</th>
+                                    <th style="padding: 10px; text-align: right; border-bottom: 1px solid #dee2e6;">Đơn giá</th>
+                                    <th style="padding: 10px; text-align: center; border-bottom: 1px solid #dee2e6;">Số lượng</th>
+                                    <th style="padding: 10px; text-align: right; border-bottom: 1px solid #dee2e6;">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${productsList}
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="3" style="padding: 10px; text-align: right;"><strong>Tổng tiền hàng:</strong></td>
+                                    <td style="padding: 10px; text-align: right;">${formatCurrency(order.totalAmount || 0)}</td>
+                                </tr>
+                                <tr style="background-color: #fff;">
+                                    <td colspan="3" style="padding: 10px; text-align: right;"><strong>Tổng thanh toán:</strong></td>
+                                    <td style="padding: 10px; text-align: right;"><strong>${formatCurrency(order.grandTotal || 0)}</strong></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                `;
+
+                // Hiển thị modal
+                Swal.fire({
+                    title: '<h2 style="color: #5a3d2b;">Chi tiết đơn hàng</h2>',
+                    html: `
+                        <div style="text-align: left;">
+                            ${customerInfo}
+                            ${orderInfo}
+                            ${productsTable}
+                        </div>
+                    `,
+                    width: '800px',
+                    confirmButtonText: 'Đóng',
+                    confirmButtonColor: '#5a3d2b',
+                    customClass: {
+                        container: 'view-order-modal',
+                        popup: 'view-order-popup',
+                        title: 'view-order-title',
+                        htmlContainer: 'view-order-content',
+                        confirmButton: 'view-order-confirm-btn'
+                    }
+                });
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error fetching order:', error);
+                Swal.fire('Lỗi!', 'Không thể tải thông tin đơn hàng', 'error');
+            });
+        }
+
+        // Xử lý đăng xuất
+        function handleLogout() {
+            Swal.fire({
+                title: 'Xác nhận đăng xuất',
+                text: 'Bạn có chắc chắn muốn đăng xuất?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Đăng xuất',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#5a3d2b',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    auth.signOut().then(() => {
+                        Swal.fire({
+                            title: 'Đăng xuất thành công!',
+                            text: 'Cảm ơn bạn đã sử dụng hệ thống',
+                            icon: 'success',
+                            confirmButtonColor: '#5a3d2b'
+                        }).then(() => {
+                            window.location.href = 'index.html';
+                        });
+                    }).catch((error) => {
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể đăng xuất. Vui lòng thử lại.',
+                            icon: 'error',
+                            confirmButtonColor: '#5a3d2b'
+                        });
+                    });
+                }
+            });
+        }
+
+        // Hàm chỉnh sửa thông tin người dùng
+        function editUser(userId) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            showLoading();
+            database.ref('/users/' + userId).once('value').then((snapshot) => {
+                hideLoading();
+                const userData = snapshot.val();
+                if (!userData) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin người dùng', 'error');
+                    return;
+                }
+
+                Swal.fire({
+                    title: '<h2 style="color: #5a3d2b; margin-bottom: 30px; font-size: 24px;">Chỉnh sửa thông tin người dùng</h2>',
+                    html: `
+                        <div style="text-align: left; padding: 20px;">
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Email</label>
+                                <input id="email" class="swal2-input" value="${userData.email || ''}" readonly style="background-color: #f8f9fa; font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Tên hiển thị</label>
+                                <input id="displayName" class="swal2-input" value="${userData.displayName || ''}" placeholder="Nhập tên hiển thị" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Trạng thái</label>
+                                <select id="status" class="swal2-input" style="width: 100%; margin: 0; font-size: 16px; padding: 12px; height: auto;">
+                                    <option value="active" ${userData.status === 'active' ? 'selected' : ''}>Hoạt động</option>
+                                    <option value="inactive" ${userData.status === 'inactive' ? 'selected' : ''}>Không hoạt động</option>
+                                    <option value="banned" ${userData.status === 'banned' ? 'selected' : ''}>Bị cấm</option>
+                                </select>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-save"></i> Lưu thay đổi',
+                    cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                    confirmButtonColor: '#5a3d2b',
+                    cancelButtonColor: '#6c757d',
+                    width: '600px',
+                    customClass: {
+                        container: 'edit-user-modal',
+                        popup: 'edit-user-popup',
+                        title: 'edit-user-title',
+                        htmlContainer: 'edit-user-content',
+                        confirmButton: 'edit-user-confirm-btn',
+                        cancelButton: 'edit-user-cancel-btn'
+                    },
+                    buttonsStyling: true,
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    },
+                    preConfirm: () => {
+                        const displayName = document.getElementById('displayName').value;
+                        const status = document.getElementById('status').value;
+
+                        if (!displayName) {
+                            Swal.showValidationMessage('Vui lòng nhập tên hiển thị');
+                            return false;
+                        }
+
+                        return {
+                            email: userData.email,
+                            displayName: displayName,
+                            status: status,
+                            createdAt: userData.createdAt,
+                            updatedAt: new Date().toISOString()
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showLoading();
+                        const updatedUser = result.value;
+                        
+                        database.ref('/users/' + userId).update(updatedUser).then(() => {
+                            hideLoading();
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Thông tin người dùng đã được cập nhật',
+                                icon: 'success',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-check"></i> OK'
+                            });
+                            loadUsers(); // Tải lại danh sách người dùng
+                        }).catch((error) => {
+                            hideLoading();
+                            console.error('Error updating user:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể cập nhật thông tin người dùng: ' + error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                            });
+                        });
+                    }
+                });
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error fetching user:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể tải thông tin người dùng: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#5a3d2b',
+                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                });
+            });
+        }
+
+        // Hàm thêm khuyến mãi mới
+        function addPromotion() {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: '<h2 style="color: #5a3d2b; margin-bottom: 30px; font-size: 24px;">Thêm khuyến mãi mới</h2>',
+                html: `
+                    <div style="text-align: left; padding: 20px;">
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Mã khuyến mãi</label>
+                            <input id="promoCode" class="swal2-input" placeholder="Nhập mã khuyến mãi" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Tên chương trình</label>
+                            <input id="title" class="swal2-input" placeholder="Nhập tên chương trình" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Giá trị khuyến mãi (VNĐ)</label>
+                            <input id="voucherAmount" type="number" class="swal2-input" placeholder="Nhập giá trị khuyến mãi" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Ngày bắt đầu</label>
+                            <input id="startDate" type="date" class="swal2-input" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Ngày kết thúc</label>
+                            <input id="endDate" type="date" class="swal2-input" style="font-size: 16px; padding: 12px; height: auto;">
+                        </div>
+                        <div style="margin-bottom: 25px;">
+                            <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Trạng thái</label>
+                            <select id="status" class="swal2-input" style="width: 100%; margin: 0; font-size: 16px; padding: 12px; height: auto;">
+                                <option value="active">Hoạt động</option>
+                                <option value="inactive">Không hoạt động</option>
+                                <option value="expired">Hết hạn</option>
+                            </select>
+                        </div>
+                    </div>
+                `,
+                showCancelButton: true,
+                confirmButtonText: '<i class="fas fa-plus"></i> Thêm mới',
+                cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                confirmButtonColor: '#5a3d2b',
+                cancelButtonColor: '#6c757d',
+                width: '600px',
+                preConfirm: () => {
+                    const promoCode = document.getElementById('promoCode').value;
+                    const title = document.getElementById('title').value;
+                    const voucherAmount = parseInt(document.getElementById('voucherAmount').value);
+                    const startDate = document.getElementById('startDate').value;
+                    const endDate = document.getElementById('endDate').value;
+                    const status = document.getElementById('status').value;
+
+                    if (!promoCode || !title || !voucherAmount || !startDate || !endDate) {
+                        Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
+                        return false;
+                    }
+
+                    if (voucherAmount <= 0) {
+                        Swal.showValidationMessage('Giá trị khuyến mãi phải lớn hơn 0');
+                        return false;
+                    }
+
+                    if (new Date(startDate) >= new Date(endDate)) {
+                        Swal.showValidationMessage('Ngày kết thúc phải sau ngày bắt đầu');
+                        return false;
+                    }
+
+                    return {
+                        promoCode,
+                        title,
+                        voucherAmount,
+                        startDate,
+                        endDate,
+                        status,
+                        createdAt: new Date().toISOString()
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    const newPromotion = result.value;
+                    
+                    database.ref('/promotions').push(newPromotion).then(() => {
+                        hideLoading();
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Khuyến mãi đã được thêm mới',
+                            icon: 'success',
+                            confirmButtonColor: '#5a3d2b',
+                            confirmButtonText: '<i class="fas fa-check"></i> OK'
+                        });
+                        loadPromotions();
+                    }).catch((error) => {
+                        hideLoading();
+                        console.error('Error adding promotion:', error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể thêm khuyến mãi: ' + error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#5a3d2b',
+                            confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                        });
+                    });
+                }
+            });
+        }
+
+        // Hàm chỉnh sửa khuyến mãi
+        function editPromotion(promoId) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            showLoading();
+            database.ref('/promotions/' + promoId).once('value').then((snapshot) => {
+                hideLoading();
+                const promoData = snapshot.val();
+                if (!promoData) {
+                    Swal.fire('Lỗi!', 'Không tìm thấy thông tin khuyến mãi', 'error');
+                    return;
+                }
+
+                Swal.fire({
+                    title: '<h2 style="color: #5a3d2b; margin-bottom: 30px; font-size: 24px;">Chỉnh sửa khuyến mãi</h2>',
+                    html: `
+                        <div style="text-align: left; padding: 20px;">
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Mã khuyến mãi</label>
+                                <input id="promoCode" class="swal2-input" value="${promoData.promoCode || ''}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Tên chương trình</label>
+                                <input id="title" class="swal2-input" value="${promoData.title || ''}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Giá trị khuyến mãi (VNĐ)</label>
+                                <input id="voucherAmount" type="number" class="swal2-input" value="${promoData.voucherAmount || ''}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Ngày bắt đầu</label>
+                                <input id="startDate" type="date" class="swal2-input" value="${promoData.startDate || ''}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Ngày kết thúc</label>
+                                <input id="endDate" type="date" class="swal2-input" value="${promoData.endDate || ''}" style="font-size: 16px; padding: 12px; height: auto;">
+                            </div>
+                            <div style="margin-bottom: 25px;">
+                                <label style="display: block; margin-bottom: 10px; color: #666; font-weight: 500; font-size: 16px;">Trạng thái</label>
+                                <select id="status" class="swal2-input" style="width: 100%; margin: 0; font-size: 16px; padding: 12px; height: auto;">
+                                    <option value="active" ${promoData.status === 'active' ? 'selected' : ''}>Hoạt động</option>
+                                    <option value="inactive" ${promoData.status === 'inactive' ? 'selected' : ''}>Không hoạt động</option>
+                                    <option value="expired" ${promoData.status === 'expired' ? 'selected' : ''}>Hết hạn</option>
+                                </select>
+                            </div>
+                        </div>
+                    `,
+                    showCancelButton: true,
+                    confirmButtonText: '<i class="fas fa-save"></i> Lưu thay đổi',
+                    cancelButtonText: '<i class="fas fa-times"></i> Hủy',
+                    confirmButtonColor: '#5a3d2b',
+                    cancelButtonColor: '#6c757d',
+                    width: '600px',
+                    preConfirm: () => {
+                        const promoCode = document.getElementById('promoCode').value;
+                        const title = document.getElementById('title').value;
+                        const voucherAmount = parseInt(document.getElementById('voucherAmount').value);
+                        const startDate = document.getElementById('startDate').value;
+                        const endDate = document.getElementById('endDate').value;
+                        const status = document.getElementById('status').value;
+
+                        if (!promoCode || !title || !voucherAmount || !startDate || !endDate) {
+                            Swal.showValidationMessage('Vui lòng điền đầy đủ thông tin');
+                            return false;
+                        }
+
+                        if (voucherAmount <= 0) {
+                            Swal.showValidationMessage('Giá trị khuyến mãi phải lớn hơn 0');
+                            return false;
+                        }
+
+                        if (new Date(startDate) >= new Date(endDate)) {
+                            Swal.showValidationMessage('Ngày kết thúc phải sau ngày bắt đầu');
+                            return false;
+                        }
+
+                        return {
+                            promoCode,
+                            title,
+                            voucherAmount,
+                            startDate,
+                            endDate,
+                            status,
+                            createdAt: promoData.createdAt,
+                            updatedAt: new Date().toISOString()
+                        }
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showLoading();
+                        const updatedPromo = result.value;
+                        
+                        database.ref('/promotions/' + promoId).update(updatedPromo).then(() => {
+                            hideLoading();
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Khuyến mãi đã được cập nhật',
+                                icon: 'success',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-check"></i> OK'
+                            });
+                            loadPromotions();
+                        }).catch((error) => {
+                            hideLoading();
+                            console.error('Error updating promotion:', error);
+                            Swal.fire({
+                                title: 'Lỗi!',
+                                text: 'Không thể cập nhật khuyến mãi: ' + error.message,
+                                icon: 'error',
+                                confirmButtonColor: '#5a3d2b',
+                                confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                            });
+                        });
+                    }
+                });
+            }).catch((error) => {
+                hideLoading();
+                console.error('Error fetching promotion:', error);
+                Swal.fire({
+                    title: 'Lỗi!',
+                    text: 'Không thể tải thông tin khuyến mãi: ' + error.message,
+                    icon: 'error',
+                    confirmButtonColor: '#5a3d2b',
+                    confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                });
+            });
+        }
+
+        // Hàm xóa khuyến mãi
+        function deletePromotion(promoId) {
+            // Check authentication first
+            const user = auth.currentUser;
+            if (!user || user.email !== 'quantrivienmocnhien@gmail.com') {
+                Swal.fire('Lỗi!', 'Bạn không có quyền thực hiện thao tác này', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Xác nhận xóa',
+                text: 'Bạn có chắc chắn muốn xóa khuyến mãi này?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy',
+                confirmButtonColor: '#dc3545',
+                cancelButtonColor: '#6c757d'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showLoading();
+                    database.ref('/promotions/' + promoId).remove().then(() => {
+                        hideLoading();
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Khuyến mãi đã được xóa',
+                            icon: 'success',
+                            confirmButtonColor: '#5a3d2b',
+                            confirmButtonText: '<i class="fas fa-check"></i> OK'
+                        });
+                        loadPromotions();
+                    }).catch((error) => {
+                        hideLoading();
+                        console.error('Error deleting promotion:', error);
+                        Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Không thể xóa khuyến mãi: ' + error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#5a3d2b',
+                            confirmButtonText: '<i class="fas fa-times"></i> Đóng'
+                        });
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html> 

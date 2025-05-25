@@ -1533,11 +1533,19 @@
                     ]);
 
                     if (savedData && updatedStatus) {
-                        showSuccess('Đăng nhập thành công', 'Chào mừng bạn đã quay trở lại!');
-                        document.getElementById('modalOverlay').style.display = 'none';
-                        document.querySelectorAll('.modal').forEach(modal => {
-                            modal.classList.remove('active');
-                        });
+                        // Kiểm tra email và chuyển hướng nếu là admin
+                        if (email === 'quantrivienmocnhien@gmail.com') {
+                            showSuccess('Đăng nhập thành công', 'Chào mừng Admin!');
+                            setTimeout(() => {
+                                window.location.href = 'admin.html';
+                            }, 1000);
+                        } else {
+                            showSuccess('Đăng nhập thành công', 'Chào mừng bạn đã quay trở lại!');
+                            document.getElementById('modalOverlay').style.display = 'none';
+                            document.querySelectorAll('.modal').forEach(modal => {
+                                modal.classList.remove('active');
+                            });
+                        }
                     }
                 } catch (error) {
                     console.error('Lỗi đăng nhập:', error);

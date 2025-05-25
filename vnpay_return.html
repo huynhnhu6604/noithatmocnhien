@@ -407,7 +407,7 @@
                     </div>
                     <div class="detail-item">
                         <span>Tổng tiền:</span>
-                        <span>${orderData.grandTotal.toLocaleString('vi-VN')}đ</span>
+                        <span>${orderData.grandTotal ? orderData.grandTotal.toLocaleString('vi-VN') + 'đ' : 'Đang cập nhật'}</span>
                     </div>
                 </div>
 
@@ -521,6 +521,7 @@
                 const vnp_BankCode = urlParams.get('vnp_BankCode');
                 const vnp_BankTranNo = urlParams.get('vnp_BankTranNo');
                 const vnp_PayDate = urlParams.get('vnp_PayDate');
+                const vnp_Amount = urlParams.get('vnp_Amount');
 
                 // Kiểm tra kết quả thanh toán
                 if (vnp_ResponseCode === '00' && vnp_TransactionStatus === '00') {
@@ -535,8 +536,10 @@
                         payDate: vnp_PayDate
                     };
 
-                    // Cập nhật mã đơn hàng từ VNPAY
+                    // Cập nhật mã đơn hàng và số tiền từ VNPAY
                     orderData.orderId = vnp_TxnRef;
+                    // Chuyển đổi số tiền từ VNPay (đơn vị: xu) sang đơn vị: đồng
+                    orderData.grandTotal = parseInt(vnp_Amount) / 100;
 
                     try {
                         // Lưu đơn hàng vào Firebase

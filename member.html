@@ -1625,16 +1625,16 @@
                     <div class="order-detail-section">
                         <h3>Sản phẩm</h3>
                         <div class="product-list">
-                            ${order.items.map(item => `
+                            ${order.items && order.items.length > 0 ? order.items.map(item => `
                                 <div class="product-item">
-                                    <img src="${item.image}" alt="${item.name}" class="product-image">
+                                    <img src="${item.image || 'picture/logo.jpg'}" alt="${item.name || 'Sản phẩm'}" class="product-image">
                                     <div class="product-info">
-                                        <div class="product-name">${item.name}</div>
-                                        <div class="product-price">${item.price.toLocaleString('vi-VN')}đ</div>
-                                        <div class="product-quantity">Số lượng: ${item.quantity}</div>
+                                        <div class="product-name">${item.name || 'Sản phẩm không xác định'}</div>
+                                        <div class="product-price">${(item.price || 0).toLocaleString('vi-VN')}đ</div>
+                                        <div class="product-quantity">Số lượng: ${item.quantity || 1}</div>
                                     </div>
                                 </div>
-                            `).join('')}
+                            `).join('') : '<p>Không có thông tin sản phẩm</p>'}
                         </div>
                     </div>
 
@@ -1673,16 +1673,16 @@
                         <div class="detail-grid">
                             <div class="detail-item">
                                 <span class="detail-label">Tạm tính</span>
-                                <span class="detail-value">${order.subtotal.toLocaleString('vi-VN')}đ</span>
+                                <span class="detail-value">${(order.subtotal || 0).toLocaleString('vi-VN')}đ</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Phí vận chuyển</span>
-                                <span class="detail-value">${order.shipping.toLocaleString('vi-VN')}đ</span>
+                                <span class="detail-value">${(order.shipping || 0).toLocaleString('vi-VN')}đ</span>
                             </div>
                             <div class="detail-item">
                                 <span class="detail-label">Tổng cộng</span>
                                 <span class="detail-value" style="color: var(--primary-color); font-weight: 600;">
-                                    ${order.grandTotal.toLocaleString('vi-VN')}đ
+                                    ${(order.grandTotal || 0).toLocaleString('vi-VN')}đ
                                 </span>
                             </div>
                         </div>
@@ -1701,7 +1701,7 @@
                                     <div class="timeline-content">Thanh toán thành công</div>
                                 </div>
                             ` : ''}
-                            ${order.status === 'completed' ? `
+                            ${order.status === 'completed' && order.updatedAt ? `
                                 <div class="timeline-item">
                                     <div class="timeline-date">${new Date(order.updatedAt).toLocaleDateString('vi-VN')}</div>
                                     <div class="timeline-content">Đơn hàng hoàn thành</div>
