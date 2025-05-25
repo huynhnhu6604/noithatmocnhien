@@ -16,6 +16,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- SheetJS (xlsx) for Excel export -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         :root {
             --primary-color: #5a3d2b;
@@ -377,6 +379,9 @@
                 <button class="btn btn-primary" onclick="handleLogout()" style="margin-left: 10px;">
                     <i class="fas fa-sign-out-alt"></i> Đăng xuất
                 </button>
+                <button class="btn btn-secondary" onclick="exportAllDataToExcel()" style="margin-left: 10px;">
+                    <i class="fas fa-file-excel"></i> Xuất Excel
+                </button>
             </div>
         </div>
 
@@ -424,7 +429,30 @@
             <div class="charts-container">
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">Doanh thu theo tháng</div>
+                        <div class="chart-title">Doanh thu theo thời gian</div>
+                        <div class="chart-filters" style="display: flex; gap: 10px; align-items: center;">
+                            <select id="timeFilter" class="swal2-input" style="width: auto; margin: 0; padding: 8px;">
+                                <option value="year">Theo năm</option>
+                                <option value="month">Theo tháng</option>
+                            </select>
+                            <select id="yearFilter" class="swal2-input" style="width: auto; margin: 0; padding: 8px;">
+                                <!-- Will be populated with years -->
+                            </select>
+                            <select id="monthFilter" class="swal2-input" style="width: auto; margin: 0; padding: 8px; display: none;">
+                                <option value="1">Tháng 1</option>
+                                <option value="2">Tháng 2</option>
+                                <option value="3">Tháng 3</option>
+                                <option value="4">Tháng 4</option>
+                                <option value="5">Tháng 5</option>
+                                <option value="6">Tháng 6</option>
+                                <option value="7">Tháng 7</option>
+                                <option value="8">Tháng 8</option>
+                                <option value="9">Tháng 9</option>
+                                <option value="10">Tháng 10</option>
+                                <option value="11">Tháng 11</option>
+                                <option value="12">Tháng 12</option>
+                            </select>
+                        </div>
                     </div>
                     <canvas id="revenueChart"></canvas>
                 </div>
@@ -730,27 +758,133 @@
                 const totalRevenue = orders.reduce((sum, order) => sum + (order.grandTotal || 0), 0);
                 document.getElementById('totalRevenue').textContent = formatCurrency(totalRevenue);
 
-                // Create revenue chart
-                const revenueChart = new Chart(document.getElementById('revenueChart'), {
-                    type: 'line',
-                    data: {
-                        labels: ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'],
-                        datasets: [{
-                            label: 'Doanh thu',
-                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            borderColor: '#5a3d2b',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                position: 'top',
+                // Initialize time filters
+                const timeFilter = document.getElementById('timeFilter');
+                const yearFilter = document.getElementById('yearFilter');
+                const monthFilter = document.getElementById('monthFilter');
+                let revenueChart;
+
+                // Populate year filter
+                const currentYear = new Date().getFullYear();
+                yearFilter.innerHTML = ''; // Clear existing options
+                for (let year = currentYear; year >= currentYear - 5; year--) {
+                    const option = document.createElement('option');
+                    option.value = year;
+                    option.textContent = year;
+                    yearFilter.appendChild(option);
+                }
+
+                // Set current month as default
+                const currentMonth = new Date().getMonth() + 1;
+                monthFilter.value = currentMonth;
+
+                function updateRevenueChart() {
+                    const selectedTime = timeFilter.value;
+                    const selectedYear = parseInt(yearFilter.value);
+                    const selectedMonth = parseInt(monthFilter.value);
+
+                    // Filter orders based on selected time period
+                    const filteredOrders = orders.filter(order => {
+                        if (!order.createdAt) return false;
+                        const orderDate = new Date(order.createdAt);
+                        const orderYear = orderDate.getFullYear();
+                        const orderMonth = orderDate.getMonth() + 1;
+
+                        if (selectedTime === 'year') {
+                            return orderYear === selectedYear;
+                        } else if (selectedTime === 'month') {
+                            return orderYear === selectedYear && orderMonth === selectedMonth;
+                        }
+                        return false;
+                    });
+
+                    // Calculate revenue based on selected time period
+                    let labels = [];
+                    let data = [];
+
+                    if (selectedTime === 'year') {
+                        labels = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T11', 'T12'];
+                        data = Array(12).fill(0);
+                        filteredOrders.forEach(order => {
+                            const month = new Date(order.createdAt).getMonth();
+                            data[month] += (order.grandTotal || 0);
+                        });
+                    } else if (selectedTime === 'month') {
+                        const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+                        labels = Array.from({length: daysInMonth}, (_, i) => `Ngày ${i + 1}`);
+                        data = Array(daysInMonth).fill(0);
+                        filteredOrders.forEach(order => {
+                            const day = new Date(order.createdAt).getDate() - 1;
+                            data[day] += (order.grandTotal || 0);
+                        });
+                    }
+
+                    // Update chart
+                    if (revenueChart) {
+                        revenueChart.destroy();
+                    }
+
+                    revenueChart = new Chart(document.getElementById('revenueChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [
+                                {
+                                    label: 'Doanh thu',
+                                    data: data,
+                                    backgroundColor: 'rgba(90, 61, 43, 0.3)',
+                                    borderColor: '#5a3d2b',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function(context) {
+                                            return formatCurrency(context.raw);
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return formatCurrency(value);
+                                        }
+                                    }
+                                }
                             }
                         }
-                    }
+                    });
+                }
+
+                // Helper function to get week number
+                function getWeekNumber(d) {
+                    d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+                    d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+                    const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+                    return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+                }
+
+                // Add event listeners
+                timeFilter.addEventListener('change', function() {
+                    monthFilter.style.display = this.value === 'month' ? 'block' : 'none';
+                    updateRevenueChart();
                 });
+
+                yearFilter.addEventListener('change', updateRevenueChart);
+                monthFilter.addEventListener('change', updateRevenueChart);
+
+                // Initial chart update
+                updateRevenueChart();
 
                 // Create products chart
                 const productsChart = new Chart(document.getElementById('productsChart'), {
@@ -2661,6 +2795,91 @@
                     });
                 }
             });
+        }
+
+        // Xuất toàn bộ dữ liệu ra Excel (gộp 1 sheet duy nhất)
+        async function exportAllDataToExcel() {
+            showLoading();
+            try {
+                const snapshot = await database.ref('/').once('value');
+                const data = snapshot.val();
+                const products = Array.isArray(data.products) ? data.products : [];
+                const orders = Object.values(data.orders || {});
+                const users = Object.values(data.users || {});
+                const promotions = Object.values(data.promotions || {});
+                const collections = Object.values(data.collections || {});
+                const contacts = Object.values(data.contacts || {});
+                const reviews = Object.values(data.reviews || {});
+
+                // 1. Doanh thu tổng hợp
+                let totalRevenue = 0;
+                let revenueByMonth = Array(12).fill(0);
+                let revenueByYear = {};
+                orders.forEach(order => {
+                    if (order.grandTotal && order.createdAt) {
+                        const date = new Date(order.createdAt);
+                        const year = date.getFullYear();
+                        const month = date.getMonth();
+                        totalRevenue += order.grandTotal;
+                        revenueByMonth[month] += order.grandTotal;
+                        if (!revenueByYear[year]) revenueByYear[year] = 0;
+                        revenueByYear[year] += order.grandTotal;
+                    }
+                });
+                // Doanh thu tổng
+                const revenueSummary = [
+                    { 'Loại dữ liệu': 'Tổng doanh thu', 'Giá trị': totalRevenue }
+                ];
+                // Doanh thu theo tháng
+                const revenueMonthArr = revenueByMonth.map((val, idx) => ({ 'Loại dữ liệu': 'Doanh thu tháng', 'Tháng': idx + 1, 'Giá trị': val }));
+                // Doanh thu theo năm
+                const revenueYearArr = Object.entries(revenueByYear).map(([year, val]) => ({ 'Loại dữ liệu': 'Doanh thu năm', 'Năm': year, 'Giá trị': val }));
+
+                // 2. Đơn hàng trong ngày
+                const today = new Date();
+                today.setHours(0,0,0,0);
+                const ordersToday = orders.filter(order => {
+                    if (!order.createdAt) return false;
+                    const d = new Date(order.createdAt);
+                    return d >= today && d < new Date(today.getTime() + 24*60*60*1000);
+                }).map(order => ({...order, 'Loại dữ liệu': 'Đơn hàng hôm nay'}));
+
+                // 3. Đơn hàng trong năm hiện tại
+                const currentYear = new Date().getFullYear();
+                const ordersThisYear = orders.filter(order => {
+                    if (!order.createdAt) return false;
+                    return new Date(order.createdAt).getFullYear() === currentYear;
+                }).map(order => ({...order, 'Loại dữ liệu': 'Đơn hàng năm'}));
+
+                // 4. Sản phẩm hết kho
+                const outOfStockProducts = products.filter(p => p.soLuongTonKho === 0).map(p => ({...p, 'Loại dữ liệu': 'Sản phẩm hết kho'}));
+
+                // 5. Đánh giá (nếu có)
+                const reviewsArr = reviews.map(r => ({...r, 'Loại dữ liệu': 'Đánh giá'}));
+
+                // 6. Liên hệ
+                const contactsArr = contacts.map(c => ({...c, 'Loại dữ liệu': 'Liên hệ'}));
+
+                // Gộp tất cả dữ liệu
+                const allData = [
+                    ...revenueSummary,
+                    ...revenueMonthArr,
+                    ...revenueYearArr,
+                    ...ordersToday,
+                    ...ordersThisYear,
+                    ...outOfStockProducts,
+                    ...reviewsArr,
+                    ...contactsArr
+                ];
+
+                // Xuất ra 1 sheet duy nhất
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(allData), 'BaoCaoTongHop');
+                XLSX.writeFile(wb, 'BaoCaoTongHop_MocNhien.xlsx');
+            } catch (error) {
+                Swal.fire('Lỗi', 'Không thể xuất dữ liệu: ' + error.message, 'error');
+            }
+            hideLoading();
         }
     </script>
 </body>
