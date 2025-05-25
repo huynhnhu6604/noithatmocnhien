@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /vnpay_return.html
+
+Sitemap: https://noithatmocnhien.com/sitemap.xml 
