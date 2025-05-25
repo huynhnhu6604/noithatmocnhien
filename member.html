@@ -46,6 +46,10 @@
                 transition: transform 0.3s, box-shadow 0.3s;
                 object-fit: cover;
             }
+            .logo:hover {
+                transform: scale(1.05);
+                box-shadow: 0 0 20px rgba(233, 196, 106, 0.8);
+            }
             .store-name {
                 font-family: 'Great Vibes', cursive;
                 font-size: 2.7rem;
@@ -92,6 +96,144 @@
             .active {
                 background-color: rgba(233, 196, 106, 0.2);
                 border: 1px solid #e9c46a;
+            }
+            
+            /* Dropdown menu */
+            .dropdown {
+                position: relative;
+            }
+            .mega-menu {
+                display: none;
+                position: absolute;
+                left: 0;
+                top: 100%;
+                background: #fff;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+                padding: 24px 32px;
+                display: flex;
+                gap: 40px;
+                z-index: 100;
+                min-width: 800px;
+                opacity: 0;
+                visibility: hidden;
+                transform: translateY(10px);
+                transition: all 0.3s ease;
+            }
+            .dropdown:hover .mega-menu {
+                display: flex;
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0);
+            }
+            .mega-column {
+                display: flex;
+                flex-direction: column;
+                min-width: 160px;
+                margin-right: 24px;
+            }
+            .mega-menu a {
+                color: #555;
+                padding: 8px 0;
+                text-decoration: none;
+                font-size: 0.9rem;
+                transition: all 0.2s;
+                border-bottom: 1px solid transparent;
+            }
+            .mega-menu a:hover {
+                color: #e9c46a;
+                border-bottom: 1px solid #e9c46a;
+                transform: translateX(5px);
+            }
+            
+            /* Thêm mũi tên cho dropdown */
+            .dropdown > .nav-btn::after {
+                content: '▼';
+                font-size: 0.7em;
+                margin-left: 5px;
+                display: inline-block;
+                transition: transform 0.3s;
+            }
+            .dropdown:hover > .nav-btn::after {
+                transform: rotate(180deg);
+            }
+            
+            /* Nút giỏ hàng */
+            .cart-btn {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                color: #d9d1cc;
+                padding: 8px 12px;
+                border-radius: 5px;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-weight: 600;
+                margin-left: 10px;
+                font-size: 0.75rem;
+            }
+            .cart-icon {
+                font-size: 2rem;
+            }
+            .cart-btn:hover {
+                background: #d4b054;
+                transform: translateY(-2px);
+            }
+            
+            /* Style cho nút đăng nhập */
+            .login-btn {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                color: #5a3d2b;
+                padding: 8px 16px;
+                border-radius: 5px;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-weight: 600;
+                margin-left: 10px;
+                font-size: 0.75rem;
+                background-color: #e9c46a;
+                border: 1px solid #e9c46a;
+            }
+            .login-btn:hover {
+                background-color: #5a3d2b;
+                color: #e9c46a;
+                transform: translateY(-2px);
+            }
+
+            /* Style cho user menu */
+            .user-menu {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                color: #5a3d2b;
+                padding: 8px 16px;
+                border-radius: 5px;
+                text-decoration: none;
+                transition: all 0.3s;
+                font-weight: 600;
+                margin-left: 10px;
+                font-size: 0.75rem;
+                background-color: #e9c46a;
+                border: 1px solid #e9c46a;
+            }
+
+            .user-menu:hover {
+                background-color: #5a3d2b;
+                color: #e9c46a;
+                transform: translateY(-2px);
+            }
+
+            .user-menu .logout-btn {
+                margin-left: 10px;
+                cursor: pointer;
+                padding: 4px 8px;
+                border-radius: 4px;
+                background: rgba(255,255,255,0.2);
+            }
+
+            .user-menu .logout-btn:hover {
+                background: rgba(255,255,255,0.3);
             }
 
             /* Member Page Styles */
@@ -687,13 +829,65 @@
         <nav class="header-nav">
             <div class="nav-links">
                 <a href="index.html" class="nav-btn">Trang chủ</a>
-                <a href="san-pham.html" class="nav-btn">Sản phẩm</a>
-                <a href="bo-suu-tap.html" class="nav-btn">Bộ sưu tập</a>
-                <a href="khuyen-mai.html" class="nav-btn">Khuyến mãi</a>
-                <a href="tin-tuc.html" class="nav-btn">Tin tức</a>
-                <a href="thanh-vien.html" class="nav-btn active">Tài khoản</a>
-                <a href="chinh-sach.html" class="nav-btn">Chính sách</a>
-                <a href="ve-chung-toi.html" class="nav-btn">Về chúng tôi</a>
+                <div class="dropdown">
+                    <a href="products.html" class="nav-btn">Sản phẩm</a>
+                    <div class="mega-menu">
+                        <div class="mega-column">
+                            <a href="products.html?category=Sofa">Sofa</a>
+                            <a href="products.html?category=Ghế dài & đôn">Ghế dài & đôn</a>
+                            <a href="products.html?category=Bàn nước">Bàn nước</a>
+                            <a href="products.html?category=Tủ tivi">Tủ tivi</a>
+                            <a href="products.html?category=Kệ trưng bày">Kệ trưng bày</a>
+                            <a href="products.html?category=Tủ giày">Tủ giày</a>
+                        </div>
+                        <div class="mega-column">
+                            <a href="products.html?category=Bàn ăn">Bàn ăn</a>
+                            <a href="products.html?category=Ghế ăn">Ghế ăn</a>
+                            <a href="products.html?category=Ghế Bar">Ghế Bar</a>
+                            <a href="products.html?category=Tủ ly">Tủ ly</a>
+                            <a href="products.html?category=Tủ bếp">Tủ bếp</a>
+                        </div>
+                        <div class="mega-column">
+                            <a href="products.html?category=Giường ngủ">Giường ngủ</a>
+                            <a href="products.html?category=Bàn đầu giường">Bàn đầu giường</a>
+                            <a href="products.html?category=Bàn trang điểm">Bàn trang điểm</a>
+                            <a href="products.html?category=Tủ áo">Tủ áo</a>
+                            <a href="products.html?category=Nệm">Nệm</a>
+                        </div>
+                        <div class="mega-column">
+                            <a href="products.html?category=Bàn làm việc">Bàn làm việc</a>
+                            <a href="products.html?category=Ghế làm việc">Ghế làm việc</a>
+                            <a href="products.html?category=Kệ sách">Kệ sách</a>
+                            <a href="products.html?category=Bàn ngoài trời">Bàn ngoài trời</a>
+                            <a href="products.html?category=Ghế ngoài trời">Ghế ngoài trời</a>
+                        </div>
+                        <div class="mega-column">
+                            <a href="products.html?category=Đèn trang trí">Đèn trang trí</a>
+                            <a href="products.html?category=Thảm trang trí">Thảm trang trí</a>
+                            <a href="products.html?category=Bình trang trí">Bình trang trí</a>
+                            <a href="products.html?category=Tranh">Tranh</a>
+                            <a href="products.html?category=Gương">Gương</a>
+                            <a href="products.html?category=Đồng hồ">Đồng hồ</a>
+                            <a href="products.html?category=Tượng trang trí">Tượng trang trí</a>
+                            <a href="products.html?category=Dụng cụ bếp">Dụng cụ bếp</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="collection.html" class="nav-btn">Bộ sưu tập</a>
+                <a href="promotion.html" class="nav-btn">Khuyến mãi</a>
+                <a href="member.html" class="nav-btn active">Thành viên</a>
+                <a href="policy.html" class="nav-btn">Chính sách</a>
+                <a href="about.html" class="nav-btn">Về chúng tôi</a>
+                <a href="cart.html" class="cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span>Giỏ hàng</span>
+                </a>
+                <div id="authButtons">
+                    <a href="#" class="login-btn" onclick="showModal('loginModal')">
+                        <span>👤</span>
+                        <span>Đăng nhập</span>
+                    </a>
+                </div>
             </div>
         </nav>
 
@@ -858,6 +1052,7 @@
                 currentUser = user;
                 loadUserData(user);
                 loadOrders(user.uid);
+                updateAuthButtons(user);
             });
 
             // Load thông tin user
@@ -1570,6 +1765,56 @@
                 if (event.target === modal) {
                     closeModal('orderDetailModal');
                 }
+            }
+
+            // Hàm cập nhật nút đăng nhập/đăng xuất
+            function updateAuthButtons(user) {
+                const authButtons = document.getElementById('authButtons');
+                if (user) {
+                    authButtons.innerHTML = `
+                        <div class="user-menu" onclick="confirmLogout()">
+                            <span>👤</span>
+                            <span>${user.email}</span>
+                        </div>
+                    `;
+                } else {
+                    authButtons.innerHTML = `
+                        <a href="#" class="login-btn" onclick="showModal('loginModal')">
+                            <span>👤</span>
+                            <span>Đăng nhập</span>
+                        </a>
+                    `;
+                }
+            }
+
+            // Hàm xác nhận đăng xuất
+            function confirmLogout() {
+                Swal.fire({
+                    title: 'Xác nhận đăng xuất',
+                    text: 'Bạn có chắc chắn muốn đăng xuất?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Đăng xuất',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading
+                        Swal.fire({
+                            title: 'Đang đăng xuất...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        auth.signOut().then(() => {
+                            window.location.href = 'index.html';
+                        }).catch((error) => {
+                            console.error('Lỗi khi đăng xuất:', error);
+                            Swal.fire('Lỗi', 'Không thể đăng xuất', 'error');
+                        });
+                    }
+                });
             }
         </script>
     </body>
