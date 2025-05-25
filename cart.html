@@ -1132,12 +1132,10 @@
             }
 
             .cart-summary {
-                background: white;
+                background: #fff;
+                padding: 25px;
                 border-radius: 12px;
-                padding: 20px;
                 box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-                position: sticky;
-                top: 20px;
             }
 
             .summary-row {
@@ -1791,6 +1789,123 @@
                 padding: 15px;
                 border-radius: 8px;
             }
+
+            .promo-code-section {
+                margin-bottom: 25px;
+                padding-bottom: 20px;
+                border-bottom: 1px solid #eee;
+            }
+
+            .promo-code-section h3 {
+                color: #5a3d2b;
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+            }
+
+            .promo-code-input {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .promo-code-input input {
+                flex: 1;
+                padding: 12px 15px;
+                border: 1.5px solid #e9c46a;
+                border-radius: 8px;
+                font-size: 0.9rem;
+                color: #5a3d2b;
+                transition: all 0.3s;
+            }
+
+            .promo-code-input input:focus {
+                outline: none;
+                border-color: #5a3d2b;
+                box-shadow: 0 0 0 2px rgba(90, 61, 43, 0.1);
+            }
+
+            .promo-code-input button {
+                padding: 12px 20px;
+                background: #e9c46a;
+                color: #5a3d2b;
+                border: none;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s;
+            }
+
+            .promo-code-input button:hover {
+                background: #5a3d2b;
+                color: #e9c46a;
+            }
+
+            .promo-code-message {
+                font-size: 0.9rem;
+                margin-top: 10px;
+            }
+
+            .promo-code-message.success {
+                color: #28a745;
+            }
+
+            .promo-code-message.error {
+                color: #dc3545;
+            }
+
+            .active-promo {
+                margin-top: 15px;
+                padding: 15px;
+                background: #f9f7f3;
+                border-radius: 8px;
+                display: none;
+            }
+
+            .active-promo.show {
+                display: block;
+            }
+
+            .active-promo .promo-title {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+
+            .active-promo .promo-title .icon {
+                font-size: 1.5rem;
+            }
+
+            .active-promo .promo-title h4 {
+                color: #5a3d2b;
+                margin: 0;
+            }
+
+            .active-promo .promo-description {
+                color: #666;
+                font-size: 0.9rem;
+                margin-bottom: 10px;
+            }
+
+            .active-promo .promo-amount {
+                color: #e9c46a;
+                font-weight: 600;
+                font-size: 1.1rem;
+            }
+
+            .active-promo .remove-promo {
+                color: #dc3545;
+                background: none;
+                border: none;
+                padding: 5px 10px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                margin-top: 10px;
+            }
+
+            .active-promo .remove-promo:hover {
+                text-decoration: underline;
+            }
         </style>
     </head>
     <body>
@@ -1870,39 +1985,14 @@
                         </div>
                     </div>
                     <div class="cart-summary">
-                        <div class="promo-code">
-                            <h4>Mã giảm giá</h4>
-                            <div class="promo-input">   
-                                <input type="text" placeholder="Nhập mã giảm giá">
-                                <button class="apply-btn">Áp dụng</button>
+                        <div class="promo-code-section">
+                            <h3>Mã giảm giá</h3>
+                            <div class="promo-code-input">
+                                <input type="text" id="promoCode" placeholder="Nhập mã giảm giá">
+                                <button onclick="applyPromoCode()">Áp dụng</button>
                             </div>
-                        </div>
-                        <!-- <div class="shipping-options">
-                            <h4>Phương thức vận chuyển</h4>
-                            <div class="shipping-option selected">
-                                <input type="radio" name="shipping" checked>
-                                <div>
-                                    <div>Giao hàng tiêu chuẩn</div>
-                                    <small>Miễn phí cho đơn hàng trên 1 triệu</small>
-                                </div>
-                            </div>
-                            <div class="shipping-option">
-                                <input type="radio" name="shipping">
-                                <div>
-                                    <div>Giao hàng nhanh</div>
-                                    <small>Phí vận chuyển: 50,000đ</small>
-                                </div>
-                            </div>
-                        </div> -->
-                        <div class="payment-methods">
-                            <h4>Phương thức thanh toán</h4>
-                            <div class="vnpay-info">
-                                <img src="https://cdn.haitrieu.com/wp-content/uploads/2022/10/Icon-VNPAY-QR.png" alt="VNPay" class="vnpay-logo">
-                                <div class="vnpay-details">
-                                    <h5>Thanh toán qua VNPay</h5>
-                                    <p>Thanh toán an toàn, nhanh chóng với VNPay</p>
-                                </div>
-                            </div>
+                            <div id="promoCodeMessage" class="promo-code-message"></div>
+                            <div id="activePromo" class="active-promo"></div>
                         </div>
                         <div class="summary-row">
                             <span>Tạm tính:</span>
@@ -3506,6 +3596,153 @@
                 if (cartCountElement) {
                     cartCountElement.textContent = `Giỏ hàng (${totalItems})`;
                 }
+            }
+
+            // Khai báo biến toàn cục
+            window.activePromoCode = null;
+
+            // Hàm tính tổng tiền tạm tính
+            function calculateSubtotal() {
+                const cart = JSON.parse(localStorage.getItem('cart')) || [];
+                return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            }
+
+            // Hàm kiểm tra và áp dụng mã giảm giá
+            function applyPromoCode() {
+                const promoCodeInput = document.getElementById('promoCode');
+                const promoCode = promoCodeInput.value.trim().toUpperCase();
+                const messageElement = document.getElementById('promoCodeMessage');
+                const activePromoElement = document.getElementById('activePromo');
+                
+                console.log('Mã giảm giá nhập vào:', promoCode);
+                
+                if (!promoCode) {
+                    messageElement.textContent = 'Vui lòng nhập mã giảm giá';
+                    messageElement.className = 'promo-code-message error';
+                    return;
+                }
+
+                // Kiểm tra nếu đã có mã giảm giá đang áp dụng
+                if (window.activePromoCode) {
+                    messageElement.textContent = 'Bạn đã áp dụng một mã giảm giá. Vui lòng xóa mã hiện tại trước khi áp dụng mã mới.';
+                    messageElement.className = 'promo-code-message error';
+                    return;
+                }
+
+                // Lấy thông tin khuyến mãi từ Firebase
+                const promotionsRef = database.ref('promotions');
+                console.log('Đang truy vấn Firebase...');
+                
+                promotionsRef.once('value')
+                    .then((snapshot) => {
+                        const promotions = snapshot.val();
+                        console.log('Dữ liệu khuyến mãi từ Firebase:', promotions);
+                        
+                        if (!promotions) {
+                            messageElement.textContent = 'Không tìm thấy thông tin khuyến mãi';
+                            messageElement.className = 'promo-code-message error';
+                            return;
+                        }
+
+                        const promo = Object.values(promotions).find(p => p.promoCode === promoCode);
+                        console.log('Mã khuyến mãi tìm thấy:', promo);
+
+                        if (!promo) {
+                            messageElement.textContent = 'Mã giảm giá không hợp lệ';
+                            messageElement.className = 'promo-code-message error';
+                            return;
+                        }
+
+                        // Kiểm tra thời gian hiệu lực
+                        const now = new Date();
+                        const startDate = new Date(promo.startDate);
+                        const endDate = new Date(promo.endDate);
+                        
+                        console.log('Thời gian kiểm tra:', {
+                            now: now,
+                            startDate: startDate,
+                            endDate: endDate
+                        });
+
+                        if (now < startDate || now > endDate) {
+                            messageElement.textContent = 'Mã giảm giá đã hết hạn hoặc chưa có hiệu lực';
+                            messageElement.className = 'promo-code-message error';
+                            return;
+                        }
+
+                        // Kiểm tra trạng thái
+                        if (promo.status !== 'active') {
+                            messageElement.textContent = 'Mã giảm giá không còn hiệu lực';
+                            messageElement.className = 'promo-code-message error';
+                            return;
+                        }
+
+                        // Kiểm tra giá trị đơn hàng tối thiểu
+                        const subtotal = calculateSubtotal();
+                        console.log('Giá trị đơn hàng:', {
+                            subtotal: subtotal,
+                            minOrderValue: promo.minOrderValue
+                        });
+
+                        if (subtotal < promo.minOrderValue) {
+                            messageElement.textContent = `Đơn hàng cần đạt tối thiểu ${formatPrice(promo.minOrderValue)} để áp dụng mã này`;
+                            messageElement.className = 'promo-code-message error';
+                            return;
+                        }
+
+                        // Áp dụng mã giảm giá
+                        window.activePromoCode = promo;
+                        messageElement.textContent = 'Áp dụng mã giảm giá thành công!';
+                        messageElement.className = 'promo-code-message success';
+
+                        // Hiển thị thông tin khuyến mãi
+                        activePromoElement.innerHTML = `
+                            <div class="promo-title">
+                                <span class="icon">${promo.icon || '🎁'}</span>
+                                <h4>${promo.title}</h4>
+                            </div>
+                            <div class="promo-description">${promo.description}</div>
+                            <div class="promo-amount">Giảm giá: ${formatPrice(promo.voucherAmount)}</div>
+                            <button class="remove-promo" onclick="removePromoCode()">Xóa mã giảm giá</button>
+                        `;
+                        activePromoElement.classList.add('show');
+
+                        // Cập nhật tổng tiền
+                        updateTotal();
+                    })
+                    .catch((error) => {
+                        console.error('Lỗi chi tiết khi kiểm tra mã giảm giá:', error);
+                        messageElement.textContent = 'Có lỗi xảy ra khi kiểm tra mã giảm giá';
+                        messageElement.className = 'promo-code-message error';
+                    });
+            }
+
+            // Hàm xóa mã giảm giá
+            function removePromoCode() {
+                window.activePromoCode = null;
+                document.getElementById('promoCode').value = '';
+                document.getElementById('promoCodeMessage').textContent = '';
+                document.getElementById('promoCodeMessage').className = 'promo-code-message';
+                document.getElementById('activePromo').classList.remove('show');
+                updateTotal();
+            }
+
+            // Cập nhật hàm updateTotal để tính toán giảm giá
+            function updateTotal() {
+                const subtotal = calculateSubtotal();
+                const shipping = subtotal > 1000000 ? 0 : 50000;
+                let discount = 0;
+
+                if (window.activePromoCode) {
+                    discount = window.activePromoCode.voucherAmount;
+                }
+
+                const total = subtotal + shipping - discount;
+                
+                document.getElementById('subtotal').textContent = formatPrice(subtotal);
+                document.getElementById('shipping').textContent = formatPrice(shipping);
+                document.getElementById('discount').textContent = formatPrice(discount);
+                document.getElementById('total').textContent = formatPrice(total);
             }
         </script>
     </body>

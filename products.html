@@ -723,7 +723,7 @@
             display: block;
         }
 
-        .modal {
+        .auth-modal {
             display: none;
             position: fixed;
             top: 50%;
@@ -738,39 +738,39 @@
             max-width: 400px;
         }
 
-        .modal.active {
+        .auth-modal.active {
             display: block;
         }
 
-        .modal-header {
+        .auth-modal-header {
             text-align: center;
             margin-bottom: 25px;
         }
 
-        .modal-title {
+        .auth-modal-title {
             color: #5a3d2b;
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 10px;
         }
 
-        .modal-subtitle {
+        .auth-modal-subtitle {
             color: #4a3322;
             font-size: 0.9rem;
             margin-bottom: 20px;
         }
 
-        .modal-form {
+        .auth-modal-form {
             display: flex;
             flex-direction: column;
             gap: 15px;
         }
 
-        .form-group {
+        .auth-form-group {
             position: relative;
         }
 
-        .form-input {
+        .auth-form-input {
             width: 100%;
             padding: 12px 15px;
             border: 1.5px solid #e9c46a;
@@ -781,13 +781,13 @@
             transition: all 0.3s;
         }
 
-        .form-input:focus {
+        .auth-form-input:focus {
             outline: none;
             border-color: #5a3d2b;
             box-shadow: 0 0 0 2px rgba(90, 61, 43, 0.1);
         }
 
-        .form-button {
+        .auth-form-button {
             width: 100%;
             padding: 12px;
             background: #e9c46a;
@@ -803,34 +803,34 @@
             gap: 10px;
         }
 
-        .form-button:hover:not(:disabled) {
+        .auth-form-button:hover:not(:disabled) {
             background: #5a3d2b;
             color: #fff8ed;
         }
 
-        .form-button:disabled {
+        .auth-form-button:disabled {
             opacity: 0.7;
             cursor: not-allowed;
         }
 
-        .modal-links {
+        .auth-modal-links {
             margin-top: 20px;
             text-align: center;
             font-size: 0.9rem;
         }
 
-        .modal-link {
+        .auth-modal-link {
             color: #5a3d2b;
             text-decoration: none;
             cursor: pointer;
             transition: color 0.3s;
         }
 
-        .modal-link:hover {
+        .auth-modal-link:hover {
             color: #e9c46a;
         }
 
-        .spinner {
+        .auth-spinner {
             width: 20px;
             height: 20px;
             border: 2px solid #5a3d2b;
@@ -840,7 +840,7 @@
             display: none;
         }
 
-        .form-button:disabled .spinner {
+        .auth-form-button:disabled .auth-spinner {
             display: inline-block;
         }
 
@@ -1427,81 +1427,81 @@
     <div class="modal-overlay" id="modalOverlay"></div>
 
     <!-- Modal Đăng nhập -->
-    <div class="modal" id="loginModal">
-        <div class="modal-header">
-            <h2 class="modal-title">Đăng nhập</h2>
-            <p class="modal-subtitle">Đăng nhập để trải nghiệm dịch vụ tốt nhất từ Mộc Nhiên</p>
+    <div class="auth-modal" id="loginModal">
+        <div class="auth-modal-header">
+            <h2 class="auth-modal-title">Đăng nhập</h2>
+            <p class="auth-modal-subtitle">Đăng nhập để trải nghiệm dịch vụ tốt nhất từ Mộc Nhiên</p>
         </div>
-        <form class="modal-form" onsubmit="handleLogin(event)">
-            <div class="form-group">
-                <input type="email" class="form-input" placeholder="Email" required>
+        <form class="auth-modal-form" onsubmit="handleLogin(event)">
+            <div class="auth-form-group">
+                <input type="email" class="auth-form-input" placeholder="Email" required>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Mật khẩu" required>
+            <div class="auth-form-group">
+                <input type="password" class="auth-form-input" placeholder="Mật khẩu" required>
             </div>
-            <button type="submit" class="form-button">
+            <button type="submit" class="auth-form-button">
                 <span>Đăng nhập</span>
-                <div class="spinner"></div>
+                <div class="auth-spinner"></div>
             </button>
         </form>
-        <div class="modal-links">
-            <a class="modal-link" onclick="showModal('registerModal')">Đăng ký tài khoản mới</a>
+        <div class="auth-modal-links">
+            <a class="auth-modal-link" onclick="showModal('registerModal')">Đăng ký tài khoản mới</a>
             <br>
-            <a class="modal-link" onclick="showModal('forgotModal')">Quên mật khẩu?</a>
+            <a class="auth-modal-link" onclick="showModal('forgotModal')">Quên mật khẩu?</a>
         </div>
     </div>
 
     <!-- Modal Đăng ký -->
-    <div class="modal" id="registerModal">
-        <div class="modal-header">
-            <h2 class="modal-title">Đăng ký</h2>
-            <p class="modal-subtitle">Tạo tài khoản để nhận nhiều ưu đãi từ Mộc Nhiên</p>
+    <div class="auth-modal" id="registerModal">
+        <div class="auth-modal-header">
+            <h2 class="auth-modal-title">Đăng ký</h2>
+            <p class="auth-modal-subtitle">Tạo tài khoản để nhận nhiều ưu đãi từ Mộc Nhiên</p>
         </div>
-        <form class="modal-form" onsubmit="handleRegister(event)">
-            <div class="form-group">
-                <input type="text" class="form-input" placeholder="Họ và tên" required>
+        <form class="auth-modal-form" onsubmit="handleRegister(event)">
+            <div class="auth-form-group">
+                <input type="text" class="auth-form-input" placeholder="Họ và tên" required>
             </div>
-            <div class="form-group">
-                <input type="email" class="form-input" placeholder="Email" required>
+            <div class="auth-form-group">
+                <input type="email" class="auth-form-input" placeholder="Email" required>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Mật khẩu" required>
+            <div class="auth-form-group">
+                <input type="password" class="auth-form-input" placeholder="Mật khẩu" required>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-input" placeholder="Xác nhận mật khẩu" required>
+            <div class="auth-form-group">
+                <input type="password" class="auth-form-input" placeholder="Xác nhận mật khẩu" required>
             </div>
-            <button type="submit" class="form-button">
+            <button type="submit" class="auth-form-button">
                 <span>Đăng ký</span>
-                <div class="spinner"></div>
+                <div class="auth-spinner"></div>
             </button>
         </form>
-        <div class="modal-links">
-            <a class="modal-link" onclick="showModal('loginModal')">Đã có tài khoản? Đăng nhập</a>
+        <div class="auth-modal-links">
+            <a class="auth-modal-link" onclick="showModal('loginModal')">Đã có tài khoản? Đăng nhập</a>
         </div>
     </div>
 
     <!-- Modal Quên mật khẩu -->
-    <div class="modal" id="forgotModal">
-        <div class="modal-header">
-            <h2 class="modal-title">Quên mật khẩu</h2>
-            <p class="modal-subtitle">Nhập email để nhận link đặt lại mật khẩu</p>
+    <div class="auth-modal" id="forgotModal">
+        <div class="auth-modal-header">
+            <h2 class="auth-modal-title">Quên mật khẩu</h2>
+            <p class="auth-modal-subtitle">Nhập email để nhận link đặt lại mật khẩu</p>
         </div>
-        <form class="modal-form" onsubmit="handleForgotPassword(event)">
-            <div class="form-group">
-                <input type="email" class="form-input" placeholder="Email" required>
+        <form class="auth-modal-form" onsubmit="handleForgotPassword(event)">
+            <div class="auth-form-group">
+                <input type="email" class="auth-form-input" placeholder="Email" required>
             </div>
-            <button type="submit" class="form-button">
+            <button type="submit" class="auth-form-button">
                 <span>Gửi yêu cầu</span>
-                <div class="spinner"></div>
+                <div class="auth-spinner"></div>
             </button>
         </form>
-        <div class="modal-links">
-            <a class="modal-link" onclick="showModal('loginModal')">Quay lại đăng nhập</a>
+        <div class="auth-modal-links">
+            <a class="auth-modal-link" onclick="showModal('loginModal')">Quay lại đăng nhập</a>
         </div>
     </div>
 
     <!-- Modal Chi tiết sản phẩm -->
-    <div class="modal product-detail-modal" id="productDetailModal">
+    <div class="product-detail-modal" id="productDetailModal">
         <div class="modal-header">
             <h2 class="modal-title">Chi tiết sản phẩm</h2>
             <button class="close-modal" onclick="closeModal('productDetailModal')">×</button>
@@ -1865,24 +1865,25 @@
 
         // Add to cart function
         function addToCart(productId) {
-            const product = allProducts.find(p => p.id === productId);
+            const product = allProducts.find(p => String(p.id) === String(productId));
             if (!product) return;
 
             // Get current cart from localStorage
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             
             // Check if product already in cart
-            const existingItem = cart.find(item => item.id === productId);
+            const existingItem = cart.find(item => String(item.id) === String(productId));
             
             if (existingItem) {
                 existingItem.quantity += 1;
             } else {
                 cart.push({
-                    id: productId,
+                    id: String(productId),
                     name: product.tenSanPham,
                     price: product.giaSauGiam,
                     image: product.hinhAnh,
-                    quantity: 1
+                    quantity: 1,
+                    originalPrice: product.giaBan || product.giaSauGiam || 0
                 });
             }
             
@@ -1978,7 +1979,7 @@
         // Hiển thị modal
         function showModal(modalId) {
             // Ẩn tất cả các modal
-            document.querySelectorAll('.modal').forEach(modal => {
+            document.querySelectorAll('.auth-modal').forEach(modal => {
                 modal.classList.remove('active');
             });
             
@@ -2090,7 +2091,7 @@
                 if (savedData && updatedStatus) {
                     showSuccess('Đăng nhập thành công', 'Chào mừng bạn đã quay trở lại!');
                     document.getElementById('modalOverlay').style.display = 'none';
-                    document.querySelectorAll('.modal').forEach(modal => {
+                    document.querySelectorAll('.auth-modal').forEach(modal => {
                         modal.classList.remove('active');
                     });
                 }
@@ -2246,10 +2247,21 @@
 
         // Thêm hàm hiển thị chi tiết sản phẩm
         function showProductDetail(productId) {
-            const productsRef = database.ref('products').child(productId);
+            // Chuyển đổi productId thành số nếu nó là chuỗi số
+            const numericId = parseInt(productId);
+            const productsRef = database.ref('products');
+            
+            console.log('Loading product details for ID:', numericId); // Debug log
+            
             productsRef.once('value')
                 .then((snapshot) => {
-                    const product = snapshot.val();
+                    const products = snapshot.val();
+                    console.log('All products data:', products); // Debug log
+                    
+                    // Tìm sản phẩm có id khớp với productId
+                    const product = products.find(p => p.id === numericId);
+                    console.log('Found product:', product); // Debug log
+                    
                     if (product) {
                         // Cập nhật hình ảnh chính
                         document.getElementById('detailProductImage').src = product.hinhAnh;
@@ -2258,7 +2270,7 @@
                         // Cập nhật thông tin sản phẩm
                         document.getElementById('detailProductName').textContent = product.tenSanPham;
                         document.getElementById('detailProductCategory').textContent = `Danh mục: ${product.danhMucSanPham.tenDanhMuc}`;
-                        document.getElementById('detailProductCode').textContent = `Mã SP: ${productId}`;
+                        document.getElementById('detailProductCode').textContent = `Mã SP: ${numericId}`;
                         
                         // Cập nhật giá
                         const currentPrice = formatPrice(product.giaSauGiam);
@@ -2295,11 +2307,14 @@
                         // Cập nhật nút thêm vào giỏ hàng
                         const addToCartBtn = document.getElementById('addToCartBtn');
                         addToCartBtn.onclick = function() {
-                            addToCartFromModal(productId);
+                            addToCartFromModal(numericId);
                         };
 
                         // Hiển thị modal
                         showModal('productDetailModal');
+                    } else {
+                        console.error('Product not found with ID:', numericId);
+                        showError('Lỗi', 'Không tìm thấy thông tin sản phẩm');
                     }
                 })
                 .catch((error) => {
@@ -2337,18 +2352,20 @@
 
         // Hàm thêm vào giỏ hàng từ modal chi tiết
         function addToCartFromModal(productId) {
-            const productsRef = database.ref('products').child(productId);
+            const productsRef = database.ref('products');
             const quantity = parseInt(document.getElementById('productQuantity').value);
             
             productsRef.once('value')
                 .then((snapshot) => {
-                    const product = snapshot.val();
+                    const products = snapshot.val();
+                    // Tìm sản phẩm có id khớp với productId
+                    const product = products.find(p => String(p.id) === String(productId));
                     if (product) {
                         // Lấy giỏ hàng hiện tại từ localStorage
                         let cart = JSON.parse(localStorage.getItem('cart')) || [];
                         
                         // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-                        const existingProductIndex = cart.findIndex(item => item.id === productId);
+                        const existingProductIndex = cart.findIndex(item => String(item.id) === String(productId));
                         
                         if (existingProductIndex > -1) {
                             // Nếu sản phẩm đã có, tăng số lượng
@@ -2356,9 +2373,10 @@
                         } else {
                             // Nếu sản phẩm chưa có, thêm mới vào giỏ hàng
                             cart.push({
-                                id: productId,
+                                id: String(productId),
                                 name: product.tenSanPham || 'Sản phẩm không rõ tên',
                                 price: product.giaSauGiam || product.giaBan || 0,
+                                originalPrice: product.giaBan || product.giaSauGiam || 0,
                                 image: product.hinhAnh || 'picture/logo.jpg',
                                 quantity: quantity
                             });
