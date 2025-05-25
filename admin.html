@@ -458,9 +458,15 @@
                 </div>
                 <div class="chart-card">
                     <div class="chart-header">
-                        <div class="chart-title">Sản phẩm bán chạy</div>
+                        <div class="chart-title">Top 5 sản phẩm bán chạy</div>
                     </div>
                     <canvas id="productsChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <div class="chart-title">Doanh số theo danh mục</div>
+                    </div>
+                    <canvas id="categoryChart"></canvas>
                 </div>
             </div>
         </div>
@@ -886,14 +892,58 @@
                 // Initial chart update
                 updateRevenueChart();
 
-                // Create products chart
+                // Tính toán số lượng bán của từng sản phẩm từ đơn hàng
+                const productSales = {};
+                const categorySales = {};
+
+                // Lấy danh sách sản phẩm để map ID với tên và danh mục
+                const productsMap = {};
+                if (Array.isArray(data.products)) {
+                    data.products.forEach(product => {
+                        productsMap[product.id] = {
+                            name: product.tenSanPham,
+                            category: product.danhMucSanPham?.tenDanhMuc || 'Khác'
+                        };
+                    });
+                }
+
+                // Tính toán số lượng bán từ đơn hàng
+                orders.forEach(order => {
+                    if (order.cart && Array.isArray(order.cart)) {
+                        order.cart.forEach(item => {
+                            // Cập nhật số lượng bán theo sản phẩm
+                            if (!productSales[item.id]) {
+                                productSales[item.id] = {
+                                    name: productsMap[item.id]?.name || 'Sản phẩm không xác định',
+                                    quantity: 0,
+                                    category: productsMap[item.id]?.category || 'Khác'
+                                };
+                            }
+                            productSales[item.id].quantity += item.quantity;
+
+                            // Cập nhật số lượng bán theo danh mục
+                            const category = productsMap[item.id]?.category || 'Khác';
+                            if (!categorySales[category]) {
+                                categorySales[category] = 0;
+                            }
+                            categorySales[category] += item.quantity;
+                        });
+                    }
+                });
+
+                // Sắp xếp sản phẩm theo số lượng bán
+                const sortedProducts = Object.values(productSales)
+                    .sort((a, b) => b.quantity - a.quantity)
+                    .slice(0, 5); // Lấy top 5 sản phẩm bán chạy
+
+                // Tạo biểu đồ sản phẩm bán chạy
                 const productsChart = new Chart(document.getElementById('productsChart'), {
                     type: 'doughnut',
                     data: {
-                        labels: ['Sofa', 'Ghế', 'Bàn', 'Tủ'],
+                        labels: sortedProducts.map(p => p.name),
                         datasets: [{
-                            data: [30, 25, 25, 20],
-                            backgroundColor: ['#5a3d2b', '#e9c46a', '#4CAF50', '#2196F3']
+                            data: sortedProducts.map(p => p.quantity),
+                            backgroundColor: ['#5a3d2b', '#e9c46a', '#4CAF50', '#2196F3', '#FF9800']
                         }]
                     },
                     options: {
@@ -901,6 +951,45 @@
                         plugins: {
                             legend: {
                                 position: 'top',
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.raw || 0;
+                                        return `${label}: ${value} sản phẩm`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                // Tạo biểu đồ doanh số theo danh mục
+                const categoryChart = new Chart(document.getElementById('categoryChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: Object.keys(categorySales),
+                        datasets: [{
+                            label: 'Số lượng bán theo danh mục',
+                            data: Object.values(categorySales),
+                            backgroundColor: '#5a3d2b'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Số lượng sản phẩm'
+                                }
                             }
                         }
                     }
